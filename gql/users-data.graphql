@@ -1,0 +1,9 @@
+query UsersData {
+    userEntities(first:1000) @namedClient(name: "GAME_SUBGRAPH") {
+        id
+        heroes {
+            id
+        }
+        timestamp
+    }
+}

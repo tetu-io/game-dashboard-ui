@@ -1,0 +1,18 @@
+documents: ./gql/*.graphql
+generates:
+  ./generated/gql.ts:
+    plugins:
+      - typescript
+      - typescript-operations
+      - typescript-apollo-angular
+    config:
+      immutableTypes: true
+      addExplicitOverride: true
+      strictScalars: true
+      scalars:
+        BigDecimal: string
+        BigInt: string
+        Bytes: string
+        Int8: number
+schema: https://api.thegraph.com/subgraphs/name/alexandersazonof/tetu-game-mumbai
+

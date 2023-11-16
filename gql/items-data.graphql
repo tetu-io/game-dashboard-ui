@@ -1,0 +1,16 @@
+query ItemsData {
+    itemEntities(first: 1000) @namedClient(name: "GAME_SUBGRAPH") {
+        id
+        hero {
+            id
+            uniqName
+        }
+        user {
+            id
+        }
+        score
+        augmentationLevel
+        durability
+        rarity
+    }
+}

@@ -1,0 +1,29 @@
+query HeroesData {
+    heroEntities(first: 1000) @namedClient(name: "GAME_SUBGRAPH") {
+        id
+        meta {
+            id
+        }
+        heroId
+        owner {
+            id
+        }
+        score
+        uniqName
+        core {
+            strength
+            dexterity
+            vitality
+            energy
+        }
+        stats {
+            level
+            experience
+            life
+            mana
+        }
+        items {
+            id
+        }
+    }
+}

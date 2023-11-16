@@ -1,0 +1,1 @@
+export const THEME_KEY = 'SACRA_DASHBOARD_THEME_KEY';

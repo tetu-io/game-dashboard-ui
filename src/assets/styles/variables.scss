@@ -1,0 +1,43 @@
+@function tint($color, $percentage) {
+  @return mix(#FFF, $color, $percentage);
+}
+
+@function shade($color, $percentage) {
+  @return mix(#000, $color, $percentage);
+}
+
+$text-primary-color: #1d1d1d;
+$text-secondary-color: tint($text-primary-color, 20%); // #4A4A4A
+$main-font: 'Roboto', sans-serif;
+$font-base-size: 14px;
+
+// [ Theme colors ]
+$theme-primary-color: #3a3a3a;
+$theme-secondary-color: #eaeaea;
+$theme-light-color: #fafafa;
+$theme-disabled-color: #cccccc;
+$theme-selected-color: #f5f7fa;
+$theme-border-color: #c4c4c4;
+
+$white-color: #ffffff;
+$black-color: #000000;
+
+// [Fonts]
+$font-name-default: Roboto, sans-serif;
+$font-size-default: 12px;
+$font-size-small: 10px;
+
+// [Layout step]
+$grid-offset-step: 4px;
+
+// [Animations]
+$animation-step: 160ms;
+
+// [Dark theme]
+$dark-bg-color: #141414;
+$dark-font-color: rgba(255, 255, 255, 0.85);
+$dark-line-color: #434343;
+$dark-font-secondary-color: rgba(125, 125, 125, 0.85);
+
+
+$network-width: 130px;

@@ -1,0 +1,9 @@
+query StoryData {
+    storyPageEntities(first:1000) @namedClient(name: "GAME_SUBGRAPH") {
+        storyId
+        heroPage
+        chamber {
+            biome
+        }
+    }
+}

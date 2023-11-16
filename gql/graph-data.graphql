@@ -1,0 +1,11 @@
+query GraphData {
+  _meta @namedClient(name: "GAME_SUBGRAPH"){
+    deployment
+    hasIndexingErrors
+    block {
+      hash
+      number
+      timestamp
+    }
+  }
+}

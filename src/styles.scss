@@ -1,1 +1,62 @@
-/* You can add global styles to this file, and also import other style files */
+@import "generic";
+@import "variables";
+@import "grid";
+@import "custom-scroll";
+@import "~ng-zorro-antd/ng-zorro-antd";
+
+.ant-table-tbody > tr.ant-table-row:hover > td {
+  background: transparent;
+}
+
+.ant-table-tbody > tr > td {
+  padding: $grid-offset-step * 3;
+}
+
+.ant-message-custom-content {
+  max-width: 500px;
+  overflow: hidden;
+}
+
+.ant-layout-sider-zero-width-trigger {
+  top: 10px;
+}
+
+body {
+  &.dark-theme {
+    @import "~ng-zorro-antd/ng-zorro-antd.dark";
+
+    color: $dark-font-color;
+    background-color: $dark-bg-color;
+
+    .ant-layout-sider-light {
+      background-color: $dark-bg-color;
+
+      .ant-layout-sider-trigger {
+        background-color: $dark-bg-color;
+      }
+    }
+
+    .ant-layout-sider-trigger {
+      padding-right: $grid-offset-step * 4;
+      text-align: right;
+      position: absolute;
+    }
+
+    .ant-menu-inline {
+      border: none;
+      overflow: hidden;
+    }
+
+    .ant-table-tbody > tr.ant-table-row:hover > td {
+      background: transparent;
+    }
+
+    .ant-table-tbody > tr > td {
+      padding: $grid-offset-step * 3;
+    }
+
+    .ant-layout-sider-zero-width-trigger {
+      top: 10px;
+    }
+  }
+}

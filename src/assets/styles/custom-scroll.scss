@@ -1,0 +1,67 @@
+@import 'variables';
+
+/*  #CUSTOM SCROLL
+------------------------------------------- */
+$g-custom-scroll-bg: rgba($theme-primary-color, 0.3);
+$g-custom-scroll-hover-bg: rgba($theme-primary-color, 0.5);
+
+$scroll-bar-width: 8px;
+$scroll-bar-width-small: 4px;
+
+// # CUSTOM SCROLL
+//===========================================
+.custom-scroll {
+  -webkit-overflow-scrolling: touch;
+  -ms-overflow-style: -ms-autohiding-scrollbar;
+
+  // [ Chrome settings ]
+  &::-webkit-scrollbar {
+    width: $scroll-bar-width;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    border-radius: 5px;
+    background: $g-custom-scroll-bg;
+
+    // [ State ] hover
+    &:hover {
+      background: $g-custom-scroll-hover-bg;
+    }
+  }
+}
+
+// [ MODE ] CUSTOM SCROLL - SMALL
+//===========================================
+.custom-scroll-small {
+  -webkit-overflow-scrolling: touch;
+  -ms-overflow-style: -ms-autohiding-scrollbar;
+
+  // [ Chrome settings ]
+  &::-webkit-scrollbar {
+    width: $scroll-bar-width-small;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    border-radius: 3px;
+    background: $g-custom-scroll-bg;
+
+    // [ State ] hover
+    &:hover {
+      background: $g-custom-scroll-hover-bg;
+    }
+  }
+}
+
+.custom-scroll--horizontal {
+  // [ Chrome settings ]
+  &::-webkit-scrollbar {
+    height: $scroll-bar-width;
+  }
+}
+
+.custom-scroll-small--horizontal {
+  // [ Chrome settings ]
+  &::-webkit-scrollbar {
+    height: $scroll-bar-width-small;
+  }
+}

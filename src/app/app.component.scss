@@ -1,0 +1,76 @@
+@import 'grid';
+@import 'variables';
+
+:host {
+  height: 100%;
+
+  font-family: $main-font;
+
+  &.dark-theme {
+    .header {
+      border-bottom-color: $dark-line-color;
+    }
+  }
+}
+
+.logo {
+  font-size: 120px;
+}
+
+.header {
+  padding: $grid-offset-step * 4;
+  border-bottom: 1px solid #e5e5e5;
+
+  &__logo {
+    margin-right: $grid-offset-step * 4;
+    font-size: 80px;
+  }
+
+  &__title {
+    margin-left: $grid-offset-step * 10;
+    font-size: 20px;
+    font-weight: 600;
+  }
+}
+
+.theme {
+  &__title {
+    margin-right: $grid-offset-step;
+  }
+
+  &__switch {
+    margin-right: $grid-offset-step * 4;
+
+    ::ng-deep {
+      .anticon svg {
+        width: 20px;
+        height: 22px;
+      }
+    }
+  }
+}
+
+.main {
+  padding: $grid-offset-step * 4;
+
+  router-outlet {
+    display: none;
+  }
+
+  ::ng-deep > * {
+    @extend .g-flex-column__item;
+  }
+}
+
+.loader {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  align-self: center;
+}
+
+.tabset {
+  height: 55px;
+  flex-grow: unset;
+  flex-shrink: 0;
+}
