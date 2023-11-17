@@ -5,6 +5,7 @@ import { DestroyService } from '../../services/destroy.service';
 import { SubgraphService } from '../../services/subgraph.service';
 import { takeUntil } from 'rxjs';
 import { ItemEntity } from '../../../../generated/gql';
+import { ItemInterface } from '../../models/item.interface';
 
 @Component({
   selector: 'app-item-stat',
@@ -14,35 +15,45 @@ import { ItemEntity } from '../../../../generated/gql';
 })
 export class ItemStatComponent implements OnInit {
 
-  columns: ColumnItem<ItemEntity>[] = [
+  columns: ColumnItem<ItemInterface>[] = [
     {
       name: 'Address + ID',
-      sortFn: (a: ItemEntity, b: ItemEntity) => a.id.localeCompare(b.id),
+      sortFn: (a: ItemInterface, b: ItemInterface) => a.id.localeCompare(b.id),
       sortDirections: ['ascend', 'descend', null],
     },
     {
       name: 'Score',
-      sortFn: (a: ItemEntity, b: ItemEntity) => a.score - b.score,
+      sortFn: (a: ItemInterface, b: ItemInterface) => a.score - b.score,
       sortDirections: ['ascend', 'descend', null],
     },
     {
       name: 'Augmentation level',
-      sortFn: (a: ItemEntity, b: ItemEntity) => a.augmentationLevel - b.augmentationLevel,
+      sortFn: (a: ItemInterface, b: ItemInterface) => a.augmentationLevel - b.augmentationLevel,
       sortDirections: ['ascend', 'descend', null],
     },
     {
       name: 'Rarity',
-      sortFn: (a: ItemEntity, b: ItemEntity) => a.rarity - b.rarity,
+      sortFn: (a: ItemInterface, b: ItemInterface) => a.rarity - b.rarity,
       sortDirections: ['ascend', 'descend', null],
     },
     {
-      name: 'Owner',
-      sortFn: (a: ItemEntity, b: ItemEntity) => (a.user?.id || '').localeCompare((b.user?.id || '')),
+      name: 'Augmentation count',
+      sortFn: (a: ItemInterface, b: ItemInterface) => a.augmentedCount - b.augmentedCount,
+      sortDirections: ['ascend', 'descend', null],
+    },
+    {
+      name: 'Repaired count',
+      sortFn: (a: ItemInterface, b: ItemInterface) => a.repairedCount - b.repairedCount,
+      sortDirections: ['ascend', 'descend', null],
+    },
+    {
+      name: 'Destroyed count',
+      sortFn: (a: ItemInterface, b: ItemInterface) => a.destroyedCount - b.destroyedCount,
       sortDirections: ['ascend', 'descend', null],
     },
   ];
 
-  data: ItemEntity[] = [];
+  data: ItemInterface[] = [];
 
   pageSize = DEFAULT_TABLE_SIZE;
 
@@ -58,7 +69,62 @@ export class ItemStatComponent implements OnInit {
       .pipe(takeUntil(this.destroy$))
       .subscribe(items => {
         if (items) {
-          this.data = items as ItemEntity[];
+          this.data = (items as ItemEntity[]).map(item => {
+
+            let augmentedCount = 0;
+            let repairedCount = 0;
+            let destroyedCount = 0;
+
+            if (item.actions) {
+              item.actions.forEach(action => {
+                if (action.action === "DESTROYED") {
+                  destroyedCount += 1;
+                } else if (action.action === "AUGMENTED") {
+                  augmentedCount += 1;
+                } else if (action.action === "REPAIRED") {
+                  repairedCount += 1;
+                }
+              });
+            }
+
+            return {
+              destroyedCount,
+              repairedCount,
+              augmentedCount,
+              ...item
+            } as ItemInterface
+          });
+
+          const totalCounts = {
+            destroyedCount: 0,
+            repairedCount: 0,
+            augmentedCount: 0,
+          };
+
+          this.data.forEach(item => {
+            totalCounts.destroyedCount += item.destroyedCount;
+            totalCounts.repairedCount += item.repairedCount;
+            totalCounts.augmentedCount += item.augmentedCount;
+          })
+
+          const averages = {
+            destroyedAverage: this.data.length > 0 ? totalCounts.destroyedCount / this.data.length : 0,
+            repairedAverage: this.data.length > 0 ? totalCounts.repairedCount / this.data.length : 0,
+            augmentedAverage: this.data.length > 0 ? totalCounts.augmentedCount / this.data.length : 0,
+          };
+
+
+          this.columns.forEach(column => {
+            if (column.name == 'Destroyed count') {
+              column.name = `Destroyed count, (average ~ ${Math.round(averages.destroyedAverage)})`;
+            }
+            if (column.name == 'Repaired count') {
+              column.name = `Repaired count, (average ~ ${Math.round(averages.repairedAverage)})`;
+            }
+            if (column.name == 'Augmentation count') {
+              column.name = `Augmentation count, (average ~ ${Math.round(averages.augmentedAverage)})`;
+            }
+          })
         }
         this.changeDetectorRef.detectChanges();
       })

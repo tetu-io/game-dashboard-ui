@@ -12,5 +12,8 @@ query ItemsData {
         augmentationLevel
         durability
         rarity
+        actions {
+            action
+        }
     }
 }
