@@ -15,4 +15,3 @@ generates:
         Bytes: string
         Int8: number
 schema: https://api.thegraph.com/subgraphs/name/alexandersazonof/tetu-game-mumbai
-
