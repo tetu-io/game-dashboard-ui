@@ -2,7 +2,8 @@
 @import "variables";
 @import "grid";
 @import "custom-scroll";
-@import "~ng-zorro-antd/ng-zorro-antd";
+//@import "~ng-zorro-antd/ng-zorro-antd";
+@import "ng-zorro-antd/ng-zorro-antd.min.css";
 
 .ant-table-tbody > tr.ant-table-row:hover > td {
   background: transparent;

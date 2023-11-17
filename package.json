@@ -8,14 +8,14 @@
     "build": "ng build",
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
-    "dev": "npm run prepare:dev && ng serve",
+    "dev": "yarn prepare:dev && ng serve",
     "config:dev": "ts-node ./scripts/setenv.ts --configuration=dev",
     "config:prod": "ts-node ./scripts/setenv.ts --configuration=prod",
-    "prepare:dev": "npm run config:dev && npm run build:gql",
-    "prepare:prod": "npm run config:prod && npm run build:gql",
-    "build:dev": "npm run prepare:dev && ng build --configuration development",
-    "build:dev:watch": "npm run prepare:dev && ng build --watch --configuration development",
-    "build:prod": "npm run prepare:prod && ng build --configuration production",
+    "prepare:dev": "yarn config:dev && yarn build:gql",
+    "prepare:prod": "yarn config:prod && yarn build:gql",
+    "build:dev": "yarn prepare:dev && ng build --configuration development",
+    "build:dev:watch": "yarn prepare:dev && ng build --watch --configuration development",
+    "build:prod": "yarn prepare:prod && ng build --configuration production",
     "build:gql": "graphql-codegen --config ./gql/codegen.yml",
     "lint": "eslint \"src/app/**/*.ts\" && prettier -c ./src/app",
     "lint:fix": "eslint --fix \"src/app/**/*.ts\" && prettier -w ./src/app"
@@ -24,12 +24,12 @@
   "license": "BUSL-1.1",
   "lint-staged": {
     "src/app/**/*.{ts,css,html}": [
-      "npm run lint:fix"
+      "yarn lint:fix"
     ]
   },
   "husky": {
     "hooks": {
-      "pre-commit": "npm run lint-staged"
+      "pre-commit": "yarn lint-staged"
     }
   },
   "dependencies": {
@@ -45,11 +45,10 @@
     "@graphql-codegen/cli": "^3.0.0",
     "@graphql-codegen/typescript-apollo-angular": "^3.5.6",
     "@graphql-codegen/typescript-operations": "^3.0.0",
-    "@yarnpkg/parsers": "^2.4.1",
     "apollo-angular": "3.0.1",
+    "ng-zorro-antd": "12.1.0",
     "echarts": "^5.3.1",
     "graphql": "16.5.0",
-    "ng-zorro-antd": "~13.1.0",
     "ngx-echarts": "^8.0.1",
     "ngx-logger": "5.0.11",
     "rxjs": "~7.4.0",
@@ -77,5 +76,8 @@
     "karma-jasmine-html-reporter": "~1.7.0",
     "ts-node": "^10.9.1",
     "typescript": "~4.4.3"
+  },
+  "resolutions": {
+    "@yarnpkg/parsers": "3.0.0-rc.48.1"
   }
 }
