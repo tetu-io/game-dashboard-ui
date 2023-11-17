@@ -25,5 +25,17 @@ query HeroesData {
         items {
             id
         }
+        openedChambers {
+            completed
+            dungeon {
+                id
+            }
+            chamber {
+                id
+                isEvent
+                isStory
+                isBattle
+            }
+        }
     }
 }

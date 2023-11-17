@@ -3,6 +3,12 @@ query UsersData {
         id
         heroes {
             id
+            items {
+                id
+            }
+        }
+        items {
+            id
         }
         timestamp
     }
