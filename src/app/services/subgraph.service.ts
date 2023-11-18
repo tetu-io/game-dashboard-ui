@@ -32,8 +32,10 @@ export class SubgraphService {
     );
   }
 
-  heroes$(): Observable<HeroesDataQuery['heroEntities']> {
-    return this.heroesGQL.fetch().pipe(
+  heroes$(first: number): Observable<HeroesDataQuery['heroEntities']> {
+    return this.heroesGQL.fetch({
+      first: first
+    }).pipe(
       map(x => x.data.heroEntities),
       retry({ count: RETRY, delay: DELAY }),
     )

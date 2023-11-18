@@ -5,4 +5,5 @@ export interface HeroItemInterface extends HeroEntity {
   battleCount: number;
   eventCount: number;
   storyCount: number;
+  earn: number;
 }

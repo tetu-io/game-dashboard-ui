@@ -1,5 +1,9 @@
-query HeroesData {
-    heroEntities(first: 1000) @namedClient(name: "GAME_SUBGRAPH") {
+query HeroesData($first: Int!) {
+    heroEntities(
+        orderBy: stats__level
+        orderDirection: desc
+        first: $first
+    ) @namedClient(name: "GAME_SUBGRAPH") {
         id
         meta {
             id
@@ -36,6 +40,11 @@ query HeroesData {
                 isStory
                 isBattle
             }
+        }
+
+        earned {
+            amount
+            reinforcementStakedFee
         }
     }
 }

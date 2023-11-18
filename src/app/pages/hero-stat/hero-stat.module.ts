@@ -4,6 +4,9 @@ import { HeroStatComponent } from './hero-stat.component';
 import { HeroStatRoutingModule } from './hero-stat-routing.module';
 import { NzTableModule } from 'ng-zorro-antd/table';
 import { IconsProviderModule } from '../../shared/icons/icons-provider.module';
+import { NzFormModule } from 'ng-zorro-antd/form';
+import { ReactiveFormsModule } from '@angular/forms';
+import { NzSelectModule } from 'ng-zorro-antd/select';
 
 
 
@@ -16,6 +19,9 @@ import { IconsProviderModule } from '../../shared/icons/icons-provider.module';
     HeroStatRoutingModule,
     NzTableModule,
     IconsProviderModule,
+    NzFormModule,
+    ReactiveFormsModule,
+    NzSelectModule,
   ],
 })
 export class HeroStatModule { }

@@ -7,6 +7,7 @@ import { takeUntil } from 'rxjs';
 import { DEFAULT_TABLE_SIZE } from '../../shared/constants/table.constant';
 import { Router } from '@angular/router';
 import { HeroItemInterface } from '../../models/hero-item.interface';
+import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 
 @Component({
   selector: 'app-hero-stat',
@@ -61,7 +62,18 @@ export class HeroStatComponent implements OnInit {
       sortFn: (a: HeroItemInterface, b: HeroItemInterface) => a.storyCount - b.storyCount,
       sortDirections: ['ascend', 'descend', null],
     },
+    {
+      name: 'Earned',
+      sortFn: (a: HeroItemInterface, b: HeroItemInterface) => a.earn - b.earn,
+      sortDirections: ['ascend', 'descend', null],
+    },
   ];
+
+  topSize = '10';
+
+  form: FormGroup = this.fb.group({
+    size: this.fb.control(this.topSize)
+  });
 
   data: HeroItemInterface[] = [];
   pageSize = DEFAULT_TABLE_SIZE;
@@ -71,10 +83,15 @@ export class HeroStatComponent implements OnInit {
     private changeDetectorRef: ChangeDetectorRef,
     private subgraphService: SubgraphService,
     private router: Router,
+    private fb: FormBuilder
   ) {}
 
   ngOnInit(): void {
-    this.subgraphService.heroes$()
+    this.prepareData();
+  }
+
+  prepareData(): void {
+    this.subgraphService.heroes$(+this.topSize)
       .pipe(takeUntil(this.destroy$))
       .subscribe(heroes => {
         if (heroes) {
@@ -109,48 +126,74 @@ export class HeroStatComponent implements OnInit {
               dungeonCount = dungeon.size;
             })
 
+            const earn =
+              +(hero.earned.map(val => {
+                if (+val.amount > 0) {
+                  if (val.reinforcementStakedFee > 0) {
+                    return +val.amount / (10 ** 18) * ((100 - val.reinforcementStakedFee) / 100);
+                  }
+                  return +val.amount / (10 ** 18)
+                }
+                return 0;
+              }).reduce((accumulator, currentValue) => {
+                return accumulator + currentValue;
+              }, 0)).toFixed(2);
+
             return {
               ...hero,
               battleCount,
               eventCount,
               storyCount,
-              dungeonCount
+              dungeonCount,
+              earn
             } as HeroItemInterface;
           });
 
           const totalCounts = {
+            itemCount: 0,
             dungeonCount: 0,
             battleCount: 0,
             eventCount: 0,
-            storyCount: 0
+            storyCount: 0,
+            earnCount: 0
           };
 
           this.data.forEach(hero => {
+            totalCounts.itemCount += hero.items.length;
             totalCounts.dungeonCount += hero.dungeonCount;
             totalCounts.battleCount += hero.battleCount;
             totalCounts.eventCount += hero.eventCount;
             totalCounts.storyCount += hero.storyCount;
+            totalCounts.earnCount += hero.earn
           });
 
           const averages = {
+            itemAverage: this.data.length > 0 ? totalCounts.itemCount / this.data.length : 0,
             dungeonAverage: this.data.length > 0 ? totalCounts.dungeonCount / this.data.length : 0,
             battleAverage: this.data.length > 0 ? totalCounts.battleCount / this.data.length : 0,
             eventAverage: this.data.length > 0 ? totalCounts.eventCount / this.data.length : 0,
-            storyAverage: this.data.length > 0 ? totalCounts.storyCount / this.data.length : 0
+            storyAverage: this.data.length > 0 ? totalCounts.storyCount / this.data.length : 0,
+            earnAverage: this.data.length > 0 ? totalCounts.earnCount / this.data.length : 0,
           };
 
           this.columns.forEach(column => {
-            if (column.name == 'Dungeon count') {
+            if (column.name.startsWith('Items count')) {
+              column.name = `Items count, (average ~ ${Math.round(averages.itemAverage)})`;
+            }
+            if (column.name.startsWith('Dungeon count')) {
               column.name = `Dungeon count, (average ~ ${Math.round(averages.dungeonAverage)})`;
             }
-            if (column.name == 'Battle count') {
+            if (column.name.startsWith('Battle count')) {
               column.name = `Battle count, (average ~ ${Math.round(averages.battleAverage)})`;
             }
-            if (column.name == 'Event count') {
+            if (column.name.startsWith('Event count')) {
               column.name = `Event count, (average ~ ${Math.round(averages.eventAverage)})`;
             }
-            if (column.name == 'Story count') {
+            if (column.name.startsWith('Story count')) {
               column.name = `Story count, (average ~ ${Math.round(averages.storyAverage)})`;
+            }
+            if (column.name.startsWith('Earned')) {
+              column.name = `Earned, (average ~ ${Math.round(averages.earnAverage)})`;
             }
           })
         }
@@ -160,5 +203,10 @@ export class HeroStatComponent implements OnInit {
 
   gotoHeroDetails(heroId: string) {
     this.router.navigate(['/hero-details', heroId]);
+  }
+
+  sizeChange(value: string): void {
+    this.topSize = value;
+    this.prepareData();
   }
 }

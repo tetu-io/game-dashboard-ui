@@ -1,4 +1,20 @@
 <div class="g-scroll-y" *ngIf="data.length > 0">
+  <form nz-form [formGroup]="form">
+    <nz-form-item>
+      <nz-form-label [nzSpan]="3" nzFor="size" nzRequired>Top heroes by level</nz-form-label>
+      <nz-form-control [nzSpan]="2">
+        <nz-select
+          id="size"
+          formControlName="size"
+          (ngModelChange)="sizeChange($event)"
+        >
+          <nz-option nzValue="10" nzLabel="10"></nz-option>
+          <nz-option nzValue="50" nzLabel="50"></nz-option>
+          <nz-option nzValue="100" nzLabel="100"></nz-option>
+        </nz-select>
+      </nz-form-control>
+    </nz-form-item>
+  </form>
   <nz-table #filterTable
             [nzPageSize]="pageSize"
             [nzData]="data" nzTableLayout="fixed">
@@ -28,6 +44,7 @@
       <td>{{ data.battleCount }}</td>
       <td>{{ data.eventCount }}</td>
       <td>{{ data.storyCount }}</td>
+      <td>{{ data.earn }}</td>
 
     </tr>
     </tbody>

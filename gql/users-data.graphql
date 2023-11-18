@@ -6,6 +6,10 @@ query UsersData {
             items {
                 id
             }
+            earned {
+                amount
+                reinforcementStakedFee
+            }
         }
         items {
             id

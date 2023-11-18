@@ -11,7 +11,7 @@ import { UserItemInterface } from '../../models/user-item.interface';
   selector: 'app-user-stat',
   templateUrl: './user-stat.component.html',
   styleUrls: ['./user-stat.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class UserStatComponent implements OnInit {
 
@@ -31,6 +31,11 @@ export class UserStatComponent implements OnInit {
       sortFn: (a: UserItemInterface, b: UserItemInterface) => a.itemsSize - b.itemsSize,
       sortDirections: ['ascend', 'descend', null],
     },
+    {
+      name: `User earned`,
+      sortFn: (a: UserItemInterface, b: UserItemInterface) => a.earn - b.earn,
+      sortDirections: ['ascend', 'descend', null],
+    },
   ];
 
   data: UserItemInterface[] = [];
@@ -39,8 +44,9 @@ export class UserStatComponent implements OnInit {
   constructor(
     private destroy$: DestroyService,
     private changeDetectorRef: ChangeDetectorRef,
-    private subgraphService: SubgraphService
-  ) { }
+    private subgraphService: SubgraphService,
+  ) {
+  }
 
   ngOnInit(): void {
     this.subgraphService.users$()
@@ -49,23 +55,48 @@ export class UserStatComponent implements OnInit {
         if (users) {
           this.data = (users as UserEntity[]).map(user => {
             const itemsSize = user.items.length + user.heroes.reduce((sum, hero) => sum + hero.items.length, 0);
+
+            const earn = +(user.heroes.map(hero => {
+                return +hero.earned.map(val => {
+                  if (+val.amount > 0) {
+                    if (val.reinforcementStakedFee > 0) {
+                      return +val.amount / (10 ** 18) * ((100 - val.reinforcementStakedFee) / 100);
+                    }
+                    return +val.amount / (10 ** 18);
+                  }
+                  return 0;
+                }).reduce((accumulator, currentValue) => {
+                  return accumulator + currentValue;
+                }, 0);
+              }).reduce((accumulator, currentValue) => {
+                return accumulator + currentValue;
+              }, 0)
+            ).toFixed(2);
+
+
             return {
               ...user,
-              itemsSize
+              itemsSize,
+              earn
             };
           }) as UserItemInterface[];
         }
 
         const totalItemsSize = this.data.reduce((sum, user) => sum + user.itemsSize, 0);
+        const totalEarned = this.data.reduce((sum, user) => sum + user.earn, 0);
         const averageItemsSize = this.data.length > 0 ? totalItemsSize / users.length : 0;
+        const averageEarned = this.data.length > 0 ? totalEarned / users.length : 0;
 
 
         this.columns.forEach(column => {
           if (column.name == 'Items count') {
             column.name = `Items count, (average ~ ${Math.round(averageItemsSize)})`;
           }
-        })
+          if (column.name == 'User earned') {
+            column.name = `User earned, (average ~ ${Math.round(averageEarned)})`;
+          }
+        });
         this.changeDetectorRef.detectChanges();
-    })
+      });
   }
 }
