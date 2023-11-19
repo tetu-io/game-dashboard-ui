@@ -16,7 +16,7 @@
     "build:dev:watch": "yarn prepare:dev && ng build --watch --configuration development",
     "build:prod": "yarn prepare:prod && ng build --configuration production",
     "build:gql": "graphql-codegen --config ./gql/codegen.yml",
-    "heroku-postbuild": "yarn build:prod",
+    "heroku-postbuild": "heroku config:set NODE_OPTIONS=\"--max_old_space_size=4096\" && yarn build:prod",
     "lint": "eslint \"src/app/**/*.ts\" && prettier -c ./src/app",
     "lint:fix": "eslint --fix \"src/app/**/*.ts\" && prettier -w ./src/app"
   },
@@ -78,6 +78,6 @@
   },
   "engines": {
     "node": "18.x",
-    "npm": "6.x"
+    "yarn": "1.22.x"
   }
 }
