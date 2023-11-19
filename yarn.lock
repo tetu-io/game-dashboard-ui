@@ -6304,10 +6304,10 @@ neo-async@^2.6.2:
   resolved "https://registry.yarnpkg.com/neo-async/-/neo-async-2.6.2.tgz#b4aafb93e3aeb2d8174ca53cf163ab7d7308305f"
   integrity sha512-Yd3UES5mWCSqR+qNT93S3UoYUkqAZ9lLg8a7g9rimsWmYGK8cVToA4/sF3RrshdyV3sAGMXVUmpMYOw+dLpOuw==
 
-ng-zorro-antd@12.1.0:
-  version "12.1.0"
-  resolved "https://registry.yarnpkg.com/ng-zorro-antd/-/ng-zorro-antd-12.1.0.tgz#64dd19e4da6d80215a1b3a76fad1257b670b40ff"
-  integrity sha512-tsL57G4RmnB+lfGsC0onxYIdZ32L1CbrZUW35I3lwn8pB37qU2W87u1AYDulZHlQbz7CMHhjEnnucYPWu3Ak3g==
+ng-zorro-antd@12.1.1:
+  version "12.1.1"
+  resolved "https://registry.yarnpkg.com/ng-zorro-antd/-/ng-zorro-antd-12.1.1.tgz#20e43db3b1e2b5864b845a2259a70880ac0baf8e"
+  integrity sha512-5Pc8IZS7VCH+iJNumr84PjJY+tRcVQQ/2KihmABREXuFdYTARGPUDgZJt+v6MnMU1K926ym1sSx/cHfiRq2yiA==
   dependencies:
     "@angular/cdk" "^12.1.0"
     "@ant-design/icons-angular" "^12.0.3"
