@@ -4,6 +4,7 @@
   "scripts": {
     "ng": "ng",
     "start": "node server.js",
+    "build": "ng build --configuration production",
     "start:local": "ng serve",
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
@@ -46,6 +47,7 @@
     "@graphql-codegen/typescript-apollo-angular": "^3.5.6",
     "@graphql-codegen/typescript-operations": "^3.0.0",
     "apollo-angular": "3.0.1",
+    "cors": "^2.8.5",
     "echarts": "^5.3.1",
     "express-favicon": "^2.0.4",
     "graphql": "16.5.0",
