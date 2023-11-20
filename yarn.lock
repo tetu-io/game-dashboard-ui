@@ -4429,6 +4429,11 @@ execa@^5.0.0:
     signal-exit "^3.0.3"
     strip-final-newline "^2.0.0"
 
+express-favicon@^2.0.4:
+  version "2.0.4"
+  resolved "https://registry.yarnpkg.com/express-favicon/-/express-favicon-2.0.4.tgz#1b5217dcd797d2d4f82ea0f521a6b0089c566a8e"
+  integrity sha512-JDGzumJdwF+WcJf+qwyhdpF1yzducuMCxZa+G6hxR3hor7ae/1CqpAPj8FXCGaGtqBA6ExDMfeszjuYRw5GUuQ==
+
 express@^4.17.1:
   version "4.18.2"
   resolved "https://registry.yarnpkg.com/express/-/express-4.18.2.tgz#3fabe08296e930c796c19e3c516979386ba9fd59"
@@ -4985,6 +4990,11 @@ header-case@^2.0.4:
   dependencies:
     capital-case "^1.0.4"
     tslib "^2.0.3"
+
+helmet@^7.1.0:
+  version "7.1.0"
+  resolved "https://registry.yarnpkg.com/helmet/-/helmet-7.1.0.tgz#287279e00f8a3763d5dccbaf1e5ee39b8c3784ca"
+  integrity sha512-g+HZqgfbpXdCkme/Cd/mZkV0aV3BZZZSugecH03kl38m/Kmdx8jKjBikpDj2cr+Iynv4KpYEviojNdTJActJAg==
 
 hoist-non-react-statics@^3.3.2:
   version "3.3.2"
