@@ -38,8 +38,8 @@ export class NewUsersComponent implements OnInit {
       return date.toISOString().split('T')[0];
     };
 
-    const dateCounts = data.reduce((acc, { timestamp }) => {
-      const dateString = convertToDateString(timestamp);
+    const dateCounts = data.reduce((acc, { lastActionTs }) => {
+      const dateString = convertToDateString(lastActionTs + '');
       acc[dateString] = (acc[dateString] || 0) + 1;
       return acc;
     }, {} as Record<string, number>);

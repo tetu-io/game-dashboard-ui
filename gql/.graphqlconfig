@@ -1,1 +1,1 @@
-{"name":"TetuGame GraphQL Schema","schemaPath":"schema.graphql","extensions":{"endpoints":{"Default GraphQL Endpoint":{"headers":{"user-agent":"JS GraphQL"},"introspect":false,"url":"https://api.thegraph.com/subgraphs/name/alexandersazonof/tetu-game-mumbai"}}}}
+{"name":"TetuGame GraphQL Schema","schemaPath":"schema.graphql","extensions":{"endpoints":{"Default GraphQL Endpoint":{"headers":{"user-agent":"JS GraphQL"},"introspect":false,"url":"https://api.thegraph.com/subgraphs/name/alexandersazonof/tetu-game-sepolia"}}}}
