@@ -54,6 +54,7 @@ export class ItemStatComponent implements OnInit {
   ];
 
   data: ItemInterface[] = [];
+  isLoading = false;
 
   pageSize = DEFAULT_TABLE_SIZE;
 
@@ -65,6 +66,16 @@ export class ItemStatComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
+
+    this.subgraphService.networkObserver.subscribe(() => {
+      this.isLoading = true;
+      this.changeDetectorRef.detectChanges();
+      this.prepareData();
+    })
+  }
+
+  prepareData(): void {
+    this.isLoading = true;
     this.subgraphService.items$()
       .pipe(takeUntil(this.destroy$))
       .subscribe(items => {
@@ -126,6 +137,8 @@ export class ItemStatComponent implements OnInit {
             }
           })
         }
+
+        this.isLoading = false;
         this.changeDetectorRef.detectChanges();
       })
   }

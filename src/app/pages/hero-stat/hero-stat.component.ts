@@ -70,6 +70,7 @@ export class HeroStatComponent implements OnInit {
   ];
 
   topSize = '10';
+  isLoading = false;
 
   form: FormGroup = this.fb.group({
     size: this.fb.control(this.topSize)
@@ -87,10 +88,15 @@ export class HeroStatComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.prepareData();
+    this.subgraphService.networkObserver.subscribe(network => {
+      this.isLoading = true;
+      this.changeDetectorRef.detectChanges();
+      this.prepareData();
+    })
   }
 
   prepareData(): void {
+    this.isLoading = true;
     this.subgraphService.heroes$(+this.topSize)
       .pipe(takeUntil(this.destroy$))
       .subscribe(heroes => {
@@ -197,6 +203,7 @@ export class HeroStatComponent implements OnInit {
             }
           })
         }
+        this.isLoading = false;
         this.changeDetectorRef.detectChanges();
       })
   }

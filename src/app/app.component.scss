@@ -33,6 +33,14 @@
   }
 }
 
+.header-content {
+  width: 80%;
+}
+
+.network {
+  width: 22%;
+}
+
 .theme {
   &__title {
     margin-right: $grid-offset-step;
@@ -73,4 +81,8 @@
   height: 55px;
   flex-grow: unset;
   flex-shrink: 0;
+}
+
+::ng-deep body.dark-theme .ant-form-item {
+  margin-bottom: 0;
 }

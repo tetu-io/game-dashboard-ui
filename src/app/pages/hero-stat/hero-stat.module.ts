@@ -7,6 +7,7 @@ import { IconsProviderModule } from '../../shared/icons/icons-provider.module';
 import { NzFormModule } from 'ng-zorro-antd/form';
 import { ReactiveFormsModule } from '@angular/forms';
 import { NzSelectModule } from 'ng-zorro-antd/select';
+import { NzSpinModule } from 'ng-zorro-antd/spin';
 
 
 
@@ -22,6 +23,7 @@ import { NzSelectModule } from 'ng-zorro-antd/select';
     NzFormModule,
     ReactiveFormsModule,
     NzSelectModule,
+    NzSpinModule,
   ],
 })
 export class HeroStatModule { }

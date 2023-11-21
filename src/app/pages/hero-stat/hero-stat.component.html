@@ -1,52 +1,62 @@
-<div class="g-scroll-y" *ngIf="data.length > 0">
-  <form nz-form [formGroup]="form">
-    <nz-form-item>
-      <nz-form-label [nzSpan]="3" nzFor="size" nzRequired>Top heroes by level</nz-form-label>
-      <nz-form-control [nzSpan]="2">
-        <nz-select
-          id="size"
-          formControlName="size"
-          (ngModelChange)="sizeChange($event)"
-        >
-          <nz-option nzValue="10" nzLabel="10"></nz-option>
-          <nz-option nzValue="50" nzLabel="50"></nz-option>
-          <nz-option nzValue="100" nzLabel="100"></nz-option>
-        </nz-select>
-      </nz-form-control>
-    </nz-form-item>
-  </form>
-  <nz-table #filterTable
-            [nzPageSize]="pageSize"
-            [nzData]="data" nzTableLayout="fixed">
-    <thead>
-    <tr>
-      <th
-        *ngFor="let column of columns"
-        [nzSortFn]="column.sortFn"
-        [nzSortDirections]="column.sortDirections"
-      >
-        {{ column.name }}
-      </th>
-    </tr>
-    </thead>
-    <tbody>
-    <tr *ngFor="let data of filterTable.data">
-      <td>
-        <a (click)="gotoHeroDetails(data.id)">{{data.id}}</a>
-      </td>
-      <td>
-        {{ data.uniqName }}
-      </td>
-      <td>{{ data.stats.level }}</td>
-      <td>{{ data.score }}</td>
-      <td>{{ data.items.length }}</td>
-      <td>{{ data.dungeonCount }}</td>
-      <td>{{ data.battleCount }}</td>
-      <td>{{ data.eventCount }}</td>
-      <td>{{ data.storyCount }}</td>
-      <td>{{ data.earn }}</td>
+<div>
+  <div class="size">
+    <form nz-form [formGroup]="form">
+      <nz-form-item>
+        <nz-form-label [nzSpan]="3" nzFor="size" nzRequired>Top heroes by level</nz-form-label>
+        <nz-form-control [nzSpan]="2">
+          <nz-select
+            id="size"
+            formControlName="size"
+            (ngModelChange)="sizeChange($event)"
+          >
+            <nz-option nzValue="10" nzLabel="10"></nz-option>
+            <nz-option nzValue="50" nzLabel="50"></nz-option>
+            <nz-option nzValue="100" nzLabel="100"></nz-option>
+          </nz-select>
+        </nz-form-control>
+      </nz-form-item>
+    </form>
+  </div>
+  <nz-spin
+    *ngIf="isLoading; else loaded"
+    class="loader g-flex-column__item-fixed">
+  </nz-spin>
+  <ng-template #loaded>
+    <div class="g-scroll-y" *ngIf="data.length > 0">
+      <nz-table #filterTable
+                [nzPageSize]="pageSize"
+                [nzData]="data" nzTableLayout="fixed">
+        <thead>
+        <tr>
+          <th
+            *ngFor="let column of columns"
+            [nzSortFn]="column.sortFn"
+            [nzSortDirections]="column.sortDirections"
+          >
+            {{ column.name }}
+          </th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr *ngFor="let data of filterTable.data">
+          <td>
+            <a (click)="gotoHeroDetails(data.id)">{{data.id}}</a>
+          </td>
+          <td>
+            {{ data.uniqName }}
+          </td>
+          <td>{{ data.stats.level }}</td>
+          <td>{{ data.score }}</td>
+          <td>{{ data.items.length }}</td>
+          <td>{{ data.dungeonCount }}</td>
+          <td>{{ data.battleCount }}</td>
+          <td>{{ data.eventCount }}</td>
+          <td>{{ data.storyCount }}</td>
+          <td>{{ data.earn }}</td>
 
-    </tr>
-    </tbody>
-  </nz-table>
+        </tr>
+        </tbody>
+      </nz-table>
+    </div>
+  </ng-template>
 </div>

@@ -56,12 +56,29 @@
   <nz-layout class="g-scroll-y">
     <nz-content class="g-flex-column">
       <header class="header g-flex-column__item-fixed g-flex g-flex--align-center g-flex--space-between">
-        <div class="g-flex g-flex--align-center">
+        <div class="header-content g-flex g-flex--align-center">
           <div class="header__title">
             Dashboard
           </div>
         </div>
 
+        <div class="network g-flex g-flex--align-center">
+          <form nz-form [formGroup]="form">
+            <nz-form-item>
+              <nz-form-label [nzSpan]="50" nzFor="network">Network</nz-form-label>
+              <nz-form-control [nzSpan]="20">
+                <nz-select
+                  id="network"
+                  formControlName="network"
+                  (ngModelChange)="networkChange($event)"
+                >
+                  <nz-option nzValue="mumbai" nzLabel="Mumbai"></nz-option>
+                  <nz-option nzValue="sepolia" nzLabel="Sepolia"></nz-option>
+                </nz-select>
+              </nz-form-control>
+            </nz-form-item>
+          </form>
+        </div>
         <div class="g-flex g-flex--align-center">
           <div class="theme__title">
             Theme:

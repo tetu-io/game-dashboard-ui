@@ -1,24 +1,30 @@
-<div *ngIf="preparedData.length > 0">
-  <nz-table #filterTable [nzData]="preparedData"
-            [nzPageSize]="pageSize"
-            nzTableLayout="fixed">
-    <thead>
-    <tr>
-      <th
-        *ngFor="let column of columns"
-        [nzSortFn]="column.sortFn"
-        [nzSortDirections]="column.sortDirections"
-      >
-        {{ column.name }}
-      </th>
-    </tr>
-    </thead>
-    <tbody>
-    <tr *ngFor="let data of filterTable.data">
-      <td>{{ data.storyId }}</td>
-      <td>{{ data.heroPage }}</td>
-      <td>{{ data.count }}</td>
-    </tr>
-    </tbody>
-  </nz-table>
-</div>
+<nz-spin
+  *ngIf="isLoading; else loaded"
+  class="loader g-flex-column__item-fixed">
+</nz-spin>
+<ng-template #loaded>
+  <div *ngIf="preparedData.length > 0">
+    <nz-table #filterTable [nzData]="preparedData"
+              [nzPageSize]="pageSize"
+              nzTableLayout="fixed">
+      <thead>
+      <tr>
+        <th
+          *ngFor="let column of columns"
+          [nzSortFn]="column.sortFn"
+          [nzSortDirections]="column.sortDirections"
+        >
+          {{ column.name }}
+        </th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr *ngFor="let data of filterTable.data">
+        <td>{{ data.storyId }}</td>
+        <td>{{ data.heroPage }}</td>
+        <td>{{ data.count }}</td>
+      </tr>
+      </tbody>
+    </nz-table>
+  </div>
+</ng-template>

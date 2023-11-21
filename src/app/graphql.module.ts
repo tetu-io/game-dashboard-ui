@@ -4,7 +4,9 @@ import { environment } from '@environments/environment';
 import { APOLLO_NAMED_OPTIONS, ApolloModule, NamedOptions } from 'apollo-angular';
 import { HttpLink } from 'apollo-angular/http';
 
-const TETU_GAME_URI = environment.SUBGRAPH_URI;
+const MUMBAI_GAME_SUBGRAPH = environment.MUMBAI_GAME_SUBGRAPH;
+const SEPOLIA_GAME_SUBGRAPH = environment.SEPOLIA_GAME_SUBGRAPH;
+
 
 const defaultOptions: DefaultOptions = {
   watchQuery: {
@@ -17,9 +19,19 @@ const defaultOptions: DefaultOptions = {
   },
 };
 
-export function createTetuGameSubgraph(httpLink: HttpLink) {
+export function createMumbaiTetuGameSubgraph(httpLink: HttpLink) {
   return {
-    link: httpLink.create({ uri: TETU_GAME_URI }),
+    link: httpLink.create({ uri: MUMBAI_GAME_SUBGRAPH }),
+    cache: new InMemoryCache({
+      resultCaching: false,
+    }),
+    defaultOptions,
+  };
+}
+
+export function createSepoliaTetuGameSubgraph(httpLink: HttpLink) {
+  return {
+    link: httpLink.create({ uri: SEPOLIA_GAME_SUBGRAPH }),
     cache: new InMemoryCache({
       resultCaching: false,
     }),
@@ -34,7 +46,8 @@ export function createTetuGameSubgraph(httpLink: HttpLink) {
       provide: APOLLO_NAMED_OPTIONS,
       useFactory(httpLink: HttpLink): NamedOptions {
         return {
-          GAME_SUBGRAPH: createTetuGameSubgraph(httpLink),
+          MUMBAI_GAME_SUBGRAPH: createMumbaiTetuGameSubgraph(httpLink),
+          SEPOLIA_GAME_SUBGRAPH: createSepoliaTetuGameSubgraph(httpLink),
         };
       },
       deps: [HttpLink],

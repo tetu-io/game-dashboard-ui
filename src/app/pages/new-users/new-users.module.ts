@@ -4,6 +4,7 @@ import { NewUsersComponent } from './new-users.component';
 import { NewUsersRoutingModule } from './new-users-routing.module';
 import { NgxEchartsModule } from 'ngx-echarts';
 import { NzEmptyModule } from 'ng-zorro-antd/empty';
+import { NzSpinModule } from 'ng-zorro-antd/spin';
 
 
 
@@ -18,6 +19,7 @@ import { NzEmptyModule } from 'ng-zorro-antd/empty';
     NgxEchartsModule.forRoot({
       echarts: () => import('echarts'),
     }),
+    NzSpinModule,
   ],
 })
 export class NewUsersModule { }

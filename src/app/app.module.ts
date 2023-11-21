@@ -16,6 +16,8 @@ import { NzMenuModule } from 'ng-zorro-antd/menu';
 import { NzSwitchModule } from 'ng-zorro-antd/switch';
 import { NzSpinModule } from 'ng-zorro-antd/spin';
 import { IconsProviderModule } from './shared/icons/icons-provider.module';
+import { NzFormModule } from 'ng-zorro-antd/form';
+import { NzSelectModule } from 'ng-zorro-antd/select';
 
 registerLocaleData(en);
 
@@ -36,6 +38,8 @@ registerLocaleData(en);
     NzSwitchModule,
     NzSpinModule,
     ReactiveFormsModule,
+    NzFormModule,
+    NzSelectModule,
   ],
   providers: [{ provide: NZ_I18N, useValue: en_US }],
   bootstrap: [AppComponent]

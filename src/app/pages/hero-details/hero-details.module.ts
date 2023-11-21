@@ -1,5 +1,5 @@
 import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { CommonModule, DatePipe } from '@angular/common';
 import { HeroDetailsComponent } from './hero-details.component';
 import { HeroDetailsRoutingModule } from './hero-details-routing.module';
 import { NzFormModule } from 'ng-zorro-antd/form';
@@ -8,6 +8,7 @@ import { NzInputModule } from 'ng-zorro-antd/input';
 import { NzButtonModule } from 'ng-zorro-antd/button';
 import { NzDescriptionsModule } from 'ng-zorro-antd/descriptions';
 import { NzBadgeModule } from 'ng-zorro-antd/badge';
+import { NzSpinModule } from 'ng-zorro-antd/spin';
 
 
 
@@ -24,6 +25,8 @@ import { NzBadgeModule } from 'ng-zorro-antd/badge';
     NzButtonModule,
     NzDescriptionsModule,
     NzBadgeModule,
+    NzSpinModule,
   ],
+  providers: [DatePipe]
 })
 export class HeroDetailsModule { }

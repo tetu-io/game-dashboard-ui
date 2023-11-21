@@ -14,6 +14,8 @@ import { takeUntil } from 'rxjs';
 export class NewUsersComponent implements OnInit {
 
   options: EChartsOption = {};
+  isLoading = false;
+
   constructor(
     private destroy$: DestroyService,
     private subgraphService: SubgraphService,
@@ -21,15 +23,27 @@ export class NewUsersComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
+    this.subgraphService.networkObserver.subscribe(() => {
+      this.isLoading = true;
+      this.changeDetectorRef.detectChanges();
+      this.prepareData();
+    })
+  }
+
+  private prepareData(): void {
+    this.isLoading = true;
+
     this.subgraphService.users$()
       .pipe(takeUntil(this.destroy$))
       .subscribe(users => {
         if (users) {
           this.prepareChartData(users as UserEntity[]);
         }
-      this.changeDetectorRef.detectChanges();
-    })
+        this.isLoading = false;
+        this.changeDetectorRef.detectChanges();
+      })
   }
+
 
   private prepareChartData(data: UserEntity[]) {
 

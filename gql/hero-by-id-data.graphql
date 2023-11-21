@@ -1,9 +1,5 @@
-query HeroesData($first: Int!) {
-    heroEntities(
-        orderBy: stats__level
-        orderDirection: desc
-        first: $first
-    ) @namedClient(name: "SEPOLIA_GAME_SUBGRAPH") {
+query Hero($id: ID!) {
+    heroEntity(id: $id) @namedClient(name: "SEPOLIA_GAME_SUBGRAPH") {
         id
         meta {
             id
@@ -12,8 +8,12 @@ query HeroesData($first: Int!) {
         owner {
             id
         }
+        biome
+        staked
+        dead
         score
         uniqName
+        timestamp
         core {
             strength
             dexterity
@@ -25,6 +25,7 @@ query HeroesData($first: Int!) {
             experience
             life
             mana
+            lifeChances
         }
         items {
             id

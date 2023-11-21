@@ -1,5 +1,5 @@
 query ItemsData {
-    itemEntities(first: 1000) @namedClient(name: "GAME_SUBGRAPH") {
+    itemEntities(first: 1000) @namedClient(name: "SEPOLIA_GAME_SUBGRAPH") {
         id
         hero {
             id

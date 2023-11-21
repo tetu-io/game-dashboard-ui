@@ -1,5 +1,5 @@
 query GraphData {
-  _meta @namedClient(name: "GAME_SUBGRAPH"){
+  _meta @namedClient(name: "SEPOLIA_GAME_SUBGRAPH"){
     deployment
     hasIndexingErrors
     block {

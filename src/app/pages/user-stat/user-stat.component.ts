@@ -40,6 +40,7 @@ export class UserStatComponent implements OnInit {
 
   data: UserItemInterface[] = [];
   pageSize = DEFAULT_TABLE_SIZE;
+  isLoading = false;
 
   constructor(
     private destroy$: DestroyService,
@@ -49,6 +50,15 @@ export class UserStatComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.subgraphService.networkObserver.subscribe(() => {
+      this.isLoading = true;
+      this.changeDetectorRef.detectChanges();
+      this.prepareData();
+    })
+  }
+
+  prepareData(): void {
+    this.isLoading = true;
     this.subgraphService.users$()
       .pipe(takeUntil(this.destroy$))
       .subscribe(users => {
@@ -96,6 +106,7 @@ export class UserStatComponent implements OnInit {
             column.name = `User earned, (average ~ ${Math.round(averageEarned)})`;
           }
         });
+        this.isLoading = false;
         this.changeDetectorRef.detectChanges();
       });
   }

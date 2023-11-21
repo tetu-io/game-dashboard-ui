@@ -41,6 +41,7 @@ export class StoryStatComponent implements OnInit {
   preparedData: StoryPageCount[] = [];
   data: StoryPageEntity[] = [];
   pageSize = DEFAULT_TABLE_SIZE;
+  isLoading = false;
 
   constructor(
     private destroy$: DestroyService,
@@ -48,6 +49,15 @@ export class StoryStatComponent implements OnInit {
     private subgraphService: SubgraphService) { }
 
   ngOnInit(): void {
+    this.subgraphService.networkObserver.subscribe(() => {
+      this.isLoading = true;
+      this.changeDetectorRef.detectChanges();
+      this.prepareData();
+    })
+  }
+
+  prepareData(): void {
+    this.isLoading = true;
     this.subgraphService.stories$()
       .pipe(takeUntil(this.destroy$))
       .subscribe(users => {
@@ -55,6 +65,7 @@ export class StoryStatComponent implements OnInit {
           this.data = users as StoryPageEntity[];
           this.prepare();
         }
+        this.isLoading = false;
         this.changeDetectorRef.detectChanges();
       })
   }
