@@ -15,5 +15,15 @@ query ItemsData {
         actions {
             action
         }
+        user {
+            id
+        }
+        hero {
+            id
+            owner {
+                id
+            }
+        }
+
     }
 }

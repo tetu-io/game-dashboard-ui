@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, HostBinding, OnInit } from '@angular/core';
+import { AfterViewInit, ChangeDetectorRef, Component, HostBinding, OnInit } from '@angular/core';
 import { MenuItemInterface } from './models/menu-item.interface';
 import { MENU } from './shared/constants/menu.constant';
 import { StorageService } from './services/storage.service';
@@ -8,22 +8,24 @@ import { DestroyService } from './services/destroy.service';
 import { ThemeService } from './services/theme.service';
 import { takeUntil } from 'rxjs';
 import { MAIN_ROUTES } from './shared/constants/routes.constant';
-import { NETWORKS } from './shared/constants/network.constant';
+import { isExcitingNetwork, NETWORKS } from './shared/constants/network.constant';
 import { SubgraphService } from './services/subgraph.service';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss']
 })
-export class AppComponent implements OnInit{
+export class AppComponent implements OnInit, AfterViewInit {
   @HostBinding('class.dark-theme')
   get getIsDarkTheme(): boolean {
     this.isLight = this.storageService.get(THEME_KEY);
 
     return !this.isLight;
   }
+
+  private isFirstLoad = true;
 
   form: FormGroup = this.fb.group({
     network: this.fb.control(NETWORKS.sepolia)
@@ -42,13 +44,11 @@ export class AppComponent implements OnInit{
     private themeService: ThemeService,
     private fb: FormBuilder,
     private subgraphService: SubgraphService,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private router: Router
   ) {}
 
   ngOnInit(): void {
-    this.route.params.subscribe(params => {
-       const network = params['network'];
-    });
     this.menuItemsKeys = Object.keys(MENU);
 
     this.themeControl.valueChanges
@@ -62,11 +62,42 @@ export class AppComponent implements OnInit{
     this.themeControl.setValue(this.isLight, { emitEvent: false });
   }
 
+  ngAfterViewInit(): void {
+    this.route.queryParams
+      .pipe(takeUntil(this.destroy$))
+      .subscribe(params => {
+        this.handleQueryParams(params);
+      });
+  }
+
   getSubMenuKeys(itemKey: string): string[] {
     return Object.keys(MENU[itemKey].subMenu);
   }
 
   networkChange(value: string): void {
+    this.updateNetworkQueryParam(value)
     this.subgraphService.changeNetwork(value);
+  }
+
+  handleQueryParams(params: any) {
+    if (this.isFirstLoad) {
+      this.isFirstLoad = false;
+    } else {
+      const network = params['network'];
+      if (!network || !isExcitingNetwork(network)) {
+      } else {
+        this.form.setValue({ network: network });
+      }
+      this.updateNetworkQueryParam(network);
+    }
+  }
+
+  updateNetworkQueryParam(value: string) {
+    this.router.navigate([], {
+      relativeTo: this.route,
+      queryParams: { network: value },
+      queryParamsHandling: 'merge',
+      preserveFragment: true,
+    });
   }
 }

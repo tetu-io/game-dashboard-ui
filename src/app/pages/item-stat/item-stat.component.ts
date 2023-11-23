@@ -51,6 +51,11 @@ export class ItemStatComponent implements OnInit {
       sortFn: (a: ItemInterface, b: ItemInterface) => a.destroyedCount - b.destroyedCount,
       sortDirections: ['ascend', 'descend', null],
     },
+    {
+      name: 'Owner',
+      sortFn: (a: ItemInterface, b: ItemInterface) => a.owner.localeCompare(b.owner),
+      sortDirections: ['ascend', 'descend', null],
+    },
   ];
 
   data: ItemInterface[] = [];
@@ -98,10 +103,13 @@ export class ItemStatComponent implements OnInit {
               });
             }
 
+            const owner = item.hero?.owner.id || item.user?.id || 'None';
+
             return {
               destroyedCount,
               repairedCount,
               augmentedCount,
+              owner,
               ...item
             } as ItemInterface
           });

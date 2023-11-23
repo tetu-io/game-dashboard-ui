@@ -4,4 +4,5 @@ export interface ItemInterface extends ItemEntity {
   augmentedCount: number;
   repairedCount: number;
   destroyedCount: number;
+  owner: string;
 }

@@ -44,6 +44,10 @@ query HeroesData($first: Int!) {
 
         earned {
             amount
+            token {
+                id
+                name
+            }
             reinforcementStakedFee
         }
     }

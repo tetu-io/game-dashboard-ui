@@ -42,11 +42,12 @@ export class SubgraphService {
     );
   }
 
+  // ignore first parameter
   heroes$(first: number): Observable<HeroesDataQuery['heroEntities']> {
     this.heroesGQL.client = this.getClientSubgraph();
-    return this.heroesGQL.fetch({
-      first: first
-    }).pipe(
+    return this.heroesGQL.fetch(
+      { first: 1000 }
+    ).pipe(
       map(x => x.data.heroEntities),
       retry({ count: RETRY, delay: DELAY }),
     )

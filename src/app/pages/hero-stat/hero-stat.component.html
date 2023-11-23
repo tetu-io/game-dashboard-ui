@@ -22,10 +22,10 @@
     class="loader g-flex-column__item-fixed">
   </nz-spin>
   <ng-template #loaded>
-    <div class="g-scroll-y" *ngIf="data.length > 0">
+    <div class="g-scroll-y" *ngIf="tableData.length > 0">
       <nz-table #filterTable
                 [nzPageSize]="pageSize"
-                [nzData]="data" nzTableLayout="fixed">
+                [nzData]="tableData" nzTableLayout="fixed">
         <thead>
         <tr>
           <th
@@ -52,7 +52,11 @@
           <td>{{ data.battleCount }}</td>
           <td>{{ data.eventCount }}</td>
           <td>{{ data.storyCount }}</td>
-          <td>{{ data.earn }}</td>
+          <td>
+            <div *ngFor="let token of data.tokenList">
+              {{ token }}: {{ data.tokenSums[token].toFixed(2) }}
+            </div>
+          </td>
 
         </tr>
         </tbody>
