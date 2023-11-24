@@ -21,8 +21,8 @@ const routes: Routes = [
     loadChildren: () => import('./pages/new-users/new-users.module').then(m => m.NewUsersModule),
   },
   {
-    path: MAIN_ROUTES[MENU_ITEMS.HERO_DETAILS],
-    loadChildren: () => import('./pages/hero-details/hero-details.module').then(m => m.HeroDetailsModule),
+    path: MAIN_ROUTES[MENU_ITEMS.NEW_HEROES],
+    loadChildren: () => import('./pages/new-heroes/new-heroes.module').then(m => m.NewHeroesModule),
   },
   {
     path: MAIN_ROUTES[MENU_ITEMS.STORY_STAT],

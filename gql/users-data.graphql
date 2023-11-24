@@ -8,6 +8,10 @@ query UsersData {
             }
             earned {
                 amount
+                token {
+                    id
+                    name
+                }
                 reinforcementStakedFee
             }
         }

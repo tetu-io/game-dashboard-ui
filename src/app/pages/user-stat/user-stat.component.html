@@ -24,7 +24,11 @@
           <td>{{ data.id }}</td>
           <td>{{ data.heroes.length }}</td>
           <td>{{ data.itemsSize }}</td>
-          <td>{{ data.earn }}</td>
+          <td>
+            <div *ngFor="let token of data.tokenList">
+              {{ token }}: {{ data.tokenSums[token].toFixed(2) }}
+            </div>
+          </td>
         </tr>
         </tbody>
       </nz-table>

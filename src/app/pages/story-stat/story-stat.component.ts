@@ -28,7 +28,7 @@ export class StoryStatComponent implements OnInit {
     },
     {
       name: 'Page',
-      sortFn: (a: StoryPageCount, b: StoryPageCount) => a.heroPage.localeCompare(b.heroPage),
+      sortFn: (a: StoryPageCount, b: StoryPageCount) => +a.heroPage - +(b.heroPage),
       sortDirections: ['ascend', 'descend', null],
     },
     {

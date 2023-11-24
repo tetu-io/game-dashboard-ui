@@ -7,6 +7,7 @@ export enum MENU_ITEMS {
   HEROES = 'Heroes',
   HERO_STAT = 'Hero stats',
   HERO_DETAILS = 'Hero details',
+  NEW_HEROES = 'New heroes',
   ITEM_STAT = 'Item stats',
   STORY_STAT = 'Story stats',
 }
@@ -34,9 +35,9 @@ export const MENU: { [key: string]: MenuItemInterface } = {
         icon: 'line-chart',
         label: MENU_ITEMS.HERO_STAT
       },
-      [MENU_ITEMS.HERO_DETAILS]: {
+      [MENU_ITEMS.NEW_HEROES]: {
         icon: 'line-chart',
-        label: MENU_ITEMS.HERO_DETAILS
+        label: MENU_ITEMS.NEW_HEROES
       },
     }
   },

@@ -7,6 +7,7 @@ query HeroesData($first: Int!) {
         id
         meta {
             id
+            heroClass
         }
         heroId
         owner {
@@ -14,6 +15,7 @@ query HeroesData($first: Int!) {
         }
         score
         uniqName
+        timestamp
         core {
             strength
             dexterity

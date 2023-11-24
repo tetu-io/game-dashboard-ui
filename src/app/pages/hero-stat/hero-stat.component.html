@@ -40,7 +40,7 @@
         <tbody>
         <tr *ngFor="let data of filterTable.data">
           <td>
-            <a (click)="gotoHeroDetails(data.id)">{{data.id}}</a>
+            <a (click)="goToHeroDetails(data.meta.id, data.heroId)">{{data.id}}</a>
           </td>
           <td>
             {{ data.uniqName }}

@@ -1,1 +1,1 @@
-export const DEFAULT_TABLE_SIZE = 20;
+export const DEFAULT_TABLE_SIZE = 1000;

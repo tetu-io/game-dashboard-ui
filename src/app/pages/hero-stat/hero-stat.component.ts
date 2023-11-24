@@ -8,6 +8,7 @@ import { DEFAULT_TABLE_SIZE } from '../../shared/constants/table.constant';
 import { Router } from '@angular/router';
 import { HeroItemInterface } from '../../models/hero-item.interface';
 import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
+import { NETWORKS_URLS } from '../../shared/constants/network.constant';
 
 @Component({
   selector: 'app-hero-stat',
@@ -71,6 +72,7 @@ export class HeroStatComponent implements OnInit {
 
   topSize = '10';
   isLoading = false;
+  network = '';
 
   form: FormGroup = this.fb.group({
     size: this.fb.control(this.topSize)
@@ -85,12 +87,13 @@ export class HeroStatComponent implements OnInit {
     private changeDetectorRef: ChangeDetectorRef,
     private subgraphService: SubgraphService,
     private router: Router,
-    private fb: FormBuilder
+    private fb: FormBuilder,
   ) {}
 
   ngOnInit(): void {
     this.subgraphService.networkObserver.subscribe(network => {
       this.isLoading = true;
+      this.network = network;
       this.changeDetectorRef.detectChanges();
       this.prepareData();
     })
@@ -261,8 +264,9 @@ export class HeroStatComponent implements OnInit {
       })
   }
 
-  gotoHeroDetails(heroId: string) {
-    this.router.navigate(['/hero-details', heroId]);
+  goToHeroDetails(address: string, heroId: number) {
+    const url = NETWORKS_URLS.get(this.network) + '/hero/' + address + '/' + heroId + '/stats';
+    window.open(url, '_blank');
   }
 
   sizeChange(value: string): void {

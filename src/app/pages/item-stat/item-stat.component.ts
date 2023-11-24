@@ -36,21 +36,21 @@ export class ItemStatComponent implements OnInit {
       sortFn: (a: ItemInterface, b: ItemInterface) => a.rarity - b.rarity,
       sortDirections: ['ascend', 'descend', null],
     },
-    {
-      name: 'Augmentation count',
-      sortFn: (a: ItemInterface, b: ItemInterface) => a.augmentedCount - b.augmentedCount,
-      sortDirections: ['ascend', 'descend', null],
-    },
+    // {
+    //   name: 'Augmentation count',
+    //   sortFn: (a: ItemInterface, b: ItemInterface) => a.augmentedCount - b.augmentedCount,
+    //   sortDirections: ['ascend', 'descend', null],
+    // },
     {
       name: 'Repaired count',
       sortFn: (a: ItemInterface, b: ItemInterface) => a.repairedCount - b.repairedCount,
       sortDirections: ['ascend', 'descend', null],
     },
-    {
-      name: 'Destroyed count',
-      sortFn: (a: ItemInterface, b: ItemInterface) => a.destroyedCount - b.destroyedCount,
-      sortDirections: ['ascend', 'descend', null],
-    },
+    // {
+    //   name: 'Destroyed count',
+    //   sortFn: (a: ItemInterface, b: ItemInterface) => a.destroyedCount - b.destroyedCount,
+    //   sortDirections: ['ascend', 'descend', null],
+    // },
     {
       name: 'Owner',
       sortFn: (a: ItemInterface, b: ItemInterface) => a.owner.localeCompare(b.owner),
