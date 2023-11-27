@@ -28,7 +28,7 @@ query HeroesData($first: Int!) {
             life
             mana
         }
-        items {
+        earnedItems {
             id
         }
         openedChambers {
@@ -44,7 +44,7 @@ query HeroesData($first: Int!) {
             }
         }
 
-        earned {
+        earnedTokens {
             amount
             token {
                 id

@@ -67,10 +67,10 @@ export class UserStatComponent implements OnInit {
         if (users) {
 
           this.data = (users as UserEntity[]).map(user => {
-            const itemsSize = user.items.length + user.heroes.reduce((sum, hero) => sum + hero.items.length, 0);
+            const itemsSize = user.heroes.reduce((sum, hero) => sum + hero.earnedItems.length, 0);
 
             const earn = +(user.heroes.map(hero => {
-                return +hero.earned.map(val => {
+                return +hero.earnedTokens.map(val => {
                   if (+val.amount > 0) {
                     if (val.reinforcementStakedFee > 0) {
                       return +val.amount / (10 ** 18) * ((100 - val.reinforcementStakedFee) / 100);
@@ -89,7 +89,7 @@ export class UserStatComponent implements OnInit {
             const tokenSums: { [key: string]: number } = {};
 
             user.heroes.forEach(hero => {
-              hero.earned.forEach((item) => {
+              hero.earnedTokens.forEach((item) => {
                 let amount = 0;
                 const token = item.token;
                 if (+item.amount > 0) {

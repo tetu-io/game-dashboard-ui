@@ -40,7 +40,7 @@ export class HeroStatComponent implements OnInit {
     },
     {
       name: 'Items count',
-      sortFn: (a: HeroItemInterface, b: HeroItemInterface) => a.items.length - b.items.length,
+      sortFn: (a: HeroItemInterface, b: HeroItemInterface) => a.earnedItems.length - b.earnedItems.length,
       sortDirections: ['ascend', 'descend', null],
     },
     {
@@ -139,7 +139,7 @@ export class HeroStatComponent implements OnInit {
             })
 
             const earn =
-              +(hero.earned.map(val => {
+              +(hero.earnedTokens.map(val => {
                 if (+val.amount > 0) {
                   if (val.reinforcementStakedFee > 0) {
                     return +val.amount / (10 ** 18) * ((100 - val.reinforcementStakedFee) / 100);
@@ -153,7 +153,7 @@ export class HeroStatComponent implements OnInit {
 
 
             const tokenSums: { [key: string]: number } = {};
-            hero.earned.forEach((item) => {
+            hero.earnedTokens.forEach((item) => {
               let amount = 0;
               const token = item.token;
               if (+item.amount > 0) {
@@ -203,7 +203,7 @@ export class HeroStatComponent implements OnInit {
           };
 
           this.data.forEach(hero => {
-            totalCounts.itemCount += hero.items.length;
+            totalCounts.itemCount += hero.earnedItems.length;
             totalCounts.dungeonCount += hero.dungeonCount;
             totalCounts.battleCount += hero.battleCount;
             totalCounts.eventCount += hero.eventCount;

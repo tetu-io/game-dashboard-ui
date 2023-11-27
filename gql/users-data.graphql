@@ -6,7 +6,10 @@ query UsersData {
             items {
                 id
             }
-            earned {
+            earnedItems {
+                id
+            }
+            earnedTokens {
                 amount
                 token {
                     id
