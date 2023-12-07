@@ -22,5 +22,6 @@ query UsersData {
             id
         }
         lastActionTs
+        timestamp
     }
 }
