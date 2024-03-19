@@ -3,4 +3,5 @@ export const HEROES_CLASSES = new Map<string, string>([
   ['2', 'Savage'],
   ['3', 'Mage'],
   ['4', 'Assassin'],
-]);
+  ['5', 'Ghost']
+  ]);

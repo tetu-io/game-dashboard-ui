@@ -34,7 +34,7 @@ export class NewHeroesComponent implements OnInit {
   private prepareData(): void {
     this.isLoading = true;
 
-    this.subgraphService.heroes$(1000)
+    this.subgraphService.fetchAllHeroes$()
       .pipe(takeUntil(this.destroy$))
       .subscribe(heroes => {
         if (heroes) {
@@ -106,7 +106,7 @@ export class NewHeroesComponent implements OnInit {
 
     this.options = {
       legend: {
-        data: ['Total heroes', 'Thrall', 'Savage', 'Mage', 'Assassin'],
+        data: ['Total heroes', 'Thrall', 'Savage', 'Mage', 'Assassin', 'Ghost'],
         align: 'left',
       },
       dataZoom: [

@@ -1,5 +1,5 @@
 query Hero($id: ID!) {
-    heroEntity(id: $id) @namedClient(name: "SEPOLIA_GAME_SUBGRAPH") {
+    heroEntity(id: $id) @namedClient(name: "SONIC_GAME_SUBGRAPH") {
         id
         meta {
             id

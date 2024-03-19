@@ -4,8 +4,7 @@ import { environment } from '@environments/environment';
 import { APOLLO_NAMED_OPTIONS, ApolloModule, NamedOptions } from 'apollo-angular';
 import { HttpLink } from 'apollo-angular/http';
 
-const MUMBAI_GAME_SUBGRAPH = environment.MUMBAI_GAME_SUBGRAPH;
-const SEPOLIA_GAME_SUBGRAPH = environment.SEPOLIA_GAME_SUBGRAPH;
+const SONIC_GAME_SUBGRAPH = environment.SONIC_GAME_SUBGRAPH;
 
 
 const defaultOptions: DefaultOptions = {
@@ -19,19 +18,9 @@ const defaultOptions: DefaultOptions = {
   },
 };
 
-export function createMumbaiTetuGameSubgraph(httpLink: HttpLink) {
+export function createSonicGameSubgraph(httpLink: HttpLink) {
   return {
-    link: httpLink.create({ uri: MUMBAI_GAME_SUBGRAPH }),
-    cache: new InMemoryCache({
-      resultCaching: false,
-    }),
-    defaultOptions,
-  };
-}
-
-export function createSepoliaTetuGameSubgraph(httpLink: HttpLink) {
-  return {
-    link: httpLink.create({ uri: SEPOLIA_GAME_SUBGRAPH }),
+    link: httpLink.create({ uri: SONIC_GAME_SUBGRAPH }),
     cache: new InMemoryCache({
       resultCaching: false,
     }),
@@ -46,8 +35,7 @@ export function createSepoliaTetuGameSubgraph(httpLink: HttpLink) {
       provide: APOLLO_NAMED_OPTIONS,
       useFactory(httpLink: HttpLink): NamedOptions {
         return {
-          MUMBAI_GAME_SUBGRAPH: createMumbaiTetuGameSubgraph(httpLink),
-          SEPOLIA_GAME_SUBGRAPH: createSepoliaTetuGameSubgraph(httpLink),
+          SONIC_GAME_SUBGRAPH: createSonicGameSubgraph(httpLink),
         };
       },
       deps: [HttpLink],

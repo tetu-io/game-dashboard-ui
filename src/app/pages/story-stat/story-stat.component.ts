@@ -58,7 +58,7 @@ export class StoryStatComponent implements OnInit {
 
   prepareData(): void {
     this.isLoading = true;
-    this.subgraphService.stories$()
+    this.subgraphService.fetchAllStories$()
       .pipe(takeUntil(this.destroy$))
       .subscribe(users => {
         if (users) {

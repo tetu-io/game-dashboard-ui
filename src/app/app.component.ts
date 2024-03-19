@@ -8,7 +8,7 @@ import { DestroyService } from './services/destroy.service';
 import { ThemeService } from './services/theme.service';
 import { takeUntil } from 'rxjs';
 import { MAIN_ROUTES } from './shared/constants/routes.constant';
-import { isExcitingNetwork, NETWORKS } from './shared/constants/network.constant';
+import { defaultNetwork, isExcitingNetwork, NETWORKS } from './shared/constants/network.constant';
 import { SubgraphService } from './services/subgraph.service';
 import { ActivatedRoute, Router } from '@angular/router';
 
@@ -28,7 +28,7 @@ export class AppComponent implements OnInit, AfterViewInit {
   private isFirstLoad = true;
 
   form: FormGroup = this.fb.group({
-    network: this.fb.control(NETWORKS.sepolia)
+    network: this.fb.control(defaultNetwork())
   });
 
   themeControl: FormControl = new FormControl();
