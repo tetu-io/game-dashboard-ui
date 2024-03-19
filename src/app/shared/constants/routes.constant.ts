@@ -8,4 +8,5 @@ export const MAIN_ROUTES = {
   [MENU_ITEMS.NEW_USERS]: 'new-users',
   [MENU_ITEMS.NEW_HEROES]: 'new-heroes',
   [MENU_ITEMS.STORY_STAT]: 'story-stat',
+  [MENU_ITEMS.TOKENOMICS]: 'tokenomics',
 };

@@ -29,6 +29,10 @@ const routes: Routes = [
     loadChildren: () => import('./pages/story-stat/story-stat.module').then(m => m.StoryStatModule),
   },
   {
+    path: MAIN_ROUTES[MENU_ITEMS.TOKENOMICS],
+    loadChildren: () => import('./pages/tokenomics/tokenomics.module').then(m => m.TokenomicsModule),
+  },
+  {
     path: '',
     pathMatch: 'full',
     redirectTo: MAIN_ROUTES[MENU_ITEMS.USER_STAT],

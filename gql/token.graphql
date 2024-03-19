@@ -1,0 +1,11 @@
+query Token($tokenAdr: ID!) {
+  tokenEntities(
+    where: { id: $tokenAdr }
+  ) @namedClient(name: "SONIC_GAME_SUBGRAPH") {
+    id
+    name
+    symbol
+    decimals
+    totalSupply
+  }
+}

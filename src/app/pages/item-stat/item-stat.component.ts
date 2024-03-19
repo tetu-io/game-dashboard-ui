@@ -81,7 +81,7 @@ export class ItemStatComponent implements OnInit {
 
   prepareData(): void {
     this.isLoading = true;
-    this.subgraphService.items$()
+    this.subgraphService.fetchAllItems$()
       .pipe(takeUntil(this.destroy$))
       .subscribe(items => {
         if (items) {

@@ -1,0 +1,16 @@
+query ItemsActionData($first: Int!, $skip: Int!) {
+    itemActionEntities(
+        where: {action_in: ["REPAIRED", "AUGMENTED"]}
+        first: $first
+        skip: $skip
+    ) @namedClient(name: "SONIC_GAME_SUBGRAPH") {
+        action
+        item {
+            meta {
+                feeToken {
+                    amount
+                }
+            }
+        }
+    }
+}

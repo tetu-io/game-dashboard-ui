@@ -1,17 +1,26 @@
-query HeroesData($first: Int!) {
+query HeroesData($first: Int!, $skip: Int!) {
     heroEntities(
         orderBy: stats__level
         orderDirection: desc
         first: $first
-    ) @namedClient(name: "SEPOLIA_GAME_SUBGRAPH") {
+        skip: $skip
+    ) @namedClient(name: "SONIC_GAME_SUBGRAPH") {
         id
         meta {
             id
             heroClass
+            feeToken {
+                amount
+            }
         }
         heroId
         owner {
             id
+        }
+        reinforcementRewardTokens {
+            tokenInfo {
+                amount
+            }
         }
         score
         uniqName
