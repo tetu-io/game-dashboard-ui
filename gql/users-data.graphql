@@ -4,7 +4,7 @@ query UsersData($first: Int!, $skip: Int!) {
         skip: $skip
     ) @namedClient(name: "SONIC_GAME_SUBGRAPH") {
         id
-        heroes {
+        heroes(first: 1000) {
             id
             items {
                 id
@@ -20,6 +20,7 @@ query UsersData($first: Int!, $skip: Int!) {
                 }
                 reinforcementStakedFee
             }
+            dead
         }
         items {
             id

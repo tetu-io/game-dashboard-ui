@@ -33,6 +33,10 @@ const routes: Routes = [
     loadChildren: () => import('./pages/tokenomics/tokenomics.module').then(m => m.TokenomicsModule),
   },
   {
+    path: MAIN_ROUTES[MENU_ITEMS.TOKENOMICS_CHART],
+    loadChildren: () => import('./pages/tokenomics-stat/tokenomics-stat.module').then(m => m.TokenomicsStatModule),
+  },
+  {
     path: '',
     pathMatch: 'full',
     redirectTo: MAIN_ROUTES[MENU_ITEMS.USER_STAT],

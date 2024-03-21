@@ -34,43 +34,58 @@ export class HeroStatComponent implements OnInit {
       sortDirections: ['ascend', 'descend', null],
     },
     {
+      name: 'Life Chance',
+      sortFn: (a: HeroItemInterface, b: HeroItemInterface) => a.stats.lifeChances - b.stats.lifeChances,
+      sortDirections: ['ascend', 'descend', null],
+    },
+    {
       name: 'Score',
       sortFn: (a: HeroItemInterface, b: HeroItemInterface) => a.score - b.score,
       sortDirections: ['ascend', 'descend', null],
     },
     {
-      name: 'Items count',
+      name: 'Items minted',
       sortFn: (a: HeroItemInterface, b: HeroItemInterface) => a.earnedItems.length - b.earnedItems.length,
       sortDirections: ['ascend', 'descend', null],
     },
     {
-      name: 'Dungeon count',
+      name: 'Dungeon passed',
       sortFn: (a: HeroItemInterface, b: HeroItemInterface) => a.dungeonCount - b.dungeonCount,
       sortDirections: ['ascend', 'descend', null],
     },
     {
-      name: 'Battle count',
+      name: 'Battle passed',
       sortFn: (a: HeroItemInterface, b: HeroItemInterface) => a.battleCount - b.battleCount,
       sortDirections: ['ascend', 'descend', null],
     },
     {
-      name: 'Event count',
+      name: 'Event passed',
       sortFn: (a: HeroItemInterface, b: HeroItemInterface) => a.eventCount - b.eventCount,
       sortDirections: ['ascend', 'descend', null],
     },
     {
-      name: 'Story count',
+      name: 'Story passed',
       sortFn: (a: HeroItemInterface, b: HeroItemInterface) => a.storyCount - b.storyCount,
       sortDirections: ['ascend', 'descend', null],
     },
     {
       name: 'Earned',
-      sortFn: (a: HeroItemInterface, b: HeroItemInterface) => a.earn - b.earn,
+      sortFn: (a: HeroItemInterface, b: HeroItemInterface) => a.earnTokens - b.earnTokens,
       sortDirections: ['ascend', 'descend', null],
     },
+    {
+      name: 'Spent',
+      sortFn: (a: HeroItemInterface, b: HeroItemInterface) => a.spentTokens - b.spentTokens,
+      sortDirections: ['ascend', 'descend', null],
+    },
+    {
+      name: 'Ratio',
+      sortFn: (a: HeroItemInterface, b: HeroItemInterface) => a.ratio - b.ratio,
+      sortDirections: ['ascend', 'descend', null],
+    }
   ];
 
-  topSize = '10';
+  topSize = '100';
   isLoading = false;
   network = '';
 
@@ -138,7 +153,7 @@ export class HeroStatComponent implements OnInit {
               dungeonCount = dungeon.size;
             })
 
-            const earn =
+            const earnTokens =
               +(hero.earnedTokens.map(val => {
                 if (+val.amount > 0) {
                   if (val.reinforcementStakedFee > 0) {
@@ -151,45 +166,21 @@ export class HeroStatComponent implements OnInit {
                 return accumulator + currentValue;
               }, 0)).toFixed(2);
 
+            let spentTokens = 0;
+            for (let i = 1; i <= hero.stats.level; i++) {
+              spentTokens += (i * +hero.meta.feeToken.amount);
+            }
 
-            const tokenSums: { [key: string]: number } = {};
-            hero.earnedTokens.forEach((item) => {
-              let amount = 0;
-              const token = item.token;
-              if (+item.amount > 0) {
-                if (item.reinforcementStakedFee > 0) {
-                  amount = +item.amount / (10 ** 18) * ((100 - item.reinforcementStakedFee) / 100);
-                }
-                amount = +item.amount / (10 ** 18)
-              }
-              const tokenName = token.name;
-              if (tokenSums[tokenName]) {
-                tokenSums[tokenName] += amount;
-              } else {
-                tokenSums[tokenName] = amount;
-              }
-
-              // average logic
-              if (tokenSumCounts[tokenName]) {
-                tokenSumCounts[tokenName].sum += amount;
-              } else {
-                tokenSumCounts[tokenName] = { sum: amount };
-              }
-            });
-
-            const tokenList = Object.keys(tokenSums);
-            const earnedList = Object.values(tokenSums);
-
+            const ratio = +((spentTokens / earnTokens)).toFixed(2);
             return {
               ...hero,
               battleCount,
               eventCount,
               storyCount,
               dungeonCount,
-              tokenList,
-              earn,
-              earnedList,
-              tokenSums
+              earnTokens,
+              spentTokens,
+              ratio
             } as HeroItemInterface;
           });
 
@@ -199,7 +190,9 @@ export class HeroStatComponent implements OnInit {
             battleCount: 0,
             eventCount: 0,
             storyCount: 0,
-            earnCount: 0
+            earnCount: 0,
+            spentCount: 0,
+            rationCount: 0
           };
 
           this.data.forEach(hero => {
@@ -208,7 +201,9 @@ export class HeroStatComponent implements OnInit {
             totalCounts.battleCount += hero.battleCount;
             totalCounts.eventCount += hero.eventCount;
             totalCounts.storyCount += hero.storyCount;
-            totalCounts.earnCount += hero.earn
+            totalCounts.earnCount += hero.earnTokens;
+            totalCounts.spentCount += hero.spentTokens;
+            totalCounts.rationCount += hero.ratio;
           });
 
           const averages = {
@@ -218,24 +213,10 @@ export class HeroStatComponent implements OnInit {
             eventAverage: this.data.length > 0 ? totalCounts.eventCount / this.data.length : 0,
             storyAverage: this.data.length > 0 ? totalCounts.storyCount / this.data.length : 0,
             earnAverage: this.data.length > 0 ? totalCounts.earnCount / this.data.length : 0,
+            spentAverage: this.data.length > 0 ? totalCounts.spentCount / this.data.length : 0,
+            ratioAverage: this.data.length > 0 ? totalCounts.rationCount / this.data.length : 0
           };
 
-
-          // earn average logic
-          const tokenAverages: { [key: string]: number } = {};
-          for (const token in tokenSumCounts) {
-            if (tokenSumCounts.hasOwnProperty(token)) {
-              const { sum } = tokenSumCounts[token];
-              tokenAverages[token] = +(sum / this.data.filter(a => a.earn > 0).length).toFixed(2);
-            }
-          }
-
-          let tokenAverageColumn = '';
-          for (const token in tokenAverages) {
-            if (tokenAverages.hasOwnProperty(token)) {
-              tokenAverageColumn = tokenAverageColumn + `average ~ ${tokenAverages[token]} ${token}\n`;
-            }
-          }
 
           this.columns.forEach(column => {
             if (column.name.startsWith('Items count')) {
@@ -254,7 +235,13 @@ export class HeroStatComponent implements OnInit {
               column.name = `Story count, (average ~ ${Math.round(averages.storyAverage)})`;
             }
             if (column.name.startsWith('Earned')) {
-              column.name = `Earned, (${tokenAverageColumn})`;
+              column.name = `Earned, (average ~ ${Math.round(averages.earnAverage)})`;
+            }
+            if (column.name.startsWith('Spent')) {
+              column.name = `Spent, (average ~ ${Math.round(averages.spentAverage)})`;
+            }
+            if (column.name.startsWith('Ratio')) {
+              column.name = `Ratio, (average ~ ${averages.ratioAverage})`;
             }
           })
           this.tableData = this.data.sort((a, b) => b.stats.level - a.stats.level).slice(0, +this.topSize);

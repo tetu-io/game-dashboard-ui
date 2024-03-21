@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import {
+  HeroActionGQL, HeroActionQuery,
   HeroesDataGQL,
   HeroesDataQuery, HeroGQL, HeroQuery, ItemsActionDataGQL, ItemsActionDataQuery,
   ItemsDataGQL,
@@ -29,7 +30,8 @@ export class SubgraphService {
     private storyGQL: StoryDataGQL,
     private heroGQL: HeroGQL,
     private tokenGQL: TokenGQL,
-    private itemActionGQL: ItemsActionDataGQL
+    private itemActionGQL: ItemsActionDataGQL,
+    private heroActionGQL: HeroActionGQL,
   ) { }
 
   changeNetwork(network: string): void {
@@ -219,6 +221,40 @@ export class SubgraphService {
 
       fetchStories();
     });
+  }
+
+  heroActions$(first: number, skip: number = 0): Observable<HeroActionQuery['heroActions']> {
+    this.heroActionGQL.client = this.getClientSubgraph();
+    return this.heroActionGQL.fetch(
+      { first: first, skip: skip }
+    ).pipe(
+      map(x => x.data.heroActions),
+      retry({ count: RETRY, delay: DELAY }),
+    )
+  }
+
+  fetchAllHeroActions$(): Observable<HeroActionQuery['heroActions']> {
+    let allHeroActions: HeroActionQuery['heroActions'] = [];
+    let skip = 0;
+    const first = 1000;
+
+    return new Observable(observer => {
+      const fetchHeroActions = () => {
+        this.heroActions$(first, skip).subscribe(heroActions => {
+          if (heroActions.length > 0) {
+            allHeroActions = allHeroActions.concat(heroActions);
+            skip += first;
+            fetchHeroActions();
+          } else {
+            observer.next(allHeroActions);
+            observer.complete();
+          }
+        });
+      };
+
+      fetchHeroActions();
+    });
+
   }
 
   private getClientSubgraph(): string {

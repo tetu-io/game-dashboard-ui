@@ -26,6 +26,7 @@ export class TokenomicsComponent implements OnInit {
   totalUsersEarned = '0';
   spentOnItems = '0';
   spentOnHeroes = '0';
+  spentOnHeroLvlUp = '0';
 
   network = '';
   chainId = 0;
@@ -66,31 +67,41 @@ export class TokenomicsComponent implements OnInit {
           this.symbol = tokenData[0].symbol;
           this.totalSupply = Formatter.formatCurrency(+formatUnits(tokenData[0].totalSupply, tokenData[0].decimals));
           // @ts-ignore
-          this.rewardFirstBiome = Formatter.formatCurrency(+formatUnits(treasuryAmount1[1] + treasuryAmount1[2], tokenData[0].decimals));
+          this.rewardFirstBiome = (+formatUnits(treasuryAmount1[1] + treasuryAmount1[2], tokenData[0].decimals)).toFixed(4);
           // @ts-ignore
-          this.rewardSecondBiome = Formatter.formatCurrency(+formatUnits(treasuryAmount2[1] + treasuryAmount2[2], tokenData[0].decimals));
+          this.rewardSecondBiome = (+formatUnits(treasuryAmount2[1] + treasuryAmount2[2], tokenData[0].decimals)).toFixed(4);
           // @ts-ignore
-          this.rewardThirdBiome = Formatter.formatCurrency(+formatUnits(treasuryAmount3[1] + treasuryAmount3[2], tokenData[0].decimals));
+          this.rewardThirdBiome = (+formatUnits(treasuryAmount3[1] + treasuryAmount3[2], tokenData[0].decimals)).toFixed(4);
           // @ts-ignore
-          this.rewardFourthBiome = Formatter.formatCurrency(+formatUnits(treasuryAmount4[1] + treasuryAmount4[2], tokenData[0].decimals));
-
-          this.totalUsersEarned = Formatter.formatCurrency(heroes.reduce((total, hero) => {
+          this.rewardFourthBiome = `${(+formatUnits(treasuryAmount4[1], tokenData[0].decimals)).toFixed(4)} + ${(+formatUnits(treasuryAmount4[2], tokenData[0].decimals)).toFixed(4)} = ${(+formatUnits(treasuryAmount4[2], tokenData[0].decimals)).toFixed(4)}`
+          this.totalUsersEarned = (heroes.reduce((total, hero) => {
             const earnedSum = hero.earnedTokens.reduce((sum, earned) => {
               const val = +formatUnits(earned.amount, tokenData[0].decimals);
               return sum + val
             }, 0);
             return total + earnedSum;
-          }, 0));
+          }, 0)).toFixed(4);
 
-          this.spentOnItems = Formatter.formatCurrency(
+          this.spentOnItems = (
             itemActions.reduce((total, action) => {
               return total + +action.item.meta.feeToken.amount
             }, 0)
-          );
+          ).toFixed(4);
 
-          this.spentOnHeroes = Formatter.formatCurrency(
+          this.spentOnHeroes = (
             heroes.reduce((total, hero) => +hero.meta.feeToken.amount + total, 0)
-          );
+          ).toFixed(4);
+
+          this.spentOnHeroLvlUp = (
+            heroes.reduce((total, hero) => {
+              if (hero.stats.level > 1) {
+                for (let i = 2; i <= hero.stats.level; i++) {
+                  total += i * +hero.meta.feeToken.amount;
+                }
+              }
+              return total;
+            }, 0)
+          ).toFixed(4);
         }
         if (allUsers) {
           this.users = allUsers.length;
