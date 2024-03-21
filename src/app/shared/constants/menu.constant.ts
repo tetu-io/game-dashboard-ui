@@ -10,13 +10,26 @@ export enum MENU_ITEMS {
   NEW_HEROES = 'New heroes',
   ITEM_STAT = 'Item stats',
   STORY_STAT = 'Story stats',
+  TOKENOMICS_STAT = 'Tokenomics stats',
   TOKENOMICS = 'Tokenomics',
+  TOKENOMICS_CHART = 'Tokenomics chart',
+
 }
 
 export const MENU: { [key: string]: MenuItemInterface } = {
-  [MENU_ITEMS.TOKENOMICS]: {
+  [MENU_ITEMS.TOKENOMICS_STAT]: {
     icon: 'line-chart',
-    label: MENU_ITEMS.TOKENOMICS,
+    label: MENU_ITEMS.TOKENOMICS_STAT,
+    subMenu: {
+      [MENU_ITEMS.TOKENOMICS]: {
+        icon: 'line-chart',
+        label: MENU_ITEMS.TOKENOMICS
+      },
+      [MENU_ITEMS.TOKENOMICS_CHART]: {
+        icon: 'line-chart',
+        label: MENU_ITEMS.TOKENOMICS_CHART
+      },
+    }
   },
   [MENU_ITEMS.USERS]: {
     icon: 'line-chart',

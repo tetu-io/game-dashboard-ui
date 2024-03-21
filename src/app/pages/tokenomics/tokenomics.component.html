@@ -5,31 +5,34 @@
 <ng-template #loaded>
   <nz-row [nzGutter]="16" >
     <nz-col class="row-padding" [nzOffset]="2" [nzSpan]="7">
-      <nz-statistic [nzValue]="totalSupply + ' ' + symbol" [nzTitle]="'Total Supply'"></nz-statistic>
+      <nz-statistic [nzValue]="totalSupply" [nzTitle]="'Total Supply'"></nz-statistic>
     </nz-col>
     <nz-col class="row-padding" [nzSpan]="7">
       <nz-statistic [nzValue]="users" [nzTitle]="'Users'"></nz-statistic>
     </nz-col>
     <nz-col class="row-padding" [nzSpan]="7">
-      <nz-statistic [nzValue]="rewardFirstBiome + ' ' + symbol" [nzTitle]="'Rewards per dung in 1 Biome'"></nz-statistic>
+      <nz-statistic [nzValue]="rewardFirstBiome" [nzTitle]="'Rewards per dung in 1 Biome'"></nz-statistic>
     </nz-col>
     <nz-col class="row-padding" [nzSpan]="7" [nzOffset]="2">
-      <nz-statistic [nzValue]="rewardSecondBiome + ' ' + symbol" [nzTitle]="'Rewards per dung in 2 Biome'"></nz-statistic>
+      <nz-statistic [nzValue]="rewardSecondBiome" [nzTitle]="'Rewards per dung in 2 Biome'"></nz-statistic>
     </nz-col>
     <nz-col class="row-padding" [nzSpan]="7">
-      <nz-statistic [nzValue]="rewardThirdBiome + ' ' + symbol" [nzTitle]="'Rewards per dung in 3 Biome'"></nz-statistic>
+      <nz-statistic [nzValue]="rewardThirdBiome" [nzTitle]="'Rewards per dung in 3 Biome'"></nz-statistic>
     </nz-col>
     <nz-col class="row-padding" [nzSpan]="7">
-      <nz-statistic [nzValue]="rewardFourthBiome + ' ' + symbol" [nzTitle]="'Rewards per dung in 4 Biome'"></nz-statistic>
+      <nz-statistic [nzValue]="rewardFourthBiome" [nzTitle]="'Rewards per dung in 4 Biome'"></nz-statistic>
     </nz-col>
     <nz-col class="row-padding" [nzSpan]="7" [nzOffset]="2">
-      <nz-statistic [nzValue]="totalUsersEarned + ' ' + symbol" [nzTitle]="'Total user earned'"></nz-statistic>
+      <nz-statistic [nzValue]="totalUsersEarned" [nzTitle]="'Total user earned'"></nz-statistic>
     </nz-col>
     <nz-col class="row-padding" [nzSpan]="7">
-      <nz-statistic [nzValue]="spentOnItems + ' ' + symbol" [nzTitle]="'Spent on items(augment + repaired)'"></nz-statistic>
+      <nz-statistic [nzValue]="spentOnItems" [nzTitle]="'Spent on items(augment + repaired)'"></nz-statistic>
     </nz-col>
     <nz-col class="row-padding" [nzSpan]="7">
-      <nz-statistic [nzValue]="spentOnHeroes + ' ' + symbol" [nzTitle]="'Spent on heroes(create hero)'"></nz-statistic>
+      <nz-statistic [nzValue]="spentOnHeroes" [nzTitle]="'Spent on heroes(create hero)'"></nz-statistic>
+    </nz-col>
+    <nz-col class="row-padding" [nzSpan]="7" [nzOffset]="2">
+      <nz-statistic [nzValue]="spentOnHeroLvlUp" [nzTitle]="'Spent on hero level up'"></nz-statistic>
     </nz-col>
   </nz-row>
 </ng-template>

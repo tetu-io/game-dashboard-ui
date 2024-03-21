@@ -1,0 +1,20 @@
+query HeroAction($first: Int!, $skip: Int!) {
+    heroActions(
+        where: {
+            action_in: [0, 2]
+        }
+        first: $first
+        skip: $skip
+    ) @namedClient(name: "SONIC_GAME_SUBGRAPH") {
+        action
+        timestamp
+        values
+        hero {
+            meta {
+                feeToken {
+                    amount
+                }
+            }
+        }
+    }
+}

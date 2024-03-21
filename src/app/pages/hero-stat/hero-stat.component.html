@@ -12,6 +12,7 @@
             <nz-option nzValue="10" nzLabel="10"></nz-option>
             <nz-option nzValue="50" nzLabel="50"></nz-option>
             <nz-option nzValue="100" nzLabel="100"></nz-option>
+            <nz-option nzValue="1000" nzLabel="1000"></nz-option>
           </nz-select>
         </nz-form-control>
       </nz-form-item>
@@ -46,18 +47,16 @@
             {{ data.uniqName }}
           </td>
           <td>{{ data.stats.level }}</td>
+          <td>{{ data.stats.lifeChances }}</td>
           <td>{{ data.score }}</td>
           <td>{{ data.earnedItems.length }}</td>
           <td>{{ data.dungeonCount }}</td>
           <td>{{ data.battleCount }}</td>
           <td>{{ data.eventCount }}</td>
           <td>{{ data.storyCount }}</td>
-          <td>
-            <div *ngFor="let token of data.tokenList">
-              {{ token }}: {{ data.tokenSums[token].toFixed(2) }}
-            </div>
-          </td>
-
+          <td>{{ data.earnTokens }}</td>
+          <td>{{ data.spentTokens }}</td>
+          <td>{{ data.ratio }}</td>
         </tr>
         </tbody>
       </nz-table>

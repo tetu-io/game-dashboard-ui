@@ -11,6 +11,10 @@ query ItemsData($first: Int!, $skip: Int!) {
         user {
             id
         }
+        itemId
+        meta {
+            id
+        }
         score
         augmentationLevel
         durability

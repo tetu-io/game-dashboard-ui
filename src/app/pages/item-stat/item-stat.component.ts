@@ -6,6 +6,7 @@ import { SubgraphService } from '../../services/subgraph.service';
 import { takeUntil } from 'rxjs';
 import { ItemEntity } from '../../../../generated/gql';
 import { ItemInterface } from '../../models/item.interface';
+import { NETWORKS_URLS } from '../../shared/constants/network.constant';
 
 @Component({
   selector: 'app-item-stat',
@@ -62,6 +63,7 @@ export class ItemStatComponent implements OnInit {
   isLoading = false;
 
   pageSize = DEFAULT_TABLE_SIZE;
+  network = '';
 
 
   constructor(
@@ -72,7 +74,8 @@ export class ItemStatComponent implements OnInit {
 
   ngOnInit(): void {
 
-    this.subgraphService.networkObserver.subscribe(() => {
+    this.subgraphService.networkObserver.subscribe(network => {
+      this.network = network;
       this.isLoading = true;
       this.changeDetectorRef.detectChanges();
       this.prepareData();
@@ -151,4 +154,8 @@ export class ItemStatComponent implements OnInit {
       })
   }
 
+  goToItemDetails(address: string, id: number) {
+    const url = NETWORKS_URLS.get(this.network) + '/item?itemAdr=' + address + '&itemId=' + id;
+    window.open(url, '_blank');
+  }
 }

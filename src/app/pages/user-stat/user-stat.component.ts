@@ -67,7 +67,7 @@ export class UserStatComponent implements OnInit {
         if (users) {
 
           this.data = (users as UserEntity[]).map(user => {
-            const itemsSize = user.heroes.reduce((sum, hero) => sum + hero.earnedItems.length, 0);
+            const itemsSize = user.heroes.reduce((sum, hero) => sum + hero.items.length, 0) + user.items.length;
 
             const earn = +(user.heroes.map(hero => {
                 return +hero.earnedTokens.map(val => {

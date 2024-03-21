@@ -36,8 +36,11 @@ query HeroesData($first: Int!, $skip: Int!) {
             experience
             life
             mana
+            lifeChances
         }
-        earnedItems {
+        earnedItems(
+            first: 1000
+        ) {
             id
         }
         openedChambers {

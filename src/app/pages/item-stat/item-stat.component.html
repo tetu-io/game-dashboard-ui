@@ -23,7 +23,7 @@
         <tbody>
         <tr *ngFor="let data of filterTable.data">
           <td>
-            {{ data.id }}
+            <a (click)="goToItemDetails(data.meta.id, data.itemId)">{{ data.id }}</a>
           </td>
           <td>{{ data.score}}</td>
           <td>{{ data.augmentationLevel}}</td>
