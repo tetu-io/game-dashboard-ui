@@ -65,7 +65,7 @@ export class TokenomicsComponent implements OnInit {
       .subscribe(({ tokenData, allUsers, treasuryAmount1, treasuryAmount2, treasuryAmount3, treasuryAmount4, heroes, itemActions }) => {
         if (tokenData && tokenData.length > 0) {
           this.symbol = tokenData[0].symbol;
-          this.totalSupply = Formatter.formatCurrency(+formatUnits(tokenData[0].totalSupply, tokenData[0].decimals));
+          this.totalSupply = (+formatUnits(tokenData[0].totalSupply, tokenData[0].decimals)).toFixed(4);
           // @ts-ignore
           this.rewardFirstBiome = (+formatUnits(treasuryAmount1[1] + treasuryAmount1[2], tokenData[0].decimals)).toFixed(4);
           // @ts-ignore
