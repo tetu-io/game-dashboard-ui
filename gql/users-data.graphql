@@ -4,8 +4,26 @@ query UsersData($first: Int!, $skip: Int!) {
         skip: $skip
     ) @namedClient(name: "SONIC_GAME_SUBGRAPH") {
         id
+        itemActions {
+            action
+        }
+        pawnshopActions {
+            id
+        }
         heroes(first: 1000) {
             id
+            refCode
+            dead
+            timestamp
+            staked
+            biome
+            meta {
+                heroClass
+            }
+            stats {
+                level
+                lifeChances
+            }
             items {
                 id
             }
@@ -20,10 +38,29 @@ query UsersData($first: Int!, $skip: Int!) {
                 }
                 reinforcementStakedFee
             }
-            dead
+            actions(
+                where: { action: 1 }
+                first: 100
+                orderBy: timestamp
+                orderDirection: desc
+            ) {
+                id
+                action
+                timestamp
+            }
         }
         items {
             id
+            meta {
+                durability
+            }
+            burned
+            durability
+            actions(
+                first: 1000
+            ) {
+                action
+            }
         }
         lastActionTs
         timestamp

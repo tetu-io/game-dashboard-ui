@@ -1,0 +1,26 @@
+<div>
+  <nz-spin
+    *ngIf="isLoading; else loaded"
+    class="loader g-flex-column__item-fixed">
+  </nz-spin>
+  <ng-template #loaded>
+    <div *ngIf="data.length > 0">
+      <nz-table #filterTable [nzPageSize]="50" [nzData]="data" [nzShowPagination]="false">
+        <thead>
+        <tr>
+          <th *ngFor="let column of columns">
+            {{ column }}
+          </th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr *ngFor="let data of filterTable.data">
+          <td>{{ data.parameter }}</td>
+          <td>{{ data.value }}</td>
+          <td>{{ data.comment }}</td>
+        </tr>
+        </tbody>
+      </nz-table>
+    </div>
+  </ng-template>
+</div>

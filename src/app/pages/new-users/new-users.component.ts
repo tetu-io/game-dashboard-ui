@@ -1,5 +1,5 @@
 import { Component, OnInit, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
-import { EChartsOption } from 'echarts';
+import { EChartsOption, SeriesOption } from 'echarts';
 import { SubgraphService } from '../../services/subgraph.service';
 import { DestroyService } from '../../services/destroy.service';
 import { UserEntity } from '../../../../generated/gql';
@@ -52,18 +52,59 @@ export class NewUsersComponent implements OnInit {
       return date.toISOString().split('T')[0];
     };
 
-    const dateCounts = data.reduce((acc, { timestamp }) => {
-      const dateString = convertToDateString(timestamp + '');
+    const userByDates: Record<string, UserEntity[]> = {};
+    const dateCounts = data.reduce((acc, data) => {
+      const dateString = convertToDateString(data.timestamp + '');
       acc[dateString] = (acc[dateString] || 0) + 1;
+      if (userByDates[dateString]) {
+        userByDates[dateString].push(data);
+      } else {
+        userByDates[dateString] = []
+        userByDates[dateString].push(data);
+      }
       return acc;
     }, {} as Record<string, number>);
 
     const dates = Object.keys(dateCounts).sort();
     const counts = dates.map(date => dateCounts[date]);
 
+    // by refCode
+    let series: SeriesOption[] = [];
+    let countsRef: number[] = [];
+    Object.keys(userByDates).map(date => {
+      const count = userByDates[date].filter(user => {
+        if (user.heroes.filter(hero => hero.refCode !== null).length > 0) {
+          return true;
+        }
+        return false;
+      }).length;
+
+      countsRef.push(count);
+    });
+
+    series.push(
+      {
+        name: 'User created by ref code',
+        type: 'line',
+        data: countsRef
+      }
+    );
+
+    series.push(
+      {
+        name: 'New users',
+        type: 'line',
+        data: counts,
+        emphasis: {
+          focus: 'series',
+        },
+        animationDelay: idx => idx * 10,
+      }
+    )
+
     this.options = {
       legend: {
-        data: ['New users'],
+        data: ['New users', 'User created by ref code'],
         align: 'left',
       },
       dataZoom: [
@@ -99,17 +140,7 @@ export class NewUsersComponent implements OnInit {
       yAxis: {
         minInterval: 1
       },
-      series: [
-        {
-          name: 'New users',
-          type: 'line',
-          data: counts,
-          emphasis: {
-            focus: 'series',
-          },
-          animationDelay: idx => idx * 10,
-        }
-      ],
+      series: series,
       animationEasing: 'elasticOut',
       animationDelayUpdate: idx => idx * 5,
     };

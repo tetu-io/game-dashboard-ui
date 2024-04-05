@@ -1,11 +1,15 @@
-query ItemsActionData($first: Int!, $skip: Int!) {
-    itemActionEntities(
-        where: {action_in: [0, 3]}
+query AllHeroAction($first: Int!, $skip: Int!) {
+    heroActions(
         first: $first
         skip: $skip
     ) @namedClient(name: "SONIC_GAME_SUBGRAPH") {
         action
-        item {
+        timestamp
+        values
+        owner {
+            id
+        }
+        hero {
             meta {
                 feeToken {
                     amount

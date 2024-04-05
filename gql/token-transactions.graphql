@@ -1,0 +1,17 @@
+query TokenTransactions($token: String!, $first: Int!, $skip: Int!) {
+    tokenTransactionEntities(
+        where: { token: $token }
+        first: $first
+        skip: $skip
+        orderBy: amount
+        orderDirection: desc
+    ) @namedClient(name: "SONIC_GAME_SUBGRAPH") {
+        token {
+            id
+        }
+        from
+        to
+        amount
+        createdAtBlock
+    }
+}

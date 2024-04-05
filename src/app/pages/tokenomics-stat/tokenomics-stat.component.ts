@@ -35,7 +35,7 @@ export class TokenomicsStatComponent implements OnInit {
   private prepareData(): void {
     this.isLoading = true;
 
-    this.subgraphService.fetchAllHeroActions$()
+    this.subgraphService.fetchHeroActionsByType$([0, 2])
       .pipe(takeUntil(this.destroy$))
       .subscribe(heroActions => {
         if (heroActions) {
@@ -70,6 +70,7 @@ export class TokenomicsStatComponent implements OnInit {
     // class count
     const spentOn: Record<string, Record<string, number>> = {};
     data.forEach(heroAction => {
+      console.log(heroAction);
       const dateString = convertToDateString(heroAction.timestamp + '');
       const type = heroAction.action
 

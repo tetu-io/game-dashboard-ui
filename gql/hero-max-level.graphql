@@ -1,0 +1,11 @@
+query HeroMaxLevelData {
+    heroEntities(
+        orderBy: stats__level
+        orderDirection: desc
+        first: 1
+    ) @namedClient(name: "SONIC_GAME_SUBGRAPH"){
+        stats {
+            level
+        }
+    }
+}
