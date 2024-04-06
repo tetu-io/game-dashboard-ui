@@ -70,7 +70,6 @@ export class TokenomicsStatComponent implements OnInit {
     // class count
     const spentOn: Record<string, Record<string, number>> = {};
     data.forEach(heroAction => {
-      console.log(heroAction);
       const dateString = convertToDateString(heroAction.timestamp + '');
       const type = heroAction.action
 

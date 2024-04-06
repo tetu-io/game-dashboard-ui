@@ -2,13 +2,22 @@ query UsersData($first: Int!, $skip: Int!) {
     userEntities(
         first: $first
         skip: $skip
+        orderBy: timestamp
+        orderDirection: asc
     ) @namedClient(name: "SONIC_GAME_SUBGRAPH") {
         id
         itemActions {
             action
         }
-        pawnshopActions {
+        pawnshopActions(
+            where: { action_in: [0 ,4] }
+            first: 1000
+            orderBy: timestamp
+            orderDirection: desc
+        ) {
             id
+            action
+            timestamp
         }
         heroes(first: 1000) {
             id
@@ -30,17 +39,22 @@ query UsersData($first: Int!, $skip: Int!) {
             earnedItems {
                 id
             }
-            earnedTokens {
+            earnedTokens(
+                first: 1000
+                orderDirection: desc
+                orderBy: timestamp
+            ) {
                 amount
                 token {
                     id
                     name
                 }
                 reinforcementStakedFee
+                timestamp
             }
             actions(
                 where: { action: 1 }
-                first: 100
+                first: 1000
                 orderBy: timestamp
                 orderDirection: desc
             ) {
