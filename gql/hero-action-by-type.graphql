@@ -9,6 +9,9 @@ query HeroAction($first: Int!, $skip: Int!, $actions: [Int!]!) {
         action
         timestamp
         values
+        owner {
+            id
+        }
         hero {
             owner {
                 id

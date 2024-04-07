@@ -11,28 +11,43 @@
       <nz-statistic [nzValue]="users" [nzTitle]="'Users'"></nz-statistic>
     </nz-col>
     <nz-col class="row-padding" [nzSpan]="7">
-      <nz-statistic [nzValue]="rewardFirstBiome" [nzTitle]="'Rewards per dung in 1 Biome'"></nz-statistic>
+      <nz-statistic [nzValue]="payerUsers" [nzTitle]="'Payer users'"></nz-statistic>
     </nz-col>
     <nz-col class="row-padding" [nzSpan]="7" [nzOffset]="2">
+      <nz-statistic [nzValue]="rewardFirstBiome" [nzTitle]="'Rewards per dung in 1 Biome'"></nz-statistic>
+    </nz-col>
+    <nz-col class="row-padding" [nzSpan]="7">
       <nz-statistic [nzValue]="rewardSecondBiome" [nzTitle]="'Rewards per dung in 2 Biome'"></nz-statistic>
     </nz-col>
     <nz-col class="row-padding" [nzSpan]="7">
       <nz-statistic [nzValue]="rewardThirdBiome" [nzTitle]="'Rewards per dung in 3 Biome'"></nz-statistic>
     </nz-col>
-    <nz-col class="row-padding" [nzSpan]="7">
+    <nz-col class="row-padding" [nzSpan]="7" [nzOffset]="2">
       <nz-statistic [nzValue]="rewardFourthBiome" [nzTitle]="'Rewards per dung in 4 Biome'"></nz-statistic>
     </nz-col>
-    <nz-col class="row-padding" [nzSpan]="7" [nzOffset]="2">
+    <nz-col class="row-padding" [nzSpan]="7">
       <nz-statistic [nzValue]="totalUsersEarned" [nzTitle]="'Total user earned'"></nz-statistic>
     </nz-col>
     <nz-col class="row-padding" [nzSpan]="7">
       <nz-statistic [nzValue]="spentOnItems" [nzTitle]="'Spent on items(augment + repaired)'"></nz-statistic>
     </nz-col>
-    <nz-col class="row-padding" [nzSpan]="7">
+    <nz-col class="row-padding" [nzSpan]="7" [nzOffset]="2">
       <nz-statistic [nzValue]="spentOnHeroes" [nzTitle]="'Spent on heroes(create hero)'"></nz-statistic>
     </nz-col>
-    <nz-col class="row-padding" [nzSpan]="7" [nzOffset]="2">
+    <nz-col class="row-padding" [nzSpan]="7">
       <nz-statistic [nzValue]="spentOnHeroLvlUp" [nzTitle]="'Spent on hero level up'"></nz-statistic>
     </nz-col>
+    <nz-col class="row-padding" [nzSpan]="7">
+      <nz-statistic [nzValue]="arpu" [nzTitle]="'ARPU'"></nz-statistic>
+    </nz-col>
+    <nz-col class="row-padding" [nzSpan]="7" [nzOffset]="2">
+      <nz-statistic [nzValue]="arppu" [nzTitle]="'ARPPU'"></nz-statistic>
+    </nz-col>
+    <nz-col class="row-padding" [nzSpan]="7">
+      <nz-statistic [nzValue]="arppu" [nzTitle]="'LTV'"></nz-statistic>
+    </nz-col>
+      <nz-col class="row-padding" [nzSpan]="7">
+    <nz-statistic [nzValue]="lifetime" [nzTitle]="'Lifetime'"></nz-statistic>
+  </nz-col>
   </nz-row>
 </ng-template>

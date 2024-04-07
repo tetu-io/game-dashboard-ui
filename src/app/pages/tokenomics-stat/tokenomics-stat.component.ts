@@ -66,6 +66,8 @@ export class TokenomicsStatComponent implements OnInit {
 
 
     let acc: Record<string, number> = {};
+    let amountOfPaymentsRecord: Record<string, number> = {};
+    let amountOfPayersRecord: Record<string, Record<string, number>> = {};
 
     // class count
     const spentOn: Record<string, Record<string, number>> = {};
@@ -89,10 +91,25 @@ export class TokenomicsStatComponent implements OnInit {
         acc[dateString] += (+heroAction.values[0] * +heroAction.hero.meta.feeToken.amount);
       }
 
+      if (!amountOfPaymentsRecord[dateString]) {
+        amountOfPaymentsRecord[dateString] = 1;
+      } else {
+        amountOfPaymentsRecord[dateString] += 1;
+      }
+
+      if (!amountOfPayersRecord[dateString]) {
+        amountOfPayersRecord[dateString] = {};
+      }
+      if (heroAction.owner) {
+        amountOfPayersRecord[dateString][heroAction.owner.id] = 1;
+      }
+
     });
 
     const dates = Object.keys(acc).sort();
     const counts = dates.map(date => acc[date]);
+    const amountOfPayments = dates.map(date => amountOfPaymentsRecord[date]);
+    const amountOfPayers = dates.map(date => Object.values(amountOfPayersRecord[date]).length);
 
     const heroSeries = Object.keys(spentOn).map(type => {
       const dates = Object.keys(spentOn[type]).sort();
@@ -114,10 +131,21 @@ export class TokenomicsStatComponent implements OnInit {
       data: counts,
     })
 
+    heroSeries.push({
+      name: 'Amount of payments',
+      type: 'line',
+      data: amountOfPayments,
+    });
+    heroSeries.push({
+      name: 'Amount of payers',
+      type: 'line',
+      data: amountOfPayers,
+    })
+
 
     this.options = {
       legend: {
-        data: ['Total spent', 'Level up', 'Create hero'],
+        data: ['Total spent', 'Level up', 'Create hero', 'Amount of payments', 'Amount of payers'],
         align: 'left',
       },
       dataZoom: [

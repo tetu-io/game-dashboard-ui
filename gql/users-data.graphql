@@ -1,4 +1,4 @@
-query UsersData($first: Int!, $skip: Int!) {
+query UsersData($first: Int!, $skip: Int!, $actions: [Int!]!) {
     userEntities(
         first: $first
         skip: $skip
@@ -53,7 +53,7 @@ query UsersData($first: Int!, $skip: Int!) {
                 timestamp
             }
             actions(
-                where: { action: 1 }
+                where: { action_in: $actions }
                 first: 1000
                 orderBy: timestamp
                 orderDirection: desc

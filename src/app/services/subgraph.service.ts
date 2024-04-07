@@ -75,24 +75,24 @@ export class SubgraphService {
     );
   }
 
-  users$(first: number, skip: number = 0): Observable<UsersDataQuery['userEntities']> {
+  users$(first: number, skip: number = 0, actions: number[]): Observable<UsersDataQuery['userEntities']> {
     this.usersGQL.client = this.getClientSubgraph();
     return this.usersGQL.fetch(
-      { first: first, skip: skip}
+      { first: first, skip: skip, actions: actions}
     ).pipe(
       map(x => x.data.userEntities),
       retry({ count: RETRY, delay: DELAY }),
     );
   }
 
-  fetchAllUsers$(): Observable<UsersDataQuery['userEntities']> {
+  fetchAllUsers$(actions: number[] = [1]): Observable<UsersDataQuery['userEntities']> {
     let allUsers: UsersDataQuery['userEntities'] = [];
     let skip = 0;
     const first = 1000;
 
     return new Observable(observer => {
       const fetchUsers = () => {
-        this.users$(first, skip).subscribe(users => {
+        this.users$(first, skip, actions).subscribe(users => {
           if (users.length > 0) {
             allUsers = allUsers.concat(users);
             skip += first;
