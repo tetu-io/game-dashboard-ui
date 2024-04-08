@@ -63,7 +63,7 @@ query UsersData($first: Int!, $skip: Int!, $actions: [Int!]!) {
                 timestamp
             }
         }
-        items {
+        items(first: 1000) {
             id
             meta {
                 durability

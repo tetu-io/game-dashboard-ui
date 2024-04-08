@@ -105,7 +105,9 @@ export class TokenomicsComponent implements OnInit {
           // @ts-ignore
           this.rewardThirdBiome = (+formatUnits(treasuryAmount3[1] + treasuryAmount3[2], tokenData[0].decimals)).toFixed(4);
           // @ts-ignore
-          this.rewardFourthBiome = `${(+formatUnits(treasuryAmount4[1], tokenData[0].decimals)).toFixed(4)} + ${(+formatUnits(treasuryAmount4[2], tokenData[0].decimals)).toFixed(4)} = ${(+formatUnits(treasuryAmount4[2], tokenData[0].decimals)).toFixed(4)}`
+          // this.rewardFourthBiome = `${(+formatUnits(treasuryAmount4[1], tokenData[0].decimals)).toFixed(4)} + ${(+formatUnits(treasuryAmount4[2], tokenData[0].decimals)).toFixed(4)} = ${(+formatUnits(treasuryAmount4[2], tokenData[0].decimals)).toFixed(4)}`
+          this.rewardFourthBiome = (+formatUnits(treasuryAmount4[1] + treasuryAmount4[2], tokenData[0].decimals)).toFixed(4);
+
           this.totalUsersEarned = (heroes.reduce((total, hero) => {
             const earnedSum = hero.earnedTokens.reduce((sum, earned) => {
               const val = +formatUnits(earned.amount, tokenData[0].decimals);

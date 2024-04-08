@@ -43,6 +43,7 @@ export class UserGeneralStatComponent implements OnInit {
       .subscribe(({ users, heroMaxLvl }) => {
         const maxSecondsLastAction = this.prepareSeconds(7);
 
+        const maxBiome = 4;
         const mauSeconds = this.prepareSeconds(30);
         const wauSeconds = this.prepareSeconds(7);
         const dauSeconds = this.prepareSeconds(1);
@@ -98,6 +99,7 @@ export class UserGeneralStatComponent implements OnInit {
           }
 
           let hasActions = false;
+          let onlyOneHero = true;
 
           for (const hero of user.heroes) {
             totalHeroes++;
@@ -135,8 +137,9 @@ export class UserGeneralStatComponent implements OnInit {
               }
             }
 
-            if (hero.actions.length > 5 && +hero.actions[0].timestamp < maxSecondsLastAction) {
+            if (hero.actions.length > 5 && +hero.actions[0].timestamp < maxSecondsLastAction && onlyOneHero) {
               completeAdventuresChurn++;
+              onlyOneHero = false;
             }
 
             if (isTrialHero(hero.meta.heroClass)) {
@@ -146,7 +149,7 @@ export class UserGeneralStatComponent implements OnInit {
               }
             }
 
-            if (hero.stats.level >= maxLvl - 5) {
+            if (hero.stats.level >= maxLvl - 5 + maxBiome) {
               treasuryEligible++;
             }
 
@@ -185,7 +188,7 @@ export class UserGeneralStatComponent implements OnInit {
           }
 
           for (const item of user.items) {
-            if (item.burned) {
+            if (item.durability === 0) {
               totalBrokenItems++;
             }
             for (const action of item.actions) {
@@ -332,7 +335,7 @@ export class UserGeneralStatComponent implements OnInit {
         });
         this.data.push({
           parameter: 'Conversion to Hero',
-          value: firstBuyHero,
+          value: `${(firstBuyHero / totalUsers * 100).toFixed(2)}%`,
           comment: 'Percentage of users who created (purchased) a hero after their first visit'
         });
         this.data.push({
@@ -344,7 +347,7 @@ export class UserGeneralStatComponent implements OnInit {
         this.data.push({
           parameter: 'Treasury Eligible',
           value: treasuryEligible,
-          comment: 'The number of people with a level greater than or equal to max-5'
+          comment: 'The number of people with a level greater than or equal to max level - 5 + max biome'
         });
 
         this.data.push({
