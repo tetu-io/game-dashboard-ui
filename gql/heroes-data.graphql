@@ -17,6 +17,13 @@ query HeroesData($first: Int!, $skip: Int!) {
         owner {
             id
         }
+        actions(
+            where: {
+                action_in: [0, 2]
+            }
+        ) {
+            id
+        }
         reinforcementRewardTokens {
             tokenInfo {
                 amount

@@ -96,11 +96,11 @@ export class ItemStatComponent implements OnInit {
 
             if (item.actions) {
               item.actions.forEach(action => {
-                if (action.action === "DESTROYED") {
+                if (action.action === 1) {
                   destroyedCount += 1;
-                } else if (action.action === "AUGMENTED") {
+                } else if (action.action === 3) {
                   augmentedCount += 1;
-                } else if (action.action === "REPAIRED") {
+                } else if (action.action === 1) {
                   repairedCount += 1;
                 }
               });

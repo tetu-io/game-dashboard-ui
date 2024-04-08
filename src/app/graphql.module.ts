@@ -22,7 +22,7 @@ export function createSonicGameSubgraph(httpLink: HttpLink) {
   return {
     link: httpLink.create({ uri: SONIC_GAME_SUBGRAPH }),
     cache: new InMemoryCache({
-      resultCaching: false,
+      resultCaching: true,
     }),
     defaultOptions,
   };

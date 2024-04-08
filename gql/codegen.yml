@@ -15,4 +15,4 @@ generates:
         Bytes: string
         Int8: number
 schema: >-
-  https://graph.public-sonic.fantom.network/gql/subgraphs/name/alexandersazonof/sacra-sonic-beta
+  https://graph.public-sonic.fantom.network/gql/subgraphs/name/alexandersazonof/sacra-sonic-beta5

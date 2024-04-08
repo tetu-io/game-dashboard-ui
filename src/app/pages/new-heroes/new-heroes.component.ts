@@ -92,7 +92,7 @@ export class NewHeroesComponent implements OnInit {
       return {
         name: HEROES_CLASSES.get(heroClass),
         type: 'line',
-        data: counts
+        data: counts,
       } as SeriesOption;
     });
 
@@ -106,7 +106,7 @@ export class NewHeroesComponent implements OnInit {
 
     this.options = {
       legend: {
-        data: ['Total heroes', 'Thrall', 'Savage', 'Mage', 'Assassin', 'Ghost'],
+        data: ['Total heroes', 'Thrall', 'Savage', 'Mage', 'Assassin', 'Ghost', 'Hammergina'],
         align: 'left',
       },
       dataZoom: [

@@ -3,16 +3,18 @@ import { MenuItemInterface } from '../../models/menu-item.interface';
 export enum MENU_ITEMS {
   USERS = 'Users',
   USER_STAT = 'User stats',
-  NEW_USERS = 'New users',
+  USER_GENERAL_STAT = 'User general stats',
+  NEW_USERS = 'User chart',
   HEROES = 'Heroes',
   HERO_STAT = 'Hero stats',
   HERO_DETAILS = 'Hero details',
-  NEW_HEROES = 'New heroes',
+  NEW_HEROES = 'Hero chart',
   ITEM_STAT = 'Item stats',
   STORY_STAT = 'Story stats',
   TOKENOMICS_STAT = 'Tokenomics stats',
   TOKENOMICS = 'Tokenomics',
   TOKENOMICS_CHART = 'Tokenomics chart',
+  TOKENS_TRANSACTIONS = 'Tokens transactions',
 
 }
 
@@ -29,12 +31,20 @@ export const MENU: { [key: string]: MenuItemInterface } = {
         icon: 'line-chart',
         label: MENU_ITEMS.TOKENOMICS_CHART
       },
+      [MENU_ITEMS.TOKENS_TRANSACTIONS]: {
+        icon: 'line-chart',
+        label: MENU_ITEMS.TOKENS_TRANSACTIONS
+      },
     }
   },
   [MENU_ITEMS.USERS]: {
     icon: 'line-chart',
     label: MENU_ITEMS.USERS,
     subMenu: {
+      [MENU_ITEMS.USER_GENERAL_STAT]: {
+        icon: 'line-chart',
+        label: MENU_ITEMS.USER_GENERAL_STAT
+      },
       [MENU_ITEMS.USER_STAT]: {
         icon: 'line-chart',
         label: MENU_ITEMS.USER_STAT

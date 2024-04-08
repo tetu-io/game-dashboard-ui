@@ -37,6 +37,14 @@ const routes: Routes = [
     loadChildren: () => import('./pages/tokenomics-stat/tokenomics-stat.module').then(m => m.TokenomicsStatModule),
   },
   {
+    path: MAIN_ROUTES[MENU_ITEMS.TOKENS_TRANSACTIONS],
+    loadChildren: () => import('./pages/token-transactions/token-transactions.module').then(m => m.TokenTransactionsModule),
+  },
+  {
+    path: MAIN_ROUTES[MENU_ITEMS.USER_GENERAL_STAT],
+    loadChildren: () => import('./pages/user-general-stat/user-general-stat.module').then(m => m.UserGeneralStatModule),
+  },
+  {
     path: '',
     pathMatch: 'full',
     redirectTo: MAIN_ROUTES[MENU_ITEMS.USER_STAT],

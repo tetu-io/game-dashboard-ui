@@ -1,7 +1,7 @@
-query HeroAction($first: Int!, $skip: Int!) {
+query HeroAction($first: Int!, $skip: Int!, $actions: [Int!]!) {
     heroActions(
         where: {
-            action_in: [0, 2]
+            action_in: $actions
         }
         first: $first
         skip: $skip
@@ -9,7 +9,13 @@ query HeroAction($first: Int!, $skip: Int!) {
         action
         timestamp
         values
+        owner {
+            id
+        }
         hero {
+            owner {
+                id
+            }
             meta {
                 feeToken {
                     amount

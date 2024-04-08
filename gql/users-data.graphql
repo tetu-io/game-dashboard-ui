@@ -1,29 +1,80 @@
-query UsersData($first: Int!, $skip: Int!) {
+query UsersData($first: Int!, $skip: Int!, $actions: [Int!]!) {
     userEntities(
         first: $first
         skip: $skip
+        orderBy: timestamp
+        orderDirection: asc
     ) @namedClient(name: "SONIC_GAME_SUBGRAPH") {
         id
+        itemActions {
+            action
+        }
+        pawnshopActions(
+            where: { action_in: [0 ,4] }
+            first: 1000
+            orderBy: timestamp
+            orderDirection: desc
+        ) {
+            id
+            action
+            timestamp
+        }
         heroes(first: 1000) {
             id
+            refCode
+            dead
+            timestamp
+            staked
+            biome
+            meta {
+                heroClass
+            }
+            stats {
+                level
+                lifeChances
+            }
             items {
                 id
             }
             earnedItems {
                 id
             }
-            earnedTokens {
+            earnedTokens(
+                first: 1000
+                orderDirection: desc
+                orderBy: timestamp
+            ) {
                 amount
                 token {
                     id
                     name
                 }
                 reinforcementStakedFee
+                timestamp
             }
-            dead
+            actions(
+                where: { action_in: $actions }
+                first: 1000
+                orderBy: timestamp
+                orderDirection: desc
+            ) {
+                id
+                action
+                timestamp
+            }
         }
         items {
             id
+            meta {
+                durability
+            }
+            burned
+            durability
+            actions(
+                first: 1000
+            ) {
+                action
+            }
         }
         lastActionTs
         timestamp

@@ -3,7 +3,8 @@ export const HEROES_CLASSES = new Map<string, string>([
   ['2', 'Savage'],
   ['3', 'Mage'],
   ['4', 'Assassin'],
-  ['5', 'Ghost']
+  ['5', 'Ghost'],
+  ['6', 'Hammergina']
   ]);
 
 export const HEROES_ACTIONS = new Map<string, string>([

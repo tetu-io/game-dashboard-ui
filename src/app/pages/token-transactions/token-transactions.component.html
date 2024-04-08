@@ -1,0 +1,30 @@
+<nz-spin
+  *ngIf="isLoading; else loaded"
+  class="loader g-flex-column__item-fixed">
+</nz-spin>
+
+<ng-template #loaded>
+  <nz-table #filterTable [nzData]="transactions"
+            [nzPageSize]="pageSize"
+            nzTableLayout="fixed">
+    <thead>
+    <tr>
+      <th
+        *ngFor="let column of columns"
+        [nzSortFn]="column.sortFn"
+        [nzSortDirections]="column.sortDirections"
+      >
+        {{ column.name }}
+      </th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr *ngFor="let data of filterTable.data">
+      <td>{{ data.from }}</td>
+      <td>{{ data.to }}</td>
+      <td>{{ data.amount }}</td>
+      <td>{{ data.createdAtBlock }}</td>
+    </tr>
+    </tbody>
+  </nz-table>
+</ng-template>
