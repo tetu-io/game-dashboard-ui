@@ -21,6 +21,7 @@ query HeroesData($first: Int!, $skip: Int!) {
             where: {
                 action_in: [0, 2]
             }
+            first: 1000
         ) {
             id
         }
@@ -63,7 +64,11 @@ query HeroesData($first: Int!, $skip: Int!) {
             }
         }
 
-        earnedTokens {
+        earnedTokens(
+            first: 1000
+            orderBy: amount
+            orderDirection: desc
+        ) {
             amount
             token {
                 id
