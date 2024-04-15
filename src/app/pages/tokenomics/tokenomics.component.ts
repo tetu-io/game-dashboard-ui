@@ -32,6 +32,9 @@ export class TokenomicsComponent implements OnInit {
   arppu = '0';
   ltv = '0';
   lifetime = '0';
+  toBurn = '0';
+  toTreasury = '0';
+  toGov = '0';
 
   network = '';
   chainId = 0;
@@ -65,9 +68,11 @@ export class TokenomicsComponent implements OnInit {
       treasuryAmount4: this.dungeonFactoryService.getDungeonTreasuryAmount$(this.chainId, gameToken, this.getHeroLvlByBiome(4), 4),
       heroes: this.subgraphService.fetchAllHeroes$(),
       itemActions: this.subgraphService.fetchAllItemActions$(),
+      earned: this.subgraphService.fetchAllHeroTokenEarned$(),
+      heroVaultStat: this.subgraphService.heroTokenVaultStatistic$(),
     })
       .pipe(takeUntil(this.destroy$))
-      .subscribe(({ tokenData, allUsers, treasuryAmount1, treasuryAmount2, treasuryAmount3, treasuryAmount4, heroes, itemActions }) => {
+      .subscribe(({ tokenData, allUsers, treasuryAmount1, treasuryAmount2, treasuryAmount3, treasuryAmount4, heroes, itemActions, earned, heroVaultStat }) => {
         const mauSeconds = this.prepareSeconds(30);
         const dauSeconds = this.prepareSeconds(1);
         let mau = 0;
@@ -108,12 +113,9 @@ export class TokenomicsComponent implements OnInit {
           // this.rewardFourthBiome = `${(+formatUnits(treasuryAmount4[1], tokenData[0].decimals)).toFixed(4)} + ${(+formatUnits(treasuryAmount4[2], tokenData[0].decimals)).toFixed(4)} = ${(+formatUnits(treasuryAmount4[2], tokenData[0].decimals)).toFixed(4)}`
           this.rewardFourthBiome = (+formatUnits(treasuryAmount4[1] + treasuryAmount4[2], tokenData[0].decimals)).toFixed(4);
 
-          this.totalUsersEarned = (heroes.reduce((total, hero) => {
-            const earnedSum = hero.earnedTokens.reduce((sum, earned) => {
-              const val = +formatUnits(earned.amount, tokenData[0].decimals);
-              return sum + val
-            }, 0);
-            return total + earnedSum;
+          this.totalUsersEarned = (earned.reduce((total, tokenEarn) => {
+            const val = +formatUnits(tokenEarn.amount, tokenEarn.token?.decimals || 18);
+            return total + val;
           }, 0)).toFixed(4);
 
           this.spentOnItems = (
@@ -142,6 +144,11 @@ export class TokenomicsComponent implements OnInit {
           this.ltv = (+this.arpu * +this.lifetime).toFixed(2);
         }
 
+        if (heroVaultStat && heroVaultStat.length > 0) {
+          this.toBurn = (+formatUnits(heroVaultStat[0].toBurn, 18)).toFixed(4);
+          this.toTreasury = (+formatUnits(heroVaultStat[0].toTreasury, 18)).toFixed(4);
+          this.toGov = (+formatUnits(heroVaultStat[0].toGov, 18)).toFixed(4);
+        }
 
 
         this.isLoading = false;

@@ -14,6 +14,15 @@
       <nz-statistic [nzValue]="payerUsers" [nzTitle]="'Payer users'"></nz-statistic>
     </nz-col>
     <nz-col class="row-padding" [nzSpan]="7" [nzOffset]="2">
+      <nz-statistic [nzValue]="toBurn" [nzTitle]="'Burned tokens'"></nz-statistic>
+    </nz-col>
+    <nz-col class="row-padding" [nzSpan]="7">
+      <nz-statistic [nzValue]="toGov" [nzTitle]="'Spent to governance'"></nz-statistic>
+    </nz-col>
+    <nz-col class="row-padding" [nzSpan]="7">
+      <nz-statistic [nzValue]="toTreasury" [nzTitle]="'Spent to treasury'"></nz-statistic>
+    </nz-col>
+    <nz-col class="row-padding" [nzSpan]="7" [nzOffset]="2">
       <nz-statistic [nzValue]="rewardFirstBiome" [nzTitle]="'Rewards per dung in 1 Biome'"></nz-statistic>
     </nz-col>
     <nz-col class="row-padding" [nzSpan]="7">
@@ -46,8 +55,8 @@
     <nz-col class="row-padding" [nzSpan]="7">
       <nz-statistic [nzValue]="arppu" [nzTitle]="'LTV'"></nz-statistic>
     </nz-col>
-      <nz-col class="row-padding" [nzSpan]="7">
-    <nz-statistic [nzValue]="lifetime" [nzTitle]="'Lifetime'"></nz-statistic>
-  </nz-col>
+    <nz-col class="row-padding" [nzSpan]="7">
+      <nz-statistic [nzValue]="lifetime" [nzTitle]="'Lifetime'"></nz-statistic>
+    </nz-col>
   </nz-row>
 </ng-template>

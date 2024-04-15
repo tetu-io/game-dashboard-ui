@@ -2,6 +2,7 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { MAIN_ROUTES } from './shared/constants/routes.constant';
 import { MENU_ITEMS } from './shared/constants/menu.constant';
+import { UsersRefModule } from './pages/users-ref/users-ref.module';
 
 const routes: Routes = [
   {
@@ -43,6 +44,14 @@ const routes: Routes = [
   {
     path: MAIN_ROUTES[MENU_ITEMS.USER_GENERAL_STAT],
     loadChildren: () => import('./pages/user-general-stat/user-general-stat.module').then(m => m.UserGeneralStatModule),
+  },
+  {
+    path: MAIN_ROUTES[MENU_ITEMS.PAWNSHOP_CHART],
+    loadChildren: () => import('./pages/pawnshop-chart/pawnshop-chart.module').then(m => m.PawnshopChartModule),
+  },
+  {
+    path: MAIN_ROUTES[MENU_ITEMS.USERS_REF],
+    loadChildren: () => import('./pages/users-ref/users-ref.module').then(m => m.UsersRefModule),
   },
   {
     path: '',

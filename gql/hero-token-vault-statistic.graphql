@@ -1,0 +1,8 @@
+query HeroTokenVaultStatisticData {
+    heroTokensVaultStatisticEntities @namedClient(name: "SONIC_GAME_SUBGRAPH") {
+        toGov
+        toBurn
+        toTreasury
+        amount
+    }
+}

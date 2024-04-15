@@ -1,0 +1,15 @@
+query HeroTokenEarnedData($first: Int!, $skip: Int!) {
+    heroTokenEarneds(
+        first: $first
+        skip: $skip
+        orderBy: timestamp
+        orderDirection: asc
+    ) @namedClient(name: "SONIC_GAME_SUBGRAPH") {
+        id
+        amount
+        token {
+            decimals
+        }
+        timestamp
+    }
+}

@@ -54,8 +54,6 @@ export class NewUsersComponent implements OnInit {
     };
 
     const userByDates: Record<string, UserEntity[]> = {};
-    const pawnshopOpenActionsByDates: Record<string, number[]> = {};
-    const pawnshopExecuteActionsByDates: Record<string, number[]> = {};
     const dauByDates: Record<string, Record<string, string>> = {};
     const reinforcementByDates: Record<string, number[]> = {};
     const dateCounts = data.reduce((acc, data) => {
@@ -68,36 +66,10 @@ export class NewUsersComponent implements OnInit {
         userByDates[dateString].push(data);
       }
 
-      // pawnshop actions
-      data.pawnshopActions.forEach(action => {
-        const datePawnshopAction = convertToDateString(action.timestamp + '');
-        // create empty array for users
-        if (!userByDates[datePawnshopAction]) {
-          userByDates[datePawnshopAction] = []
-        }
-
-        if (action.action == 0) {
-          if (pawnshopOpenActionsByDates[datePawnshopAction]) {
-            pawnshopOpenActionsByDates[datePawnshopAction].push(action.action);
-          } else {
-            pawnshopOpenActionsByDates[datePawnshopAction] = [];
-            pawnshopOpenActionsByDates[datePawnshopAction].push(action.action);
-          }
-        }
-
-        if (action.action == 4) {
-          if (pawnshopExecuteActionsByDates[datePawnshopAction]) {
-            pawnshopExecuteActionsByDates[datePawnshopAction].push(action.action);
-          } else {
-            pawnshopExecuteActionsByDates[datePawnshopAction] = [];
-            pawnshopExecuteActionsByDates[datePawnshopAction].push(action.action);
-          }
-        }
-      });
-
       let actions: HeroAction[] = [];
       data.heroes.forEach(hero => {
 
+        // TODO move to other page
         // reinforcement
         hero.earnedTokens.forEach(token => {
           if (token.reinforcementStakedFee > 0) {
@@ -145,8 +117,6 @@ export class NewUsersComponent implements OnInit {
     // by refCode
     let series: SeriesOption[] = [];
     let countsRef: number[] = [];
-    let pawnshopExecuteActions: number[] = [];
-    let pawnshopOpenActions: number[] = [];
     let dau: number[] = [];
     let reinforcement: number[] = [];
     Object.keys(userByDates).map(date => {
@@ -161,8 +131,6 @@ export class NewUsersComponent implements OnInit {
 
 
       countsRef.push(count);
-      pawnshopExecuteActions.push(pawnshopExecuteActionsByDates[date] ? pawnshopExecuteActionsByDates[date].length : 0);
-      pawnshopOpenActions.push(pawnshopOpenActionsByDates[date] ? pawnshopOpenActionsByDates[date].length : 0);
       dau.push(Object.values(dauByDates[date]).length);
       reinforcement.push(
         reinforcementArray && reinforcementArray.length > 0 ?
@@ -177,20 +145,6 @@ export class NewUsersComponent implements OnInit {
         name: 'User created by ref code',
         type: 'line',
         data: countsRef
-      }
-    );
-    series.push(
-      {
-        name: 'Market Deals',
-        type: 'line',
-        data: pawnshopExecuteActions
-      }
-    );
-    series.push(
-      {
-        name: 'NFTs for Sale',
-        type: 'line',
-        data: pawnshopOpenActions
       }
     );
 
@@ -224,7 +178,7 @@ export class NewUsersComponent implements OnInit {
 
     this.options = {
       legend: {
-        data: ['New users', 'User created by ref code', 'Market Deals', 'DAU', 'NFTs for Sale', 'Av Reinforcement Revenue'],
+        data: ['New users', 'User created by ref code', 'DAU', 'Av Reinforcement Revenue'],
         align: 'left',
       },
       dataZoom: [

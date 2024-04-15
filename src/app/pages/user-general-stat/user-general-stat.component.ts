@@ -46,7 +46,7 @@ export class UserGeneralStatComponent implements OnInit {
         const maxBiome = 4;
         const mauSeconds = this.prepareSeconds(30);
         const wauSeconds = this.prepareSeconds(7);
-        const dauSeconds = this.prepareSeconds(1);
+        const dauSeconds = this.prepareSeconds(2);
 
         let totalUsers = users.length;
         let mau = 0;
