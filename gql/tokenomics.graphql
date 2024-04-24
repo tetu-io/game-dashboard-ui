@@ -1,0 +1,8 @@
+query Tokenomics {
+    generalTokenomicsEntities(
+        first: 1
+    ) {
+        spentOnHero
+        spentOnItems
+    }
+}

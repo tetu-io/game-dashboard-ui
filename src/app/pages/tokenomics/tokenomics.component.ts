@@ -61,44 +61,47 @@ export class TokenomicsComponent implements OnInit {
     const gameToken = GET_CORE_ADDRESSES(this.chainId).gameToken.toLowerCase();
     forkJoin({
       tokenData: this.subgraphService.tokenByAddress$(gameToken),
-      allUsers: this.subgraphService.fetchAllUsers$([0, 1 ,2]),
+      userStats: this.subgraphService.fetchAllUsersStat$(),
       treasuryAmount1: this.dungeonFactoryService.getDungeonTreasuryAmount$(this.chainId, gameToken, this.getHeroLvlByBiome(1), 1),
       treasuryAmount2: this.dungeonFactoryService.getDungeonTreasuryAmount$(this.chainId, gameToken, this.getHeroLvlByBiome(2), 2),
       treasuryAmount3: this.dungeonFactoryService.getDungeonTreasuryAmount$(this.chainId, gameToken, this.getHeroLvlByBiome(3), 3),
       treasuryAmount4: this.dungeonFactoryService.getDungeonTreasuryAmount$(this.chainId, gameToken, this.getHeroLvlByBiome(4), 4),
-      heroes: this.subgraphService.fetchAllHeroes$(),
-      itemActions: this.subgraphService.fetchAllItemActions$(),
-      earned: this.subgraphService.fetchAllHeroTokenEarned$(),
       heroVaultStat: this.subgraphService.heroTokenVaultStatistic$(),
+      earned: this.subgraphService.heroEarned$(),
+      dauStats: this.subgraphService.dau$(30),
+      stat: this.subgraphService.tokenomicStats$(),
     })
       .pipe(takeUntil(this.destroy$))
-      .subscribe(({ tokenData, allUsers, treasuryAmount1, treasuryAmount2, treasuryAmount3, treasuryAmount4, heroes, itemActions, earned, heroVaultStat }) => {
-        const mauSeconds = this.prepareSeconds(30);
-        const dauSeconds = this.prepareSeconds(1);
+      .subscribe(({
+        tokenData,
+        userStats,
+        treasuryAmount1,
+        treasuryAmount2,
+        treasuryAmount3,
+        treasuryAmount4,
+        // heroes, itemActions,
+        heroVaultStat,
+        earned,
+        dauStats,
+        stat
+      }) => {
         let mau = 0;
         let dau = 0;
+        const usersInMau: Record<string, number> = {};
 
-        this.users = allUsers.length;
-        this.payerUsers = allUsers.filter(user => user.heroes.filter(hero => hero.actions.length > 0).length > 0).length;
-
-        allUsers.forEach(user => {
-          let checkedActivity = false;
-          user.heroes.forEach(hero => {
-            if (hero.actions.length > 0) {
-              if (!checkedActivity) {
-                if (+hero.actions[0].timestamp > dauSeconds) {
-                  dau++;
-                }
-                if (+hero.actions[0].timestamp > mauSeconds) {
-                  mau++;
-                }
-                checkedActivity = true;
-              }
+        if (dauStats.length > 0) {
+          dau = dauStats[0].count;
+        }
+        dauStats.forEach(stat => {
+          stat.users.forEach(user => {
+            if (!usersInMau[user.id]) {
+              usersInMau[user.id] = 1;
+              mau++;
             }
-          });
+          })
         });
-
-
+        this.users = userStats.length;
+        this.payerUsers = userStats.filter(user => user.actions > 0).length;
         this.lifetime = (1 / ((mau - dau) / 30)).toFixed(2);
         if (tokenData && tokenData.length > 0) {
           this.symbol = tokenData[0].symbol;
@@ -113,31 +116,34 @@ export class TokenomicsComponent implements OnInit {
           // this.rewardFourthBiome = `${(+formatUnits(treasuryAmount4[1], tokenData[0].decimals)).toFixed(4)} + ${(+formatUnits(treasuryAmount4[2], tokenData[0].decimals)).toFixed(4)} = ${(+formatUnits(treasuryAmount4[2], tokenData[0].decimals)).toFixed(4)}`
           this.rewardFourthBiome = (+formatUnits(treasuryAmount4[1] + treasuryAmount4[2], tokenData[0].decimals)).toFixed(4);
 
-          this.totalUsersEarned = (earned.reduce((total, tokenEarn) => {
-            const val = +formatUnits(tokenEarn.amount, tokenEarn.token?.decimals || 18);
-            return total + val;
-          }, 0)).toFixed(4);
+          if (earned && earned.length > 0) {
+            this.totalUsersEarned = (+formatUnits(earned[0].totalAmount)).toFixed(4);
+          }
 
-          this.spentOnItems = (
-            itemActions.reduce((total, action) => {
-              return total + +action.item.meta.feeToken.amount
-            }, 0)
-          ).toFixed(4);
-
-          this.spentOnHeroes = (
-            heroes.reduce((total, hero) => +hero.meta.feeToken.amount + total, 0)
-          ).toFixed(4);
-
-          this.spentOnHeroLvlUp = (
-            heroes.reduce((total, hero) => {
-              if (hero.stats.level > 1) {
-                for (let i = 2; i <= hero.stats.level; i++) {
-                  total += i * +hero.meta.feeToken.amount;
-                }
-              }
-              return total;
-            }, 0)
-          ).toFixed(4);
+          if (stat && stat.length > 0) {
+            this.spentOnHeroes = stat[0].spentOnHero;
+            this.spentOnItems = stat[0].spentOnItems;
+          }
+          // this.spentOnItems = (
+          //   itemActions.reduce((total, action) => {
+          //     return total + +action.item.meta.feeToken.amount
+          //   }, 0)
+          // ).toFixed(4);
+          //
+          // this.spentOnHeroes = (
+          //   heroes.reduce((total, hero) => +hero.meta.feeToken.amount + total, 0)
+          // ).toFixed(4);
+          //
+          // this.spentOnHeroLvlUp = (
+          //   heroes.reduce((total, hero) => {
+          //     if (hero.stats.level > 1) {
+          //       for (let i = 2; i <= hero.stats.level; i++) {
+          //         total += i * +hero.meta.feeToken.amount;
+          //       }
+          //     }
+          //     return total;
+          //   }, 0)
+          // ).toFixed(4);
 
           this.arpu = ((+this.spentOnItems + +this.spentOnHeroes + +this.spentOnHeroLvlUp) / this.users).toFixed(2);
           this.arppu = ((+this.spentOnItems + +this.spentOnHeroes + +this.spentOnHeroLvlUp) / this.payerUsers).toFixed(2);

@@ -1,0 +1,25 @@
+query HeroStatData($first: Int!, $skip: Int!) {
+    heroStatEntities(
+        first: $first
+        skip: $skip
+    ) @namedClient(name: "SONIC_GAME_SUBGRAPH") {
+        id
+        hero {
+            stats {
+                level
+                lifeChances
+            }
+            meta {
+                feeToken {
+                    amount
+                }
+            }
+        }
+        itemsMinted
+        dungeonCompleted
+        battles
+        events
+        stories
+        tokenEarned
+    }
+}

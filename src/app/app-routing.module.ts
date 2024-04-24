@@ -54,6 +54,14 @@ const routes: Routes = [
     loadChildren: () => import('./pages/users-ref/users-ref.module').then(m => m.UsersRefModule),
   },
   {
+    path: MAIN_ROUTES[MENU_ITEMS.DAU_CHART],
+    loadChildren: () => import('./pages/dau-chart/dau-chart.module').then(m => m.DauChartModule),
+  },
+  {
+    path: MAIN_ROUTES[MENU_ITEMS.TX_CHART],
+    loadChildren: () => import('./pages/total-tx/total-tx.module').then(m => m.TotalTxModule),
+  },
+  {
     path: '',
     pathMatch: 'full',
     redirectTo: MAIN_ROUTES[MENU_ITEMS.USER_STAT],

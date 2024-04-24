@@ -43,7 +43,11 @@ export class UsersRefComponent implements OnInit {
               this.records[hero.refCode] = 1;
             }
           }
-        })
+        });
+
+        this.records = Object.entries(this.records)
+          .sort(([, a], [, b]) => b - a)
+          .reduce((r, [k, v]) => ({ ...r, [k]: v }), {});
 
         this.keys = Object.keys(this.records);
         this.isLoading = false;

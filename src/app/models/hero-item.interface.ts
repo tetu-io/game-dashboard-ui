@@ -1,14 +1,13 @@
-import { HeroEntity } from '../../../generated/gql';
-
-export interface HeroItemInterface extends HeroEntity {
+export interface HeroItemInterface {
+  id: string;
   dungeonCount: number;
   battleCount: number;
   eventCount: number;
   storyCount: number;
   earnTokens: number;
-  // tokenList: string[];
-  // earnedList: number[];
-  // tokenSums: { [key: string]: number };
   spentTokens: number;
   ratio: number;
+  itemsMinted: number;
+  lifeChances: number;
+  level: number;
 }

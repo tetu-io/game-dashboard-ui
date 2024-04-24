@@ -34,7 +34,7 @@ export class NewHeroesComponent implements OnInit {
   private prepareData(): void {
     this.isLoading = true;
 
-    this.subgraphService.fetchAllHeroes$()
+    this.subgraphService.fetchAllHeroesSimple$()
       .pipe(takeUntil(this.destroy$))
       .subscribe(heroes => {
         if (heroes) {

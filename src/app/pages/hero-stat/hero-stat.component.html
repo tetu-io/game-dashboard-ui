@@ -41,15 +41,11 @@
         <tbody>
         <tr *ngFor="let data of filterTable.data">
           <td>
-            <a (click)="goToHeroDetails(data.meta.id, data.heroId)">{{data.id}}</a>
+            <a (click)="goToHeroDetails(data.id)">{{data.id}}</a>
           </td>
-          <td>
-            {{ data.uniqName }}
-          </td>
-          <td>{{ data.stats.level }}</td>
-          <td>{{ data.stats.lifeChances }}</td>
-          <td>{{ data.score }}</td>
-          <td>{{ data.earnedItems.length }}</td>
+          <td>{{ data.level }}</td>
+          <td>{{ data.lifeChances }}</td>
+          <td>{{ data.itemsMinted }}</td>
           <td>{{ data.dungeonCount }}</td>
           <td>{{ data.battleCount }}</td>
           <td>{{ data.eventCount }}</td>
