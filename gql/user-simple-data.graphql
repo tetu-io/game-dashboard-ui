@@ -1,0 +1,19 @@
+query UsersSimpleData($first: Int!, $skip: Int!) {
+    userEntities(
+        first: $first
+        skip: $skip
+        orderBy: timestamp
+        orderDirection: asc
+    ) @namedClient(name: "SONIC_GAME_SUBGRAPH") {
+        id
+        heroes(
+            where: {
+                refCode_not: null
+            }
+            first: 1000
+        ) {
+            refCode
+        }
+        timestamp
+    }
+}

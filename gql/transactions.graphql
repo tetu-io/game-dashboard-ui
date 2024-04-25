@@ -1,0 +1,11 @@
+query Transactions($first: Int!, $skip: Int!) {
+    totalTxStatisticEntities(
+        first: $first
+        skip: $skip
+        orderBy: id
+        orderDirection: asc
+    ) {
+        id
+        count
+    }
+}

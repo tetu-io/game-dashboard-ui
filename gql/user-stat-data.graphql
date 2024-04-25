@@ -1,0 +1,13 @@
+query UserStatData($first: Int!, $skip: Int!) {
+    userStatEntities(
+        first: $first
+        skip: $skip
+    ) @namedClient(name: "SONIC_GAME_SUBGRAPH") {
+        id
+        heroes
+        items
+        earned
+        actions
+        pawnshopActions
+    }
+}

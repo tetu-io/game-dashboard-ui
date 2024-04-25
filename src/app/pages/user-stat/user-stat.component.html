@@ -22,13 +22,9 @@
         <tbody>
         <tr *ngFor="let data of filterTable.data">
           <td>{{ data.id }}</td>
-          <td>{{ data.heroes.length }}</td>
+          <td>{{ data.heroes }}</td>
           <td>{{ data.itemsSize }}</td>
-          <td>
-            <div *ngFor="let token of data.tokenList">
-              {{ token }}: {{ data.tokenSums[token].toFixed(2) }}
-            </div>
-          </td>
+          <td>{{ data.earn }}</td>
         </tr>
         </tbody>
       </nz-table>

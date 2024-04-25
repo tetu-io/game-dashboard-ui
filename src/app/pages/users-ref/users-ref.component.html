@@ -1,0 +1,25 @@
+<div>
+  <nz-spin
+    *ngIf="isLoading; else loaded"
+    class="loader g-flex-column__item-fixed">
+  </nz-spin>
+  <ng-template #loaded>
+    <nz-table #filterTable [nzPageSize]="keys.length" [nzData]="keys" [nzShowPagination]="false">
+      <thead>
+      <tr>
+        <th *ngFor="let column of columns">
+          {{ column }}
+        </th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr *ngFor="let key of filterTable.data">
+        <td>{{ key }}</td>
+        <td>{{ records[key] }}</td>
+        <!--          <td>{{ data.value }}</td>-->
+        <!--          <td>{{ data.comment }}</td>-->
+      </tr>
+      </tbody>
+    </nz-table>
+  </ng-template>
+</div>

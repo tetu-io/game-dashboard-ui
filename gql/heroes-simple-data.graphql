@@ -1,0 +1,11 @@
+query HeroSimpleData($first: Int!, $skip: Int!) {
+    heroEntities(
+        first: $first
+        skip: $skip
+    ) @namedClient(name: "SONIC_GAME_SUBGRAPH") {
+        meta {
+            heroClass
+        }
+        timestamp
+    }
+}

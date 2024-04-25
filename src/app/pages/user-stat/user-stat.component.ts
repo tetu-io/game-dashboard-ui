@@ -6,6 +6,7 @@ import { UserEntity } from '../../../../generated/gql';
 import { ColumnItem } from '../../models/column-item.interface';
 import { DEFAULT_TABLE_SIZE } from '../../shared/constants/table.constant';
 import { UserItemInterface } from '../../models/user-item.interface';
+import { formatUnits } from 'ethers';
 
 @Component({
   selector: 'app-user-stat',
@@ -23,17 +24,17 @@ export class UserStatComponent implements OnInit {
     },
     {
       name: 'Heroes count',
-      sortFn: (a: UserItemInterface, b: UserItemInterface) => a.heroes.length - b.heroes.length,
+      sortFn: (a: UserItemInterface, b: UserItemInterface) => a.heroes - b.heroes,
       sortDirections: ['ascend', 'descend', null],
     },
     {
-      name: `Items count`,
+      name: `Items minted`,
       sortFn: (a: UserItemInterface, b: UserItemInterface) => a.itemsSize - b.itemsSize,
       sortDirections: ['ascend', 'descend', null],
     },
     {
       name: `User earned`,
-      sortFn: (a: UserItemInterface, b: UserItemInterface) => a.earn - b.earn,
+      sortFn: (a: UserItemInterface, b: UserItemInterface) => +a.earn - +b.earn,
       sortDirections: ['ascend', 'descend', null],
     },
   ];
@@ -59,87 +60,30 @@ export class UserStatComponent implements OnInit {
 
   prepareData(): void {
     this.isLoading = true;
-    this.subgraphService.fetchAllUsers$()
+    this.subgraphService.fetchAllUsersStat$()
       .pipe(takeUntil(this.destroy$))
       .subscribe(users => {
         const tokenSumCounts: { [key: string]: { sum: number } } = {};
-
-        if (users) {
-
-          this.data = (users as UserEntity[]).map(user => {
-            const itemsSize = user.heroes.reduce((sum, hero) => sum + hero.items.length, 0) + user.items.length;
-
-            const earn = +(user.heroes.map(hero => {
-                return +hero.earnedTokens.map(val => {
-                  if (+val.amount > 0) {
-                    if (val.reinforcementStakedFee > 0) {
-                      return +val.amount / (10 ** 18) * ((100 - val.reinforcementStakedFee) / 100);
-                    }
-                    return +val.amount / (10 ** 18);
-                  }
-                  return 0;
-                }).reduce((accumulator, currentValue) => {
-                  return accumulator + currentValue;
-                }, 0);
-              }).reduce((accumulator, currentValue) => {
-                return accumulator + currentValue;
-              }, 0)
-            ).toFixed(2);
-
-            const tokenSums: { [key: string]: number } = {};
-
-            user.heroes.forEach(hero => {
-              hero.earnedTokens.forEach((item) => {
-                let amount = 0;
-                const token = item.token;
-                if (+item.amount > 0) {
-                  if (item.reinforcementStakedFee > 0) {
-                    amount = +item.amount / (10 ** 18) * ((100 - item.reinforcementStakedFee) / 100);
-                  }
-                  amount = +item.amount / (10 ** 18)
-                }
-                const tokenName = token.name;
-                if (tokenSums[tokenName]) {
-                  tokenSums[tokenName] += amount;
-                } else {
-                  tokenSums[tokenName] = amount;
-                }
-
-                // average logic
-                if (tokenSumCounts[tokenName]) {
-                  tokenSumCounts[tokenName].sum += amount;
-                } else {
-                  tokenSumCounts[tokenName] = { sum: amount };
-                }
-              });
-            })
-
-            const tokenList = Object.keys(tokenSums);
-            const earnedList = Object.values(tokenSums);
-
-
-            return {
-              ...user,
-              itemsSize,
-              earn,
-              tokenList,
-              earnedList,
-              tokenSums
-            };
-          }) as UserItemInterface[];
-        }
-
+        this.data = users.map(user => {
+          return {
+            id: user.id,
+            heroes: user.heroes,
+            itemsSize: user.items,
+            earn: (+formatUnits(user.earned)).toFixed(2),
+            actions: user.actions,
+            pawnshopActions: user.pawnshopActions
+          } as UserItemInterface;
+        }) as UserItemInterface[];
         const totalItemsSize = this.data.reduce((sum, user) => sum + user.itemsSize, 0);
-        const totalEarned = this.data.reduce((sum, user) => sum + user.earn, 0);
+        const totalEarned = this.data.reduce((sum, user) => sum + +user.earn, 0);
         const averageItemsSize = this.data.length > 0 ? totalItemsSize / users.length : 0;
-        const averageEarned = this.data.length > 0 ? totalEarned / users.length : 0;
 
         // earn average logic
         const tokenAverages: { [key: string]: number } = {};
         for (const token in tokenSumCounts) {
           if (tokenSumCounts.hasOwnProperty(token)) {
             const { sum } = tokenSumCounts[token];
-            tokenAverages[token] = +(sum / this.data.filter(a => a.earn > 0).length).toFixed(2);
+            tokenAverages[token] = +(sum / this.data.filter(a => +a.earn > 0).length).toFixed(2);
           }
         }
 

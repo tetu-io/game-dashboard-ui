@@ -14,6 +14,15 @@
       <nz-statistic [nzValue]="payerUsers" [nzTitle]="'Payer users'"></nz-statistic>
     </nz-col>
     <nz-col class="row-padding" [nzSpan]="7" [nzOffset]="2">
+      <nz-statistic [nzValue]="toBurn" [nzTitle]="'Burned tokens(only from hero actions)'"></nz-statistic>
+    </nz-col>
+    <nz-col class="row-padding" [nzSpan]="7">
+      <nz-statistic [nzValue]="toGov" [nzTitle]="'Spent to governance'"></nz-statistic>
+    </nz-col>
+    <nz-col class="row-padding" [nzSpan]="7">
+      <nz-statistic [nzValue]="toTreasury" [nzTitle]="'Spent to treasury'"></nz-statistic>
+    </nz-col>
+    <nz-col class="row-padding" [nzSpan]="7" [nzOffset]="2">
       <nz-statistic [nzValue]="rewardFirstBiome" [nzTitle]="'Rewards per dung in 1 Biome'"></nz-statistic>
     </nz-col>
     <nz-col class="row-padding" [nzSpan]="7">
@@ -32,10 +41,7 @@
       <nz-statistic [nzValue]="spentOnItems" [nzTitle]="'Spent on items(augment + repaired)'"></nz-statistic>
     </nz-col>
     <nz-col class="row-padding" [nzSpan]="7" [nzOffset]="2">
-      <nz-statistic [nzValue]="spentOnHeroes" [nzTitle]="'Spent on heroes(create hero)'"></nz-statistic>
-    </nz-col>
-    <nz-col class="row-padding" [nzSpan]="7">
-      <nz-statistic [nzValue]="spentOnHeroLvlUp" [nzTitle]="'Spent on hero level up'"></nz-statistic>
+      <nz-statistic [nzValue]="spentOnHeroes" [nzTitle]="'Spent on heroes'"></nz-statistic>
     </nz-col>
     <nz-col class="row-padding" [nzSpan]="7">
       <nz-statistic [nzValue]="arpu" [nzTitle]="'ARPU'"></nz-statistic>
@@ -46,8 +52,8 @@
     <nz-col class="row-padding" [nzSpan]="7">
       <nz-statistic [nzValue]="arppu" [nzTitle]="'LTV'"></nz-statistic>
     </nz-col>
-      <nz-col class="row-padding" [nzSpan]="7">
-    <nz-statistic [nzValue]="lifetime" [nzTitle]="'Lifetime'"></nz-statistic>
-  </nz-col>
+    <nz-col class="row-padding" [nzSpan]="7">
+      <nz-statistic [nzValue]="lifetime" [nzTitle]="'Lifetime'"></nz-statistic>
+    </nz-col>
   </nz-row>
 </ng-template>

@@ -1,0 +1,13 @@
+query UsersRefCodeData($first: Int!, $skip: Int!) {
+    heroEntities(
+        first: $first
+        skip: $skip
+        where:{
+            refCode_not: null
+        }
+        orderBy: timestamp
+        orderDirection: asc
+    ) @namedClient(name: "SONIC_GAME_SUBGRAPH") {
+        refCode
+    }
+}

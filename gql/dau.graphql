@@ -1,0 +1,14 @@
+query Dau($first: Int!, $skip: Int!) {
+    daustatisticEntities(
+        first: $first
+        skip: $skip
+        orderBy: id
+        orderDirection: desc
+    ) {
+        id
+        count
+        users {
+            id
+        }
+    }
+}

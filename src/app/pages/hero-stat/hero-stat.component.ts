@@ -9,6 +9,7 @@ import { Router } from '@angular/router';
 import { HeroItemInterface } from '../../models/hero-item.interface';
 import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { NETWORKS_URLS } from '../../shared/constants/network.constant';
+import { formatUnits } from 'ethers';
 
 @Component({
   selector: 'app-hero-stat',
@@ -24,28 +25,18 @@ export class HeroStatComponent implements OnInit {
       sortDirections: ['ascend', 'descend', null],
     },
     {
-      name: 'Name',
-      sortFn: (a: HeroItemInterface, b: HeroItemInterface) => a.uniqName.localeCompare(b.uniqName),
-      sortDirections: ['ascend', 'descend', null],
-    },
-    {
       name: 'Level',
-      sortFn: (a: HeroItemInterface, b: HeroItemInterface) => a.stats.level - b.stats.level,
+      sortFn: (a: HeroItemInterface, b: HeroItemInterface) => a.level - b.level,
       sortDirections: ['ascend', 'descend', null],
     },
     {
       name: 'Life Chance',
-      sortFn: (a: HeroItemInterface, b: HeroItemInterface) => a.stats.lifeChances - b.stats.lifeChances,
-      sortDirections: ['ascend', 'descend', null],
-    },
-    {
-      name: 'Score',
-      sortFn: (a: HeroItemInterface, b: HeroItemInterface) => a.score - b.score,
+      sortFn: (a: HeroItemInterface, b: HeroItemInterface) => a.lifeChances - b.lifeChances,
       sortDirections: ['ascend', 'descend', null],
     },
     {
       name: 'Items minted',
-      sortFn: (a: HeroItemInterface, b: HeroItemInterface) => a.earnedItems.length - b.earnedItems.length,
+      sortFn: (a: HeroItemInterface, b: HeroItemInterface) => a.itemsMinted - b.itemsMinted,
       sortDirections: ['ascend', 'descend', null],
     },
     {
@@ -116,13 +107,13 @@ export class HeroStatComponent implements OnInit {
 
   prepareData(): void {
     this.isLoading = true;
-    this.subgraphService.heroes$(+this.topSize)
+    this.subgraphService.fetchAllHeroStat$()
       .pipe(takeUntil(this.destroy$))
       .subscribe(heroes => {
         if (heroes) {
           const tokenSumCounts: { [key: string]: { sum: number } } = {};
 
-          this.data = (heroes as HeroEntity[]).map(hero => {
+          this.data = heroes.map(hero => {
             const dungeon = new Set();
             const events = new Set();
             const stories = new Set();
@@ -133,55 +124,26 @@ export class HeroStatComponent implements OnInit {
             let storyCount = 0;
             let dungeonCount = 0;
 
-            hero.openedChambers.forEach(openChamber => {
-              if (openChamber.completed) {
-                dungeon.add(openChamber.dungeon.id);
-              }
-              if (openChamber.chamber.isEvent) {
-                events.add(openChamber.chamber.id)
-              }
-              if (openChamber.chamber.isStory) {
-                stories.add(openChamber.chamber.id)
-              }
-              if (openChamber.chamber.isBattle) {
-                battles.add(openChamber.chamber.id)
-              }
-
-              battleCount = battles.size;
-              eventCount = events.size;
-              storyCount = stories.size;
-              dungeonCount = dungeon.size;
-            })
-
-            const earnTokens =
-              +(hero.earnedTokens.map(val => {
-                if (+val.amount > 0) {
-                  if (val.reinforcementStakedFee > 0) {
-                    return +val.amount / (10 ** 18) * ((100 - val.reinforcementStakedFee) / 100);
-                  }
-                  return +val.amount / (10 ** 18)
-                }
-                return 0;
-              }).reduce((accumulator, currentValue) => {
-                return accumulator + currentValue;
-              }, 0)).toFixed(2);
-
+            const earnedTokens = +(+formatUnits(hero.tokenEarned)).toFixed(2);
             let spentTokens = 0;
-            for (let i = 1; i <= hero.stats.level; i++) {
-              spentTokens += (i * +hero.meta.feeToken.amount);
+            for (let i = 1; i <= hero.hero.stats.level; i++) {
+              spentTokens += (i * +hero.hero.meta.feeToken.amount);
             }
 
-            const ratio = +((spentTokens / earnTokens)).toFixed(2);
+            const ratio = +(+((spentTokens / earnedTokens))).toFixed(4);
             return {
-              ...hero,
-              battleCount,
-              eventCount,
-              storyCount,
-              dungeonCount,
-              earnTokens,
+              id: hero.id,
+              dungeonCount: hero.dungeonCompleted,
+              battleCount: hero.battles,
+              eventCount: hero.events,
+              storyCount: hero.stories,
+              earnTokens: earnedTokens,
+              itemsMinted: hero.itemsMinted,
+              level: hero.hero.stats.level,
+              lifeChances: hero.hero.stats.lifeChances,
               spentTokens,
               ratio
-            } as HeroItemInterface;
+            };
           });
 
           const totalCounts = {
@@ -196,7 +158,7 @@ export class HeroStatComponent implements OnInit {
           };
 
           this.data.forEach(hero => {
-            totalCounts.itemCount += hero.earnedItems.length;
+            totalCounts.itemCount += hero.itemsMinted;
             totalCounts.dungeonCount += hero.dungeonCount;
             totalCounts.battleCount += hero.battleCount;
             totalCounts.eventCount += hero.eventCount;
@@ -244,16 +206,19 @@ export class HeroStatComponent implements OnInit {
               column.name = `Ratio, (average ~ ${averages.ratioAverage})`;
             }
           })
-          this.tableData = this.data.sort((a, b) => b.stats.level - a.stats.level).slice(0, +this.topSize);
+          this.tableData = this.data.sort((a, b) => b.earnTokens - a.earnTokens).slice(0, +this.topSize);
         }
         this.isLoading = false;
         this.changeDetectorRef.detectChanges();
       })
   }
 
-  goToHeroDetails(address: string, heroId: number) {
-    const url = NETWORKS_URLS.get(this.network) + '/hero/' + address + '/' + heroId + '/stats';
-    window.open(url, '_blank');
+  goToHeroDetails(id: string) {
+    const array = id.split('-');
+    if (array.length > 1) {
+      const url = NETWORKS_URLS.get(this.network) + '/hero/' + array[0] + '/' + array[1] + '/stats';
+      window.open(url, '_blank');
+    }
   }
 
   sizeChange(value: string): void {

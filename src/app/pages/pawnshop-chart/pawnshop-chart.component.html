@@ -1,0 +1,21 @@
+<div class="chart-container g-flex-column__item">
+
+  <nz-spin
+    *ngIf="isLoading; else loaded"
+    class="loader g-flex-column__item-fixed">
+  </nz-spin>
+
+  <ng-template #loaded>
+    <div
+      *ngIf="options; else noDataTpl"
+      class="chart"
+      echarts
+      [options]="options">
+    </div>
+
+    <ng-template #noDataTpl>
+      <nz-empty nzNotFoundImage="simple">
+      </nz-empty>
+    </ng-template>
+  </ng-template>
+</div>

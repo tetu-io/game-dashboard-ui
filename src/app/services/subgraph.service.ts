@@ -4,6 +4,8 @@ import {
   AllHeroActionQuery,
   ControllerDataGQL,
   ControllerDataQuery,
+  DauGQL,
+  DauQuery,
   HeroActionGQL,
   HeroActionQuery,
   HeroesDataGQL,
@@ -12,18 +14,36 @@ import {
   HeroMaxLevelDataGQL,
   HeroMaxLevelDataQuery,
   HeroQuery,
+  HeroSimpleDataGQL,
+  HeroSimpleDataQuery, HeroStatDataGQL, HeroStatDataQuery,
+  HeroTokenEarnedDataGQL,
+  HeroTokenEarnedDataQuery,
+  HeroTokenVaultStatisticDataGQL,
+  HeroTokenVaultStatisticDataQuery,
   ItemsActionDataGQL,
   ItemsActionDataQuery,
   ItemsDataGQL,
   ItemsDataQuery,
+  PawnshopDataGQL,
+  PawnshopDataQuery,
   StoryDataGQL,
   StoryDataQuery,
-  TokenGQL,
+  TokenEarnedGQL,
+  TokenEarnedQuery,
+  TokenGQL, TokenomicsGQL, TokenomicsQuery,
   TokenQuery,
   TokenTransactionsGQL,
   TokenTransactionsQuery,
+  TransactionsGQL,
+  TransactionsQuery,
   UsersDataGQL,
   UsersDataQuery,
+  UsersRefCodeDataGQL,
+  UsersRefCodeDataQuery,
+  UsersSimpleDataGQL,
+  UsersSimpleDataQuery,
+  UserStatDataGQL,
+  UserStatDataQuery,
 } from '../../../generated/gql';
 import { BehaviorSubject, map, Observable, retry } from 'rxjs';
 import { defaultNetwork, NETWORKS } from '../shared/constants/network.constant';
@@ -53,10 +73,30 @@ export class SubgraphService {
     private controllerGQL: ControllerDataGQL,
     private allHeroActionGQL: AllHeroActionGQL,
     private heroMaxLevelGQL: HeroMaxLevelDataGQL,
+    private pawnshopGQL: PawnshopDataGQL,
+    private heroTokenEarnedGQL: HeroTokenEarnedDataGQL,
+    private heroTokenVaultStatisticDataGQL: HeroTokenVaultStatisticDataGQL,
+    private usersRefCodeDataGQL: UsersRefCodeDataGQL,
+    private usersSimpleDataGQL: UsersSimpleDataGQL,
+    private dauGQL: DauGQL,
+    private transactionsGQL: TransactionsGQL,
+    private tokenEarnedGQL: TokenEarnedGQL,
+    private heroSimpleGQL: HeroSimpleDataGQL,
+    private userStatGQL: UserStatDataGQL,
+    private heroStatGQL: HeroStatDataGQL,
+    private tokenomicsGQL: TokenomicsGQL,
   ) { }
 
   changeNetwork(network: string): void {
     this.networkSubject.next(network);
+  }
+
+  tokenomicStats$(): Observable<TokenomicsQuery['generalTokenomicsEntities']> {
+    this.tokenomicsGQL.client = this.getClientSubgraph();
+    return this.tokenomicsGQL.fetch().pipe(
+      map(x => x.data.generalTokenomicsEntities),
+      retry({ count: RETRY, delay: DELAY }),
+    );
   }
 
   heroMaxLevel$(): Observable<HeroMaxLevelDataQuery['heroEntities']> {
@@ -67,12 +107,160 @@ export class SubgraphService {
     );
   }
 
+  heroEarned$(): Observable<TokenEarnedQuery['generalHeroTokenEarneds']> {
+    this.tokenEarnedGQL.client = this.getClientSubgraph();
+    return this.tokenEarnedGQL.fetch().pipe(
+      map(x => x.data.generalHeroTokenEarneds),
+      retry({ count: RETRY, delay: DELAY }),
+    );
+  }
+
+  heroTokenVaultStatistic$(): Observable<HeroTokenVaultStatisticDataQuery['heroTokensVaultStatisticEntities']> {
+    this.heroTokenVaultStatisticDataGQL.client = this.getClientSubgraph();
+    return this.heroTokenVaultStatisticDataGQL.fetch().pipe(
+      map(x => x.data.heroTokensVaultStatisticEntities),
+      retry({ count: RETRY, delay: DELAY }),
+    );
+  }
+
   controller$(): Observable<ControllerDataQuery['controllerEntities']> {
     this.controllerGQL.client = this.getClientSubgraph();
     return this.controllerGQL.fetch().pipe(
       map(x => x.data.controllerEntities),
       retry({ count: RETRY, delay: DELAY }),
     );
+  }
+
+  heroStat$(first: number, skip: number = 0): Observable<HeroStatDataQuery['heroStatEntities']> {
+    this.heroStatGQL.client = this.getClientSubgraph();
+    return this.heroStatGQL.fetch(
+      { first: first, skip: skip}
+    ).pipe(
+      map(x => x.data.heroStatEntities),
+      retry({ count: RETRY, delay: DELAY }),
+    );
+  }
+
+  fetchAllHeroStat$(): Observable<HeroStatDataQuery['heroStatEntities']> {
+    let allHero: HeroStatDataQuery['heroStatEntities'] = [];
+    let skip = 0;
+    const first = 1000;
+
+    return new Observable(observer => {
+      const fetchHero = () => {
+        this.heroStat$(first, skip).subscribe(heroes => {
+          if (heroes.length > 0) {
+            allHero = allHero.concat(heroes);
+            skip += first;
+            fetchHero();
+          } else {
+            observer.next(allHero);
+            observer.complete();
+          }
+        });
+      };
+
+      return fetchHero();
+    });
+  }
+
+  usersStat$(first: number, skip: number = 0): Observable<UserStatDataQuery['userStatEntities']> {
+    this.userStatGQL.client = this.getClientSubgraph();
+    return this.userStatGQL.fetch(
+      { first: first, skip: skip}
+    ).pipe(
+      map(x => x.data.userStatEntities),
+      retry({ count: RETRY, delay: DELAY }),
+    );
+  }
+
+  fetchAllUsersStat$(): Observable<UserStatDataQuery['userStatEntities']> {
+    let allUsers: UserStatDataQuery['userStatEntities'] = [];
+    let skip = 0;
+    const first = 1000;
+
+    return new Observable(observer => {
+      const fetchUsers = () => {
+        this.usersStat$(first, skip).subscribe(users => {
+          if (users.length > 0) {
+            allUsers = allUsers.concat(users);
+            skip += first;
+            fetchUsers();
+          } else {
+            observer.next(allUsers);
+            observer.complete();
+          }
+        });
+      };
+
+      return fetchUsers();
+    });
+  }
+
+  usersSimple$(first: number, skip: number = 0): Observable<UsersSimpleDataQuery['userEntities']> {
+    this.usersSimpleDataGQL.client = this.getClientSubgraph();
+    return this.usersSimpleDataGQL.fetch(
+      { first: first, skip: skip}
+    ).pipe(
+      map(x => x.data.userEntities),
+      retry({ count: RETRY, delay: DELAY }),
+    );
+  }
+
+  fetchAllUsersSimple$(): Observable<UsersSimpleDataQuery['userEntities']> {
+    let allUsers: UsersSimpleDataQuery['userEntities'] = [];
+    let skip = 0;
+    const first = 1000;
+
+    return new Observable(observer => {
+      const fetchUsers = () => {
+        this.usersSimple$(first, skip).subscribe(users => {
+          if (users.length > 0) {
+            allUsers = allUsers.concat(users);
+            skip += first;
+            fetchUsers();
+          } else {
+            observer.next(allUsers);
+            observer.complete();
+          }
+        });
+      };
+
+      return fetchUsers();
+    });
+  }
+
+  heroSimple$(first: number, skip: number = 0): Observable<HeroSimpleDataQuery['heroEntities']> {
+    this.heroSimpleGQL.client = this.getClientSubgraph();
+    return this.heroSimpleGQL.fetch(
+      { first: first, skip: skip}
+    ).pipe(
+      map(x => x.data.heroEntities),
+      retry({ count: RETRY, delay: DELAY }),
+    );
+  }
+
+  fetchAllHeroesSimple$(): Observable<HeroSimpleDataQuery['heroEntities']> {
+    let allHero: HeroSimpleDataQuery['heroEntities'] = [];
+    let skip = 0;
+    const first = 1000;
+
+    return new Observable(observer => {
+      const fetchHeroes = () => {
+        this.heroSimple$(first, skip).subscribe(users => {
+          if (users.length > 0) {
+            allHero = allHero.concat(users);
+            skip += first;
+            fetchHeroes();
+          } else {
+            observer.next(allHero);
+            observer.complete();
+          }
+        });
+      };
+
+      return fetchHeroes();
+    });
   }
 
   users$(first: number, skip: number = 0, actions: number[]): Observable<UsersDataQuery['userEntities']> {
@@ -105,6 +293,72 @@ export class SubgraphService {
       };
 
       return fetchUsers();
+    });
+  }
+
+  dau$(first: number, skip: number = 0): Observable<DauQuery['daustatisticEntities']> {
+    this.dauGQL.client = this.getClientSubgraph();
+    return this.dauGQL.fetch(
+      { first: first, skip: skip}
+    ).pipe(
+      map(x => x.data.daustatisticEntities),
+      retry({ count: RETRY, delay: DELAY }),
+    );
+  }
+
+  fetchAllDau$(): Observable<DauQuery['daustatisticEntities']> {
+    let allDau: DauQuery['daustatisticEntities'] = [];
+    let skip = 0;
+    const first = 1000;
+
+    return new Observable(observer => {
+      const fetchDau = () => {
+        this.dau$(first, skip).subscribe(users => {
+          if (users.length > 0) {
+            allDau = allDau.concat(users);
+            skip += first;
+            fetchDau();
+          } else {
+            observer.next(allDau);
+            observer.complete();
+          }
+        });
+      };
+
+      return fetchDau();
+    });
+  }
+
+  transaction$(first: number, skip: number = 0): Observable<TransactionsQuery['totalTxStatisticEntities']> {
+    this.transactionsGQL.client = this.getClientSubgraph();
+    return this.transactionsGQL.fetch(
+      { first: first, skip: skip}
+    ).pipe(
+      map(x => x.data.totalTxStatisticEntities),
+      retry({ count: RETRY, delay: DELAY }),
+    );
+  }
+
+  fetchTransactions$(): Observable<TransactionsQuery['totalTxStatisticEntities']> {
+    let allTransaction: TransactionsQuery['totalTxStatisticEntities'] = [];
+    let skip = 0;
+    const first = 1000;
+
+    return new Observable(observer => {
+      const fetchTx = () => {
+        this.transaction$(first, skip).subscribe(users => {
+          if (users.length > 0) {
+            allTransaction = allTransaction.concat(users);
+            skip += first;
+            fetchTx();
+          } else {
+            observer.next(allTransaction);
+            observer.complete();
+          }
+        });
+      };
+
+      return fetchTx();
     });
   }
 
@@ -323,6 +577,105 @@ export class SubgraphService {
       };
 
       fetchHeroActions();
+    });
+  }
+
+  pawnshopActions$(first: number, skip: number = 0): Observable<PawnshopDataQuery['pawnshopPositionHistoryEntities']> {
+    this.pawnshopGQL.client = this.getClientSubgraph();
+    return this.pawnshopGQL.fetch(
+      { first: first, skip: skip }
+    ).pipe(
+      map(x => x.data.pawnshopPositionHistoryEntities),
+      retry({ count: RETRY, delay: DELAY }),
+    )
+  }
+
+  fetchAllPawnshopActions$(): Observable<PawnshopDataQuery['pawnshopPositionHistoryEntities']> {
+    let pawnshopAllActions: PawnshopDataQuery['pawnshopPositionHistoryEntities'] = [];
+    let skip = 0;
+    const first = 1000;
+
+    return new Observable(observer => {
+      const pawnshopActions$ = () => {
+        this.pawnshopActions$(first, skip).subscribe(pawnshopActions => {
+          if (pawnshopActions.length > 0) {
+            pawnshopAllActions = pawnshopAllActions.concat(pawnshopActions);
+            skip += first;
+            pawnshopActions$();
+          } else {
+            observer.next(pawnshopAllActions);
+            observer.complete();
+          }
+        });
+      };
+
+      pawnshopActions$();
+    });
+  }
+
+  heroTokenEarned$(first: number, skip: number = 0): Observable<HeroTokenEarnedDataQuery['heroTokenEarneds']> {
+    this.heroTokenEarnedGQL.client = this.getClientSubgraph();
+    return this.heroTokenEarnedGQL.fetch(
+      { first: first, skip: skip }
+    ).pipe(
+      map(x => x.data.heroTokenEarneds),
+      retry({ count: RETRY, delay: DELAY }),
+    )
+  }
+
+  fetchAllHeroTokenEarned$(): Observable<HeroTokenEarnedDataQuery['heroTokenEarneds']> {
+    let allEarned: HeroTokenEarnedDataQuery['heroTokenEarneds'] = [];
+    let skip = 0;
+    const first = 1000;
+
+    return new Observable(observer => {
+      const heroTokenEarned$ = () => {
+        this.heroTokenEarned$(first, skip).subscribe(earned => {
+          if (earned.length > 0) {
+            allEarned = allEarned.concat(earned);
+            skip += first;
+            heroTokenEarned$();
+          } else {
+            observer.next(allEarned);
+            observer.complete();
+          }
+        });
+      };
+
+      heroTokenEarned$();
+    });
+  }
+
+  heroesWithRefCode$(first: number, skip: number = 0): Observable<UsersRefCodeDataQuery['heroEntities']> {
+    this.usersRefCodeDataGQL.client = this.getClientSubgraph();
+    return this.usersRefCodeDataGQL.fetch(
+      { first: first, skip: skip}
+    ).pipe(
+      map(x => x.data.heroEntities),
+      retry({ count: RETRY, delay: DELAY }),
+    )
+  }
+
+  fetchHeroesWithRefCode$(): Observable<UsersRefCodeDataQuery['heroEntities']> {
+    let allHeroes: UsersRefCodeDataQuery['heroEntities'] = [];
+    let skip = 0;
+    const first = 1000;
+
+    return new Observable(observer => {
+      const fetchHeroes = () => {
+        this.heroesWithRefCode$(first, skip).subscribe(heroes => {
+          if (heroes.length > 0) {
+            allHeroes = allHeroes.concat(heroes);
+            skip += first;
+            fetchHeroes();
+          } else {
+            observer.next(allHeroes);
+            observer.complete();
+          }
+        });
+      };
+
+      fetchHeroes();
     });
   }
 

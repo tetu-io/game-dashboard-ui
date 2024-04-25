@@ -4,7 +4,8 @@ export enum MENU_ITEMS {
   USERS = 'Users',
   USER_STAT = 'User stats',
   USER_GENERAL_STAT = 'User general stats',
-  NEW_USERS = 'User chart',
+  NEW_USERS = 'New users',
+  USERS_REF = 'Users ref',
   HEROES = 'Heroes',
   HERO_STAT = 'Hero stats',
   HERO_DETAILS = 'Hero details',
@@ -15,10 +16,21 @@ export enum MENU_ITEMS {
   TOKENOMICS = 'Tokenomics',
   TOKENOMICS_CHART = 'Tokenomics chart',
   TOKENS_TRANSACTIONS = 'Tokens transactions',
-
+  PAWNSHOP = 'Pawnshop',
+  PAWNSHOP_CHART = 'Pawnshop chart',
+  DAU_CHART = 'DAU',
+  TX_CHART = 'Total transactions',
 }
 
 export const MENU: { [key: string]: MenuItemInterface } = {
+  [MENU_ITEMS.DAU_CHART]: {
+    icon: 'line-chart',
+    label: MENU_ITEMS.DAU_CHART,
+  },
+  [MENU_ITEMS.TX_CHART]: {
+    icon: 'line-chart',
+    label: MENU_ITEMS.TX_CHART,
+  },
   [MENU_ITEMS.TOKENOMICS_STAT]: {
     icon: 'line-chart',
     label: MENU_ITEMS.TOKENOMICS_STAT,
@@ -53,6 +65,10 @@ export const MENU: { [key: string]: MenuItemInterface } = {
         icon: 'line-chart',
         label: MENU_ITEMS.NEW_USERS
       },
+      [MENU_ITEMS.USERS_REF]: {
+        icon: 'line-chart',
+        label: MENU_ITEMS.USERS_REF
+      },
     }
   },
   [MENU_ITEMS.HEROES]: {
@@ -66,6 +82,16 @@ export const MENU: { [key: string]: MenuItemInterface } = {
       [MENU_ITEMS.NEW_HEROES]: {
         icon: 'line-chart',
         label: MENU_ITEMS.NEW_HEROES
+      },
+    }
+  },
+  [MENU_ITEMS.PAWNSHOP]: {
+    icon: 'line-chart',
+    label: MENU_ITEMS.PAWNSHOP,
+    subMenu: {
+      [MENU_ITEMS.PAWNSHOP_CHART]: {
+        icon: 'line-chart',
+        label: MENU_ITEMS.PAWNSHOP_CHART
       },
     }
   },

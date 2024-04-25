@@ -1,0 +1,13 @@
+query PawnshopData($first: Int!, $skip: Int!) {
+    pawnshopPositionHistoryEntities(
+        where: { action_in: [0 ,4] }
+        first: $first
+        skip: $skip
+        orderBy: timestamp
+        orderDirection: asc
+    ) @namedClient(name: "SONIC_GAME_SUBGRAPH") {
+        id
+        action
+        timestamp
+    }
+}
