@@ -72,7 +72,7 @@
                   formControlName="network"
                   (ngModelChange)="networkChange($event)"
                 >
-                  <nz-option nzValue="sonic" nzLabel="Sonic"></nz-option>
+                  <nz-option *ngFor="let network of networks" [nzValue]="network" [nzLabel]="network"></nz-option>
                 </nz-select>
               </nz-form-control>
             </nz-form-item>

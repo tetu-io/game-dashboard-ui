@@ -1,7 +1,8 @@
 export const NETWORKS = {
   // sepolia: 'sepolia',
   // mumbai: 'mumbai',
-  sonic: 'sonic'
+  sonic: 'sonic',
+  fantom: 'fantom',
 }
 
 export function defaultNetwork(): string {
@@ -21,17 +22,20 @@ export function getChainId(network: string): number {
 }
 
 export const CHAIN_ID = new Map<string, number>([
-  ['sonic', 64165]
+  ['sonic', 64165],
+  ['fantom', 250],
 ]);
 
 export const NETWORKS_URLS = new Map<string, string>([
   ['sepolia', 'https://sepolia.sacra.cc'],
   ['mumbai', 'https://mumbai.sacra.cc'],
   ['sonic', 'https://sonic-beta.sacra.cc'],
+  ['fantom', 'https://sacra.game/']
 ]);
 
 export const RPC_URLS = new Map<number, string>([
-  [64165, 'https://rpc.sonic.fantom.network/']
+  [64165, 'https://rpc.sonic.fantom.network/'],
+  [250, 'https://rpc.ftm.tools/'],
 ]);
 
 export const ON_CHAIN_CALL_RETRY = 3;

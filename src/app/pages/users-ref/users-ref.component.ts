@@ -2,6 +2,7 @@ import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit } from '@
 import { SubgraphService } from '../../services/subgraph.service';
 import { DestroyService } from '../../services/destroy.service';
 import { takeUntil } from 'rxjs';
+import { UsersRefStat } from '../../models/users-ref-stat.interface';
 
 @Component({
   selector: 'app-users-ref',
@@ -11,8 +12,10 @@ import { takeUntil } from 'rxjs';
 })
 export class UsersRefComponent implements OnInit {
 
-  columns = ['Referral Code', 'Count'];
+  columns = ['Referral Code', 'Count', 'Get lvl 2', 'Get lvl 5', 'Passed 1 biome'];
   records: Record<string, number> = {};
+  recordStat: Record<string, UsersRefStat> = {};
+
   keys: string[] = [];
   isLoading = false;
 
@@ -41,6 +44,26 @@ export class UsersRefComponent implements OnInit {
               this.records[hero.refCode] += 1;
             } else {
               this.records[hero.refCode] = 1;
+            }
+
+            if (!this.recordStat[hero.refCode]) {
+              this.recordStat[hero.refCode] = {
+                lvlTwo: 0,
+                lvlFive: 0,
+                passFirstBiome: 0,
+              };
+            }
+
+            if (this.recordStat[hero.refCode]) {
+              if (hero.stats.level > 2) {
+                this.recordStat[hero.refCode].lvlTwo += 1;
+              }
+              if (hero.stats.level > 5) {
+                this.recordStat[hero.refCode].lvlFive += 1;
+              }
+              if (hero.biome > 1) {
+                this.recordStat[hero.refCode].passFirstBiome += 1;
+              }
             }
           }
         });
