@@ -16,8 +16,9 @@
       <tr *ngFor="let key of filterTable.data">
         <td>{{ key }}</td>
         <td>{{ records[key] }}</td>
-        <!--          <td>{{ data.value }}</td>-->
-        <!--          <td>{{ data.comment }}</td>-->
+        <td>{{ recordStat[key].lvlTwo }}</td>
+        <td>{{ recordStat[key].lvlFive }}</td>
+        <td>{{ recordStat[key].passFirstBiome }}</td>
       </tr>
       </tbody>
     </nz-table>

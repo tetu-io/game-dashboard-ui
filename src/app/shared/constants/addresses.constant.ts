@@ -2,6 +2,7 @@
 
 import { CoreAddressesModel } from '../../models/core-addresses.model';
 import { SONIC_CORE } from './sonic.constants';
+import { FANTOM_CORE } from './fantom.constant';
 
 export const ADDRESS_ZERO = '0x0000000000000000000000000000000000000000';
 
@@ -10,7 +11,10 @@ export type TokenInfo = {
   decimals: number;
 };
 
-const ADDRESSES_CORE_MAP = new Map<number, CoreAddressesModel>([[64165, SONIC_CORE]]);
+const ADDRESSES_CORE_MAP = new Map<number, CoreAddressesModel>([
+  [64165, SONIC_CORE],
+  [250, FANTOM_CORE],
+]);
 
 
 export const GET_CORE_ADDRESSES = (chainId: number) => {

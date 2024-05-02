@@ -9,5 +9,9 @@ query UsersRefCodeData($first: Int!, $skip: Int!) {
         orderDirection: asc
     ) @namedClient(name: "SONIC_GAME_SUBGRAPH") {
         refCode
+        stats {
+            level
+        }
+        biome
     }
 }

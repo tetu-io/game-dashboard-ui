@@ -346,9 +346,9 @@ export class SubgraphService {
 
     return new Observable(observer => {
       const fetchTx = () => {
-        this.transaction$(first, skip).subscribe(users => {
-          if (users.length > 0) {
-            allTransaction = allTransaction.concat(users);
+        this.transaction$(first, skip).subscribe(data => {
+          if (data.length > 0) {
+            allTransaction = allTransaction.concat(data);
             skip += first;
             fetchTx();
           } else {
@@ -718,6 +718,8 @@ export class SubgraphService {
     switch (this.networkSubject.value) {
       case NETWORKS.sonic:
         return 'SONIC_GAME_SUBGRAPH';
+      case NETWORKS.fantom:
+        return 'FANTOM_GAME_SUBGRAPH';
       default:
         return '';
     }

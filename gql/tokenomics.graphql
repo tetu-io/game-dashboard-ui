@@ -4,5 +4,6 @@ query Tokenomics {
     ) {
         spentOnHero
         spentOnItems
+        totalBurned
     }
 }

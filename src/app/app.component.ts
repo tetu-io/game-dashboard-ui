@@ -36,6 +36,7 @@ export class AppComponent implements OnInit, AfterViewInit {
   MAIN_ROUTES_ITEMS: { [key: string]: string } = MAIN_ROUTES;
   menuItemsKeys: string[] = [];
   isLight: boolean = false;
+  networks = Object.keys(NETWORKS);
 
   constructor(
     private changeDetectorRef: ChangeDetectorRef,

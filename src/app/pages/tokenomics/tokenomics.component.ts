@@ -7,6 +7,7 @@ import { getChainId } from '../../shared/constants/network.constant';
 import { forkJoin, takeUntil } from 'rxjs';
 import { formatUnits, parseUnits } from 'ethers';
 import { Formatter } from '../../shared/utils/formatter';
+import { TokenService } from '../../services/onchain/token.service';
 
 @Component({
   selector: 'app-tokenomics',
@@ -33,8 +34,9 @@ export class TokenomicsComponent implements OnInit {
   ltv = '0';
   lifetime = '0';
   toBurn = '0';
-  toTreasury = '0';
-  toGov = '0';
+  treasuryBalance = '0';
+  controllerBalance = '0';
+  dungeonFactoryBalance = '0';
 
   network = '';
   chainId = 0;
@@ -45,6 +47,7 @@ export class TokenomicsComponent implements OnInit {
     private changeDetectorRef: ChangeDetectorRef,
     private subgraphService: SubgraphService,
     private dungeonFactoryService: DungeonFactoryService,
+    private tokenService: TokenService
   ) { }
 
   ngOnInit(): void {
@@ -59,6 +62,9 @@ export class TokenomicsComponent implements OnInit {
 
   prepareData(): void {
     const gameToken = GET_CORE_ADDRESSES(this.chainId).gameToken.toLowerCase();
+    const controller = GET_CORE_ADDRESSES(this.chainId).controller.toLowerCase();
+    const treasury = GET_CORE_ADDRESSES(this.chainId).treasury.toLowerCase();
+    const dungeonFactory = GET_CORE_ADDRESSES(this.chainId).dungeonFactory.toLowerCase();
     forkJoin({
       tokenData: this.subgraphService.tokenByAddress$(gameToken),
       userStats: this.subgraphService.fetchAllUsersStat$(),
@@ -66,10 +72,13 @@ export class TokenomicsComponent implements OnInit {
       treasuryAmount2: this.dungeonFactoryService.getDungeonTreasuryAmount$(this.chainId, gameToken, this.getHeroLvlByBiome(2), 2),
       treasuryAmount3: this.dungeonFactoryService.getDungeonTreasuryAmount$(this.chainId, gameToken, this.getHeroLvlByBiome(3), 3),
       treasuryAmount4: this.dungeonFactoryService.getDungeonTreasuryAmount$(this.chainId, gameToken, this.getHeroLvlByBiome(4), 4),
-      heroVaultStat: this.subgraphService.heroTokenVaultStatistic$(),
+      // heroVaultStat: this.subgraphService.heroTokenVaultStatistic$(),
       earned: this.subgraphService.heroEarned$(),
       dauStats: this.subgraphService.dau$(30),
       stat: this.subgraphService.tokenomicStats$(),
+      controllerBalance: this.tokenService.balanceOf$(gameToken, this.chainId, controller),
+      treasuryBalance: this.tokenService.balanceOf$(gameToken, this.chainId, treasury),
+      dungeonFactoryBalance: this.tokenService.balanceOf$(gameToken, this.chainId, dungeonFactory),
     })
       .pipe(takeUntil(this.destroy$))
       .subscribe(({
@@ -80,10 +89,13 @@ export class TokenomicsComponent implements OnInit {
         treasuryAmount3,
         treasuryAmount4,
         // heroes, itemActions,
-        heroVaultStat,
+        // heroVaultStat,
         earned,
         dauStats,
-        stat
+        stat,
+        controllerBalance,
+        treasuryBalance,
+        dungeonFactoryBalance
       }) => {
         let mau = 0;
         let dau = 0;
@@ -114,7 +126,7 @@ export class TokenomicsComponent implements OnInit {
           this.rewardThirdBiome = (+formatUnits(treasuryAmount3[1] + treasuryAmount3[2], tokenData[0].decimals)).toFixed(4);
           // @ts-ignore
           // this.rewardFourthBiome = `${(+formatUnits(treasuryAmount4[1], tokenData[0].decimals)).toFixed(4)} + ${(+formatUnits(treasuryAmount4[2], tokenData[0].decimals)).toFixed(4)} = ${(+formatUnits(treasuryAmount4[2], tokenData[0].decimals)).toFixed(4)}`
-          this.rewardFourthBiome = (+formatUnits(treasuryAmount4[1] + treasuryAmount4[2], tokenData[0].decimals)).toFixed(4);
+          this.rewardFourthBiome = `${(+formatUnits(treasuryAmount4[1], tokenData[0].decimals)).toFixed(4)} + ${(+formatUnits(treasuryAmount4[2], tokenData[0].decimals)).toFixed(4)} = ${(+formatUnits(treasuryAmount4[2], tokenData[0].decimals)).toFixed(4)}`
 
           if (earned && earned.length > 0) {
             this.totalUsersEarned = (+formatUnits(earned[0].totalAmount)).toFixed(4);
@@ -123,7 +135,11 @@ export class TokenomicsComponent implements OnInit {
           if (stat && stat.length > 0) {
             this.spentOnHeroes = stat[0].spentOnHero;
             this.spentOnItems = stat[0].spentOnItems;
+            this.toBurn = (+formatUnits(stat[0].totalBurned, 18)).toFixed(4);
           }
+          this.treasuryBalance = (+formatUnits(treasuryBalance, tokenData[0].decimals)).toFixed(4);
+          this.controllerBalance = (+formatUnits(controllerBalance, tokenData[0].decimals)).toFixed(4);
+          this.dungeonFactoryBalance = (+formatUnits(dungeonFactoryBalance, tokenData[0].decimals)).toFixed(4);
           // this.spentOnItems = (
           //   itemActions.reduce((total, action) => {
           //     return total + +action.item.meta.feeToken.amount
@@ -149,13 +165,6 @@ export class TokenomicsComponent implements OnInit {
           this.arppu = ((+this.spentOnItems + +this.spentOnHeroes + +this.spentOnHeroLvlUp) / this.payerUsers).toFixed(2);
           this.ltv = (+this.arpu * +this.lifetime).toFixed(2);
         }
-
-        if (heroVaultStat && heroVaultStat.length > 0) {
-          this.toBurn = (+formatUnits(heroVaultStat[0].toBurn, 18)).toFixed(4);
-          this.toTreasury = (+formatUnits(heroVaultStat[0].toTreasury, 18)).toFixed(4);
-          this.toGov = (+formatUnits(heroVaultStat[0].toGov, 18)).toFixed(4);
-        }
-
 
         this.isLoading = false;
         this.changeDetectorRef.detectChanges();
