@@ -14,13 +14,22 @@
       <nz-statistic [nzValue]="payerUsers" [nzTitle]="'Payer users'"></nz-statistic>
     </nz-col>
     <nz-col class="row-padding" [nzSpan]="7" [nzOffset]="2">
-      <nz-statistic [nzValue]="toBurn" [nzTitle]="'Burned tokens(only from hero actions)'"></nz-statistic>
+      <nz-statistic [nzValue]="toBurn" [nzTitle]="'Burned tokens'"></nz-statistic>
     </nz-col>
     <nz-col class="row-padding" [nzSpan]="7">
-      <nz-statistic [nzValue]="toGov" [nzTitle]="'Spent to governance'"></nz-statistic>
+      <nz-statistic [nzValue]="arpu" [nzTitle]="'ARPU'"></nz-statistic>
     </nz-col>
     <nz-col class="row-padding" [nzSpan]="7">
-      <nz-statistic [nzValue]="toTreasury" [nzTitle]="'Spent to treasury'"></nz-statistic>
+      <nz-statistic [nzValue]="arppu" [nzTitle]="'ARPPU'"></nz-statistic>
+    </nz-col>
+    <nz-col class="row-padding" [nzSpan]="7" [nzOffset]="2">
+      <nz-statistic [nzValue]="controllerBalance" [nzTitle]="'Controller balance'"></nz-statistic>
+    </nz-col>
+    <nz-col class="row-padding" [nzSpan]="7">
+      <nz-statistic [nzValue]="treasuryBalance" [nzTitle]="'Treasury balance'"></nz-statistic>
+    </nz-col>
+    <nz-col class="row-padding" [nzSpan]="7">
+      <nz-statistic [nzValue]="dungeonFactoryBalance" [nzTitle]="'Dungeon factory balance'"></nz-statistic>
     </nz-col>
     <nz-col class="row-padding" [nzSpan]="7" [nzOffset]="2">
       <nz-statistic [nzValue]="rewardFirstBiome" [nzTitle]="'Rewards per dung in 1 Biome'"></nz-statistic>
@@ -42,12 +51,6 @@
     </nz-col>
     <nz-col class="row-padding" [nzSpan]="7" [nzOffset]="2">
       <nz-statistic [nzValue]="spentOnHeroes" [nzTitle]="'Spent on heroes'"></nz-statistic>
-    </nz-col>
-    <nz-col class="row-padding" [nzSpan]="7">
-      <nz-statistic [nzValue]="arpu" [nzTitle]="'ARPU'"></nz-statistic>
-    </nz-col>
-    <nz-col class="row-padding" [nzSpan]="7" [nzOffset]="2">
-      <nz-statistic [nzValue]="arppu" [nzTitle]="'ARPPU'"></nz-statistic>
     </nz-col>
     <nz-col class="row-padding" [nzSpan]="7">
       <nz-statistic [nzValue]="arppu" [nzTitle]="'LTV'"></nz-statistic>
