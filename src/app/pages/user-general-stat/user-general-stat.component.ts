@@ -56,7 +56,7 @@ export class UserGeneralStatComponent implements OnInit {
         let activeUser = 0;
         let totalHeroes = 0;
         let kFactor = 0;
-        let maxLvl = heroMaxLvl.length > 0 ? heroMaxLvl[0].stats.level : 0;
+        // let maxLvl = heroMaxLvl.length > 0 ? heroMaxLvl[0].stats.level : 0;
         let medLvlRefArray: number[] = [];
         let maxEquippedHero = 0;
         let completeAdventuresChurn = 0;
@@ -66,7 +66,7 @@ export class UserGeneralStatComponent implements OnInit {
         let firstBuyHero = 0;
         let incativeOneLifechanceHeroes = 0;
         let conversionToHeroAfterOnboarding = 0;
-        let treasuryEligible = 0;
+        // let treasuryElig`ible = 0;
         let nftTraders = 0;
         let fullLifeChances = 0;
 
@@ -149,9 +149,9 @@ export class UserGeneralStatComponent implements OnInit {
               }
             }
 
-            if (hero.stats.level >= maxLvl - 5 + maxBiome) {
-              treasuryEligible++;
-            }
+            // if (hero.stats.level >= maxLvl - 5 + maxBiome) {
+            //   treasuryEligible++;
+            // }
 
             if (hero.stats.lifeChances > 4) {
               fullLifeChances++;
@@ -344,11 +344,11 @@ export class UserGeneralStatComponent implements OnInit {
           comment: 'Users who purchased their FIRST hero after completing the trial (dropped ones are not counted)'
         });
 
-        this.data.push({
-          parameter: 'Treasury Eligible',
-          value: treasuryEligible,
-          comment: 'The number of people with a level greater than or equal to max level - 5 + max biome'
-        });
+        // this.data.push({
+        //   parameter: 'Treasury Eligible',
+        //   value: treasuryEligible,
+        //   comment: 'The number of people with a level greater than or equal to max level - 5 + max biome'
+        // });
 
         this.data.push({
           parameter: '1 Lifechance Heroes',
