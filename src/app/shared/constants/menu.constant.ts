@@ -6,6 +6,7 @@ export enum MENU_ITEMS {
   USER_GENERAL_STAT = 'User general stats',
   NEW_USERS = 'New users',
   USERS_REF = 'Users ref',
+  USERS_RATIO_EARN = 'Users ratio earn',
   HEROES = 'Heroes',
   HERO_STAT = 'Hero stats',
   HERO_DETAILS = 'Hero details',
@@ -68,6 +69,10 @@ export const MENU: { [key: string]: MenuItemInterface } = {
       [MENU_ITEMS.USERS_REF]: {
         icon: 'line-chart',
         label: MENU_ITEMS.USERS_REF
+      },
+      [MENU_ITEMS.USERS_RATIO_EARN]: {
+        icon: 'line-chart',
+        label: MENU_ITEMS.USERS_RATIO_EARN
       },
     }
   },
