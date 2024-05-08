@@ -62,6 +62,10 @@ const routes: Routes = [
     loadChildren: () => import('./pages/total-tx/total-tx.module').then(m => m.TotalTxModule),
   },
   {
+    path: MAIN_ROUTES[MENU_ITEMS.USERS_RATIO_EARN],
+    loadChildren: () => import('./pages/users-ratio-earn/users-ratio-earn.module').then(m => m.UsersRatioEarnModule),
+  },
+  {
     path: '',
     pathMatch: 'full',
     redirectTo: MAIN_ROUTES[MENU_ITEMS.USER_STAT],

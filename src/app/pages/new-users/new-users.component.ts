@@ -4,7 +4,6 @@ import { SubgraphService } from '../../services/subgraph.service';
 import { DestroyService } from '../../services/destroy.service';
 import { HeroAction, UserEntity } from '../../../../generated/gql';
 import { takeUntil } from 'rxjs';
-import { formatUnits, parseUnits } from 'ethers';
 
 @Component({
   selector: 'app-new-users',
