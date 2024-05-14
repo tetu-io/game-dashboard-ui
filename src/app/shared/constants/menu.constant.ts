@@ -16,7 +16,7 @@ export enum MENU_ITEMS {
   TOKENOMICS_STAT = 'Tokenomics stats',
   TOKENOMICS = 'Tokenomics',
   TOKENOMICS_CHART = 'Tokenomics chart',
-  TOKENS_TRANSACTIONS = 'Tokens transactions',
+  TOKENS_TRANSACTIONS = 'Token transactions',
   PAWNSHOP = 'Pawnshop',
   PAWNSHOP_CHART = 'Pawnshop chart',
   DAU_CHART = 'DAU',

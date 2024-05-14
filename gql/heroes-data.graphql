@@ -4,7 +4,7 @@ query HeroesData($first: Int!, $skip: Int!) {
         orderDirection: desc
         first: $first
         skip: $skip
-    ) @namedClient(name: "SONIC_GAME_SUBGRAPH") {
+    ) @namedClient(name: "FANTOM_GAME_SUBGRAPH") {
         id
         meta {
             id

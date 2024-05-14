@@ -5,9 +5,10 @@ import { mergeMap, takeUntil } from 'rxjs';
 import { TokenTransactionEntity } from '../../../../generated/gql';
 import { DEFAULT_TABLE_SIZE } from '../../shared/constants/table.constant';
 import { ColumnItem } from '../../models/column-item.interface';
-import { TransactionItemInterface } from '../../models/transaction-item.interface';
-import { Formatter } from '../../shared/utils/formatter';
 import { formatUnits } from 'ethers';
+import { TokenBalance } from '../../models/token-balance.interface';
+import { GET_CORE_ADDRESSES } from '../../shared/constants/addresses.constant';
+import { getChainId, getPools } from '../../shared/constants/network.constant';
 
 @Component({
   selector: 'app-token-transactions',
@@ -17,32 +18,39 @@ import { formatUnits } from 'ethers';
 })
 export class TokenTransactionsComponent implements OnInit {
 
-  columns: ColumnItem<TokenTransactionEntity>[] = [
+  columns: ColumnItem<TokenBalance>[] = [
     {
-      name: 'From',
-      sortFn: (a: TokenTransactionEntity, b: TokenTransactionEntity) => a.from.localeCompare(b.from),
+      name: 'Address',
+      sortFn: (a: TokenBalance, b: TokenBalance) => a.address.localeCompare(b.address),
       sortDirections: ['ascend', 'descend', null],
     },
     {
-      name: 'To',
-      sortFn: (a: TokenTransactionEntity, b: TokenTransactionEntity) => a.to.localeCompare(b.to),
+      name: 'From pool (buy Sacra)',
+      sortFn: (a: TokenBalance, b: TokenBalance) => a.fromPoolUsd - b.fromPoolUsd,
       sortDirections: ['ascend', 'descend', null],
     },
     {
-      name: `Amount`,
-      sortFn: (a: TokenTransactionEntity, b: TokenTransactionEntity) => a.amount.localeCompare(b.amount),
+      name: `Dungeon`,
+      sortFn: (a: TokenBalance, b: TokenBalance) => a.fromDungeon - b.fromDungeon,
       sortDirections: ['ascend', 'descend', null],
     },
     {
-      name: `Block`,
-      sortFn: (a: TokenTransactionEntity, b: TokenTransactionEntity) => a.createdAtBlock.localeCompare(b.createdAtBlock),
+      name: `To pool (sell Sacra)`,
+      sortFn: (a: TokenBalance, b: TokenBalance) => a.toPoolUsd - b.toPoolUsd,
+      sortDirections: ['ascend', 'descend', null],
+    },
+    {
+      name: `Other`,
+      sortFn: (a: TokenBalance, b: TokenBalance) => a.other - b.other,
       sortDirections: ['ascend', 'descend', null],
     },
   ];
 
   isLoading = false;
-  transactions: TransactionItemInterface[] = [];
+  tokenBalances: TokenBalance[] = [];
   pageSize = DEFAULT_TABLE_SIZE;
+  network: string = '';
+  chainId: number = 0;
 
   constructor(
     private destroy$: DestroyService,
@@ -52,6 +60,8 @@ export class TokenTransactionsComponent implements OnInit {
 
   ngOnInit(): void {
     this.subgraphService.networkObserver.subscribe(network => {
+      this.network = network;
+      this.chainId = getChainId(network);
       this.prepareData();
     });
   }
@@ -69,18 +79,103 @@ export class TokenTransactionsComponent implements OnInit {
         takeUntil(this.destroy$)
       )
       .subscribe(transactions => {
+        this.tokenBalances = [];
+        const tokenBalanceRecord: Record<string, TokenBalance> = {};
         if (transactions) {
-          this.transactions = (transactions as TokenTransactionEntity[]).map(tx => {
-            return {
-              ...tx,
-              amountFormatted: Formatter.prettyNumber(+formatUnits(tx.amount, 18)),
-              // TODO add repeat
-              repeat: 1
+          transactions.forEach(tx => {
+            const amount = parseFloat(formatUnits(tx.amount, 18));
+            if (this.isPool(tx.from)) {
+              if (!tokenBalanceRecord[tx.to]) {
+                tokenBalanceRecord[tx.to] = {
+                  address: tx.to,
+                  fromPool: 0,
+                  fromPoolUsd: 0,
+                  fromDungeon: 0,
+                  toPool: 0,
+                  toPoolUsd: 0,
+                  other: 0,
+                }
+              }
+              tokenBalanceRecord[tx.to].fromPool += amount;
+              tokenBalanceRecord[tx.to].fromPoolUsd += amount * +tx.price;
+              // to pool
+            } else if (this.isPool(tx.to)) {
+              if (!tokenBalanceRecord[tx.from]) {
+                tokenBalanceRecord[tx.from] = {
+                  address: tx.from,
+                  fromPool: 0,
+                  fromPoolUsd: 0,
+                  fromDungeon: 0,
+                  toPool: 0,
+                  toPoolUsd: 0,
+                  other: 0,
+                }
+              }
+              tokenBalanceRecord[tx.from].toPool += amount;
+              tokenBalanceRecord[tx.from].toPoolUsd += amount * +tx.price;
+            } else if (this.isDungeon(tx.from)) {
+              if (!tokenBalanceRecord[tx.to]) {
+                tokenBalanceRecord[tx.to] = {
+                  address: tx.to,
+                  fromPool: 0,
+                  fromPoolUsd: 0,
+                  fromDungeon: 0,
+                  toPool: 0,
+                  toPoolUsd: 0,
+                  other: 0,
+                }
+              }
+              tokenBalanceRecord[tx.to].fromDungeon += amount;
+            } else {
+              if (!(this.isDungeon(tx.to))) {
+                if (!tokenBalanceRecord[tx.from]) {
+                  tokenBalanceRecord[tx.from] = {
+                    address: tx.from,
+                    fromPool: 0,
+                    fromPoolUsd: 0,
+                    fromDungeon: 0,
+                    toPool: 0,
+                    toPoolUsd: 0,
+                    other: 0,
+                  }
+                }
+                tokenBalanceRecord[tx.from].other -= amount;
+                if (!tokenBalanceRecord[tx.to]) {
+                  tokenBalanceRecord[tx.to] = {
+                    address: tx.to,
+                    fromPool: 0,
+                    fromPoolUsd: 0,
+                    fromDungeon: 0,
+                    toPool: 0,
+                    toPoolUsd: 0,
+                    other: 0,
+                  }
+                }
+                tokenBalanceRecord[tx.to].other += amount;
+              }
             }
           });
         }
+        Object.keys(tokenBalanceRecord).forEach(key => {
+          this.tokenBalances.push({
+            ...tokenBalanceRecord[key],
+            fromPool: +tokenBalanceRecord[key].fromPool.toFixed(1),
+            fromPoolUsd: +tokenBalanceRecord[key].fromPoolUsd.toFixed(1),
+            toPool: +tokenBalanceRecord[key].toPool.toFixed(1),
+            toPoolUsd: +tokenBalanceRecord[key].toPoolUsd.toFixed(1),
+            fromDungeon: +tokenBalanceRecord[key].fromDungeon.toFixed(1),
+          })
+        });
         this.isLoading = false;
         this.changeDetectorRef.detectChanges();
       })
+  }
+
+  isDungeon(address: string): boolean {
+    return address.toLowerCase() === GET_CORE_ADDRESSES(this.chainId).dungeonFactory.toLowerCase();
+  }
+
+  isPool(address: string): boolean {
+    return getPools(this.network).includes(address.toLowerCase());
   }
 }

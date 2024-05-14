@@ -1,5 +1,5 @@
 query GraphData {
-  _meta @namedClient(name: "SONIC_GAME_SUBGRAPH"){
+  _meta @namedClient(name: "FANTOM_GAME_SUBGRAPH"){
     deployment
     hasIndexingErrors
     block {

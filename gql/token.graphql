@@ -1,7 +1,7 @@
 query Token($tokenAdr: ID!) {
   tokenEntities(
     where: { id: $tokenAdr }
-  ) @namedClient(name: "SONIC_GAME_SUBGRAPH") {
+  ) @namedClient(name: "FANTOM_GAME_SUBGRAPH") {
     id
     name
     symbol

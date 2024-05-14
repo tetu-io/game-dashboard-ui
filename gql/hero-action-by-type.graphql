@@ -5,7 +5,7 @@ query HeroAction($first: Int!, $skip: Int!, $actions: [Int!]!) {
         }
         first: $first
         skip: $skip
-    ) @namedClient(name: "SONIC_GAME_SUBGRAPH") {
+    ) @namedClient(name: "FANTOM_GAME_SUBGRAPH") {
         action
         timestamp
         values

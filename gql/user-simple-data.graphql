@@ -4,7 +4,7 @@ query UsersSimpleData($first: Int!, $skip: Int!) {
         skip: $skip
         orderBy: timestamp
         orderDirection: asc
-    ) @namedClient(name: "SONIC_GAME_SUBGRAPH") {
+    ) @namedClient(name: "FANTOM_GAME_SUBGRAPH") {
         id
         heroes(
             where: {

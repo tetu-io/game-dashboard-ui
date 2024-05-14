@@ -3,7 +3,7 @@ query ItemsActionData($first: Int!, $skip: Int!) {
         where: {action_in: [0, 3]}
         first: $first
         skip: $skip
-    ) @namedClient(name: "SONIC_GAME_SUBGRAPH") {
+    ) @namedClient(name: "FANTOM_GAME_SUBGRAPH") {
         action
         item {
             meta {
