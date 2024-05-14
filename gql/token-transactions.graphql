@@ -3,15 +3,16 @@ query TokenTransactions($token: String!, $first: Int!, $skip: Int!) {
         where: { token: $token }
         first: $first
         skip: $skip
-        orderBy: amount
+        orderBy: id
         orderDirection: desc
-    ) @namedClient(name: "SONIC_GAME_SUBGRAPH") {
+    ) @namedClient(name: "FANTOM_GAME_SUBGRAPH") {
         token {
             id
         }
         from
         to
         amount
+        price
         createdAtBlock
     }
 }

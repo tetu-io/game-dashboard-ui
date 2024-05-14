@@ -7,7 +7,7 @@ query UsersRefCodeData($first: Int!, $skip: Int!) {
         }
         orderBy: timestamp
         orderDirection: asc
-    ) @namedClient(name: "SONIC_GAME_SUBGRAPH") {
+    ) @namedClient(name: "FANTOM_GAME_SUBGRAPH") {
         refCode
         stats {
             level

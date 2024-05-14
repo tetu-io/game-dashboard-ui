@@ -1,3 +1,5 @@
+import { FANTOM_POOLS } from './fantom.constant';
+
 export const NETWORKS = {
   // sepolia: 'sepolia',
   // mumbai: 'mumbai',
@@ -19,6 +21,13 @@ export function getRpcUrl(chainId: number): string {
 
 export function getChainId(network: string): number {
   return CHAIN_ID.get(network) || 0;
+}
+
+export function getPools(network: string): string[] {
+  if (network === 'fantom') {
+    return FANTOM_POOLS;
+  }
+  return [];
 }
 
 export const CHAIN_ID = new Map<string, number>([

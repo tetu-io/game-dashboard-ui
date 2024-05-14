@@ -4,7 +4,7 @@
 </nz-spin>
 
 <ng-template #loaded>
-  <nz-table #filterTable [nzData]="transactions"
+  <nz-table #filterTable [nzData]="tokenBalances"
             [nzPageSize]="pageSize"
             nzTableLayout="fixed">
     <thead>
@@ -20,10 +20,11 @@
     </thead>
     <tbody>
     <tr *ngFor="let data of filterTable.data">
-      <td>{{ data.from }}</td>
-      <td>{{ data.to }}</td>
-      <td>{{ data.amount }}</td>
-      <td>{{ data.createdAtBlock }}</td>
+      <td>{{ data.address }}</td>
+      <td>{{ data.fromPool + " ~(" + data.fromPoolUsd + "$)" }}</td>
+      <td>{{ data.fromDungeon }}</td>
+      <td>{{ data.toPool + " ~(" + data.toPoolUsd + "$)" }}</td>
+      <td>{{ data.other }}</td>
     </tr>
     </tbody>
   </nz-table>

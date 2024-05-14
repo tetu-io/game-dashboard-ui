@@ -1,5 +1,5 @@
 query ControllerData {
-    controllerEntities @namedClient(name: "SONIC_GAME_SUBGRAPH"){
+    controllerEntities @namedClient(name: "FANTOM_GAME_SUBGRAPH"){
         id
         dungeonFactory
         gameToken

@@ -2,7 +2,7 @@ query StoryData($first: Int!, $skip: Int!) {
     storyPageEntities(
         first: $first
         skip: $skip
-    ) @namedClient(name: "SONIC_GAME_SUBGRAPH") {
+    ) @namedClient(name: "FANTOM_GAME_SUBGRAPH") {
         storyId
         heroPage
         chamber {

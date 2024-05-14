@@ -23,3 +23,10 @@ export const FANTOM_CORE = new CoreAddressesModel(
   '0x000000000000000000000000000000000000000E', // network token
   '0x50D8F5E54Cf0658b5568C82cEA244D2fBd97173C', // sponsored hero
 );
+
+export const FANTOM_POOLS = [
+  '0xdef171fe48cf0115b1d80b88dc8eab59176fee57'.toLowerCase(),
+  '0x56e837286dc7366ef6d6464d332ac6f9d32bc5a0'.toLowerCase(),
+  '0x9254397549a15aefb0fba41ef34c6b06c33b1801'.toLowerCase(),
+  '0x44eb7CFD34538324cCfAdf25e2D4753B57e43F91'.toLowerCase(),
+]

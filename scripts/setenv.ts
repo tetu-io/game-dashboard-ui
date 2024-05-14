@@ -6,7 +6,7 @@ const { argv } = require('yargs');
 require('dotenv').config();
 
 const envKey = 'SACRA_';
-const envSubgraphUri = envKey + 'SONIC_GAME_SUBGRAPH';
+const envSubgraphUri = envKey + 'FANTOM_GAME_SUBGRAPH';
 const { configuration } = argv;
 const isProduction = configuration === 'prod';
 const targetPath = isProduction ? `./src/environments/environment.prod.ts` : `./src/environments/environment.ts`;

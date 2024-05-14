@@ -3,7 +3,7 @@ query HeroMaxLevelData {
         orderBy: stats__level
         orderDirection: desc
         first: 1
-    ) @namedClient(name: "SONIC_GAME_SUBGRAPH"){
+    ) @namedClient(name: "FANTOM_GAME_SUBGRAPH"){
         stats {
             level
         }
