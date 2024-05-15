@@ -8,7 +8,7 @@ import { ColumnItem } from '../../models/column-item.interface';
 import { formatUnits } from 'ethers';
 import { TokenBalance } from '../../models/token-balance.interface';
 import { GET_CORE_ADDRESSES } from '../../shared/constants/addresses.constant';
-import { getChainId, getPools } from '../../shared/constants/network.constant';
+import { getChainId, getPools, getSkipAddresses } from '../../shared/constants/network.constant';
 
 @Component({
   selector: 'app-token-transactions',
@@ -30,13 +30,18 @@ export class TokenTransactionsComponent implements OnInit {
       sortDirections: ['ascend', 'descend', null],
     },
     {
-      name: `Dungeon`,
-      sortFn: (a: TokenBalance, b: TokenBalance) => a.fromDungeon - b.fromDungeon,
+      name: `To pool (sell Sacra)`,
+      sortFn: (a: TokenBalance, b: TokenBalance) => a.toPoolUsd - b.toPoolUsd,
       sortDirections: ['ascend', 'descend', null],
     },
     {
-      name: `To pool (sell Sacra)`,
-      sortFn: (a: TokenBalance, b: TokenBalance) => a.toPoolUsd - b.toPoolUsd,
+      name: `Earned`,
+      sortFn: (a: TokenBalance, b: TokenBalance) => a.earned - b.earned,
+      sortDirections: ['ascend', 'descend', null],
+    },
+    {
+      name: `Dungeon`,
+      sortFn: (a: TokenBalance, b: TokenBalance) => a.fromDungeon - b.fromDungeon,
       sortDirections: ['ascend', 'descend', null],
     },
     {
@@ -82,7 +87,10 @@ export class TokenTransactionsComponent implements OnInit {
         this.tokenBalances = [];
         const tokenBalanceRecord: Record<string, TokenBalance> = {};
         if (transactions) {
-          transactions.forEach(tx => {
+          for (let tx of transactions) {
+            if (this.skipAddresses(tx.from) || this.skipAddresses(tx.to)) {
+              continue;
+            }
             const amount = parseFloat(formatUnits(tx.amount, 18));
             if (this.isPool(tx.from)) {
               if (!tokenBalanceRecord[tx.to]) {
@@ -94,6 +102,7 @@ export class TokenTransactionsComponent implements OnInit {
                   toPool: 0,
                   toPoolUsd: 0,
                   other: 0,
+                  earned: 0,
                 }
               }
               tokenBalanceRecord[tx.to].fromPool += amount;
@@ -109,6 +118,7 @@ export class TokenTransactionsComponent implements OnInit {
                   toPool: 0,
                   toPoolUsd: 0,
                   other: 0,
+                  earned: 0,
                 }
               }
               tokenBalanceRecord[tx.from].toPool += amount;
@@ -123,6 +133,7 @@ export class TokenTransactionsComponent implements OnInit {
                   toPool: 0,
                   toPoolUsd: 0,
                   other: 0,
+                  earned: 0,
                 }
               }
               tokenBalanceRecord[tx.to].fromDungeon += amount;
@@ -137,6 +148,7 @@ export class TokenTransactionsComponent implements OnInit {
                     toPool: 0,
                     toPoolUsd: 0,
                     other: 0,
+                    earned: 0,
                   }
                 }
                 tokenBalanceRecord[tx.from].other -= amount;
@@ -149,21 +161,25 @@ export class TokenTransactionsComponent implements OnInit {
                     toPool: 0,
                     toPoolUsd: 0,
                     other: 0,
+                    earned: 0,
                   }
                 }
                 tokenBalanceRecord[tx.to].other += amount;
               }
             }
-          });
+          }
         }
         Object.keys(tokenBalanceRecord).forEach(key => {
+          const fromPoolUsd = +tokenBalanceRecord[key].fromPoolUsd.toFixed(1);
+          const toPoolUsd = +tokenBalanceRecord[key].toPoolUsd.toFixed(1);
           this.tokenBalances.push({
             ...tokenBalanceRecord[key],
             fromPool: +tokenBalanceRecord[key].fromPool.toFixed(1),
-            fromPoolUsd: +tokenBalanceRecord[key].fromPoolUsd.toFixed(1),
+            fromPoolUsd: fromPoolUsd,
             toPool: +tokenBalanceRecord[key].toPool.toFixed(1),
-            toPoolUsd: +tokenBalanceRecord[key].toPoolUsd.toFixed(1),
+            toPoolUsd: toPoolUsd,
             fromDungeon: +tokenBalanceRecord[key].fromDungeon.toFixed(1),
+            earned: +(toPoolUsd - fromPoolUsd).toFixed(1)
           })
         });
         this.isLoading = false;
@@ -177,5 +193,9 @@ export class TokenTransactionsComponent implements OnInit {
 
   isPool(address: string): boolean {
     return getPools(this.network).includes(address.toLowerCase());
+  }
+
+  skipAddresses(address: string): boolean {
+    return getSkipAddresses(this.network).includes(address.toLowerCase());
   }
 }

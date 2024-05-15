@@ -31,3 +31,8 @@ export const FANTOM_POOLS = [
   '0x44eb7CFD34538324cCfAdf25e2D4753B57e43F91'.toLowerCase(),
   '0x1231deb6f5749ef6ce6943a275a1d3e7486f4eae'.toLowerCase()
 ]
+
+export const FANTOM_SKIP_ADDRESSES = [
+  '0xbbbbb8c4364ec2ce52c59d2ed3e56f307e529a94'.toLowerCase(),
+  '0x000000000000000000000000000000000000000E'.toLowerCase(),
+]

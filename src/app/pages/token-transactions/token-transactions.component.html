@@ -22,8 +22,9 @@
     <tr *ngFor="let data of filterTable.data">
       <td>{{ data.address }}</td>
       <td>{{ data.fromPool + " ~(" + data.fromPoolUsd + "$)" }}</td>
-      <td>{{ data.fromDungeon }}</td>
       <td>{{ data.toPool + " ~(" + data.toPoolUsd + "$)" }}</td>
+      <td>{{ data.earned + "$" }}</td>
+      <td>{{ data.fromDungeon }}</td>
       <td>{{ data.other }}</td>
     </tr>
     </tbody>
