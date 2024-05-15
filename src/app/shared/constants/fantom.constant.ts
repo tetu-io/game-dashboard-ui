@@ -19,7 +19,7 @@ export const FANTOM_CORE = new CoreAddressesModel(
   '0xe4436821E403e78a6Dd62f7a9F5611f97a18f44C', // magicToken
   '0xe4436821E403e78a6Dd62f7a9F5611f97a18f44C', // strengthToken
   '0xe4436821E403e78a6Dd62f7a9F5611f97a18f44C', // dexterityToken
-  '0x8fF90eebE9672d6EC115EAfb8Ab90AF6300BE108', // pawnsop
+  '0xfc0a5E585Ddc9bD07D5513848d1232b00F9e8264', // pawnsop
   '0x000000000000000000000000000000000000000E', // network token
   '0x50D8F5E54Cf0658b5568C82cEA244D2fBd97173C', // sponsored hero
 );
@@ -30,4 +30,9 @@ export const FANTOM_POOLS = [
   '0x9254397549a15aefb0fba41ef34c6b06c33b1801'.toLowerCase(),
   '0x44eb7CFD34538324cCfAdf25e2D4753B57e43F91'.toLowerCase(),
   '0x1231deb6f5749ef6ce6943a275a1d3e7486f4eae'.toLowerCase()
+]
+
+export const FANTOM_SKIP_ADDRESSES = [
+  '0xbbbbb8c4364ec2ce52c59d2ed3e56f307e529a94'.toLowerCase(),
+  '0x000000000000000000000000000000000000000E'.toLowerCase(),
 ]

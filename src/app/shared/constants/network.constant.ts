@@ -1,4 +1,4 @@
-import { FANTOM_POOLS } from './fantom.constant';
+import { FANTOM_POOLS, FANTOM_SKIP_ADDRESSES } from './fantom.constant';
 
 export const NETWORKS = {
   // sepolia: 'sepolia',
@@ -26,6 +26,13 @@ export function getChainId(network: string): number {
 export function getPools(network: string): string[] {
   if (network === 'fantom') {
     return FANTOM_POOLS;
+  }
+  return [];
+}
+
+export function getSkipAddresses(network: string): string[] {
+  if (network === 'fantom') {
+    return FANTOM_SKIP_ADDRESSES;
   }
   return [];
 }
