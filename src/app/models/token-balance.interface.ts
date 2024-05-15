@@ -6,5 +6,8 @@ export interface TokenBalance {
   earned: number;
   toPool: number;
   toPoolUsd: number;
+  fromPawnshop: number;
+  toPawnshop: number;
   other: number;
+  reinforcement: number;
 }

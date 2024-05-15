@@ -45,6 +45,21 @@ export class TokenTransactionsComponent implements OnInit {
       sortDirections: ['ascend', 'descend', null],
     },
     {
+      name: `Reinforcement`,
+      sortFn: (a: TokenBalance, b: TokenBalance) => a.reinforcement - b.reinforcement,
+      sortDirections: ['ascend', 'descend', null],
+    },
+    {
+      name: `From pawnshop (sell smth)`,
+      sortFn: (a: TokenBalance, b: TokenBalance) => a.fromPawnshop - b.fromPawnshop,
+      sortDirections: ['ascend', 'descend', null],
+    },
+    {
+      name: `To pawnshop (buy smth)`,
+      sortFn: (a: TokenBalance, b: TokenBalance) => a.toPawnshop - b.toPawnshop,
+      sortDirections: ['ascend', 'descend', null],
+    },
+    {
       name: `Other`,
       sortFn: (a: TokenBalance, b: TokenBalance) => a.other - b.other,
       sortDirections: ['ascend', 'descend', null],
@@ -73,14 +88,10 @@ export class TokenTransactionsComponent implements OnInit {
 
   prepareData(): void {
     this.isLoading = true;
-    this.subgraphService.controller$()
+    const gameToken = GET_CORE_ADDRESSES(this.chainId).gameToken.toLowerCase();
+    console.log('gameToken', gameToken)
+    this.subgraphService.fetchAllTokenTransactions$(gameToken)
       .pipe(
-        mergeMap(controller => {
-          if (controller.length > 0) {
-            return this.subgraphService.fetchAllTokenTransactions$(controller[0].gameToken.toLowerCase())
-          }
-          return [];
-        }),
         takeUntil(this.destroy$)
       )
       .subscribe(transactions => {
@@ -103,6 +114,9 @@ export class TokenTransactionsComponent implements OnInit {
                   toPoolUsd: 0,
                   other: 0,
                   earned: 0,
+                  fromPawnshop: 0,
+                  toPawnshop: 0,
+                  reinforcement: 0,
                 }
               }
               tokenBalanceRecord[tx.to].fromPool += amount;
@@ -119,6 +133,9 @@ export class TokenTransactionsComponent implements OnInit {
                   toPoolUsd: 0,
                   other: 0,
                   earned: 0,
+                  fromPawnshop: 0,
+                  toPawnshop: 0,
+                  reinforcement: 0,
                 }
               }
               tokenBalanceRecord[tx.from].toPool += amount;
@@ -134,11 +151,65 @@ export class TokenTransactionsComponent implements OnInit {
                   toPoolUsd: 0,
                   other: 0,
                   earned: 0,
+                  fromPawnshop: 0,
+                  toPawnshop: 0,
+                  reinforcement: 0,
                 }
               }
               tokenBalanceRecord[tx.to].fromDungeon += amount;
+            } else if (this.isPawnshop(tx.from)) {
+              if (!tokenBalanceRecord[tx.to]) {
+                tokenBalanceRecord[tx.to] = {
+                  address: tx.to,
+                  fromPool: 0,
+                  fromPoolUsd: 0,
+                  fromDungeon: 0,
+                  toPool: 0,
+                  toPoolUsd: 0,
+                  other: 0,
+                  earned: 0,
+                  fromPawnshop: 0,
+                  toPawnshop: 0,
+                  reinforcement: 0,
+                }
+              }
+              tokenBalanceRecord[tx.to].toPawnshop += amount;
+            } else if (this.isPawnshop(tx.to)) {
+              if (!tokenBalanceRecord[tx.from]) {
+                tokenBalanceRecord[tx.from] = {
+                  address: tx.to,
+                  fromPool: 0,
+                  fromPoolUsd: 0,
+                  fromDungeon: 0,
+                  toPool: 0,
+                  toPoolUsd: 0,
+                  other: 0,
+                  earned: 0,
+                  fromPawnshop: 0,
+                  toPawnshop: 0,
+                  reinforcement: 0,
+                }
+              }
+              tokenBalanceRecord[tx.from].fromPawnshop += amount;
+            } else if (this.isReinforcement(tx.from)) {
+              if (!tokenBalanceRecord[tx.to]) {
+                tokenBalanceRecord[tx.to] = {
+                  address: tx.to,
+                  fromPool: 0,
+                  fromPoolUsd: 0,
+                  fromDungeon: 0,
+                  toPool: 0,
+                  toPoolUsd: 0,
+                  other: 0,
+                  earned: 0,
+                  fromPawnshop: 0,
+                  toPawnshop: 0,
+                  reinforcement: 0,
+                }
+              }
+              tokenBalanceRecord[tx.to].reinforcement += amount;
             } else {
-              if (!(this.isDungeon(tx.to))) {
+              if (!(this.isDungeon(tx.to) || this.isReinforcement(tx.to))) {
                 if (!tokenBalanceRecord[tx.from]) {
                   tokenBalanceRecord[tx.from] = {
                     address: tx.from,
@@ -149,6 +220,9 @@ export class TokenTransactionsComponent implements OnInit {
                     toPoolUsd: 0,
                     other: 0,
                     earned: 0,
+                    fromPawnshop: 0,
+                    toPawnshop: 0,
+                    reinforcement: 0,
                   }
                 }
                 tokenBalanceRecord[tx.from].other -= amount;
@@ -162,6 +236,9 @@ export class TokenTransactionsComponent implements OnInit {
                     toPoolUsd: 0,
                     other: 0,
                     earned: 0,
+                    fromPawnshop: 0,
+                    toPawnshop: 0,
+                    reinforcement: 0,
                   }
                 }
                 tokenBalanceRecord[tx.to].other += amount;
@@ -179,7 +256,11 @@ export class TokenTransactionsComponent implements OnInit {
             toPool: +tokenBalanceRecord[key].toPool.toFixed(1),
             toPoolUsd: toPoolUsd,
             fromDungeon: +tokenBalanceRecord[key].fromDungeon.toFixed(1),
-            earned: +(toPoolUsd - fromPoolUsd).toFixed(1)
+            earned: +(toPoolUsd - fromPoolUsd).toFixed(1),
+            reinforcement: +tokenBalanceRecord[key].reinforcement.toFixed(1),
+            other: +tokenBalanceRecord[key].other.toFixed(1),
+            fromPawnshop: +tokenBalanceRecord[key].fromPawnshop.toFixed(1),
+            toPawnshop: +tokenBalanceRecord[key].toPawnshop.toFixed(1),
           })
         });
         this.isLoading = false;
@@ -193,6 +274,14 @@ export class TokenTransactionsComponent implements OnInit {
 
   isPool(address: string): boolean {
     return getPools(this.network).includes(address.toLowerCase());
+  }
+
+  isPawnshop(address: string): boolean {
+    return address.toLowerCase() === GET_CORE_ADDRESSES(this.chainId).pawnshop.toLowerCase();
+  }
+
+  isReinforcement(address: string): boolean {
+    return address.toLowerCase() === GET_CORE_ADDRESSES(this.chainId).reinforcementController.toLowerCase();
   }
 
   skipAddresses(address: string): boolean {
