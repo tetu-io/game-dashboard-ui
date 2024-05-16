@@ -10,4 +10,6 @@ export interface TokenBalance {
   toPawnshop: number;
   other: number;
   reinforcement: number;
+  isPlayer: boolean;
+  hasHero: boolean;
 }
