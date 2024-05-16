@@ -49,6 +49,7 @@ export class UserGeneralStatComponent implements OnInit {
         const dauSeconds = this.prepareSeconds(2);
 
         let totalUsers = users.length;
+        let usersCompleteDungeon = 0;
         let mau = 0;
         let wau = 0;
         let dau = 0;
@@ -100,12 +101,18 @@ export class UserGeneralStatComponent implements OnInit {
 
           let hasActions = false;
           let onlyOneHero = true;
+          let onlyOneHeroForDungeon = true;
 
           for (const hero of user.heroes) {
             totalHeroes++;
             if (hero.refCode != null) {
               kFactor++;
               medLvlRefArray.push(hero.stats.level);
+            }
+
+            if (hero.earnedItems.length > 0 && onlyOneHeroForDungeon) {
+              onlyOneHeroForDungeon = false;
+              usersCompleteDungeon++;
             }
 
             if (hero.items.length > 11) {
@@ -271,6 +278,12 @@ export class UserGeneralStatComponent implements OnInit {
           parameter: 'Total heroes',
           value: totalHeroes,
           comment: 'Not dead heroes'
+        });
+
+        this.data.push({
+          parameter: 'Users completed dungeon',
+          value: `${(usersCompleteDungeon / totalUsers * 100).toFixed(2)}%`,
+          comment: 'User completed dungeon / total users'
         });
 
         // ACTIONS

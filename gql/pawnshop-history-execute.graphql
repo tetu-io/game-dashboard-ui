@@ -1,0 +1,16 @@
+query PawnshopExecuteData($first: Int!, $skip: Int!) {
+    pawnshopPositionHistoryEntities(
+        where: { action: 4 }
+        first: $first
+        skip: $skip
+    ) @namedClient(name: "FANTOM_GAME_SUBGRAPH") {
+        position {
+            acquiredAmount
+        }
+        action
+        values
+        user {
+            id
+        }
+    }
+}

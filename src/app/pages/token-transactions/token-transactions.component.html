@@ -2,8 +2,20 @@
   *ngIf="isLoading; else loaded"
   class="loader g-flex-column__item-fixed">
 </nz-spin>
-
 <ng-template #loaded>
+  <h3>
+    Total users: {{totalUsers}}
+  </h3>
+  <h3>
+    Total players (finished 1 dungeon): {{totalPlayers}}
+  </h3>
+  <h3>
+    Total profit players: {{totalProfitPlayers}} ({{((totalProfitPlayers/totalPlayers) * 100).toFixed(2)}}%)
+  </h3>
+  <h3>
+    Users not finished dungeon, but have hero: {{usersNotFinishDung}}
+  </h3>
+
   <nz-table #filterTable [nzData]="tokenBalances"
             [nzPageSize]="pageSize"
             nzTableLayout="fixed">

@@ -25,7 +25,7 @@ import {
   ItemsDataGQL,
   ItemsDataQuery,
   PawnshopDataGQL,
-  PawnshopDataQuery,
+  PawnshopDataQuery, PawnshopExecuteDataGQL, PawnshopExecuteDataQuery,
   StoryDataGQL,
   StoryDataQuery,
   TokenEarnedGQL,
@@ -37,7 +37,7 @@ import {
   TransactionsGQL,
   TransactionsQuery,
   UsersDataGQL,
-  UsersDataQuery,
+  UsersDataQuery, UsersHeroDataGQL, UsersHeroDataQuery,
   UsersRefCodeDataGQL,
   UsersRefCodeDataQuery,
   UsersSimpleDataGQL,
@@ -85,6 +85,8 @@ export class SubgraphService {
     private userStatGQL: UserStatDataGQL,
     private heroStatGQL: HeroStatDataGQL,
     private tokenomicsGQL: TokenomicsGQL,
+    private pawnshopExecuteGQL: PawnshopExecuteDataGQL,
+    private userWithHeroGQL: UsersHeroDataGQL,
   ) { }
 
   changeNetwork(network: string): void {
@@ -215,6 +217,39 @@ export class SubgraphService {
     return new Observable(observer => {
       const fetchUsers = () => {
         this.usersSimple$(first, skip).subscribe(users => {
+          if (users.length > 0) {
+            allUsers = allUsers.concat(users);
+            skip += first;
+            fetchUsers();
+          } else {
+            observer.next(allUsers);
+            observer.complete();
+          }
+        });
+      };
+
+      return fetchUsers();
+    });
+  }
+
+  usersWithHero$(first: number, skip: number = 0): Observable<UsersHeroDataQuery['userEntities']> {
+    this.userWithHeroGQL.client = this.getClientSubgraph();
+    return this.userWithHeroGQL.fetch(
+      { first: first, skip: skip}
+    ).pipe(
+      map(x => x.data.userEntities),
+      retry({ count: RETRY, delay: DELAY }),
+    );
+  }
+
+  fetchAllUsersWithHero$(): Observable<UsersHeroDataQuery['userEntities']> {
+    let allUsers: UsersHeroDataQuery['userEntities'] = [];
+    let skip = 0;
+    const first = 1000;
+
+    return new Observable(observer => {
+      const fetchUsers = () => {
+        this.usersWithHero$(first, skip).subscribe(users => {
           if (users.length > 0) {
             allUsers = allUsers.concat(users);
             skip += first;
@@ -598,6 +633,39 @@ export class SubgraphService {
     return new Observable(observer => {
       const pawnshopActions$ = () => {
         this.pawnshopActions$(first, skip).subscribe(pawnshopActions => {
+          if (pawnshopActions.length > 0) {
+            pawnshopAllActions = pawnshopAllActions.concat(pawnshopActions);
+            skip += first;
+            pawnshopActions$();
+          } else {
+            observer.next(pawnshopAllActions);
+            observer.complete();
+          }
+        });
+      };
+
+      pawnshopActions$();
+    });
+  }
+
+  pawnshopExecuteActions$(first: number, skip: number = 0): Observable<PawnshopExecuteDataQuery['pawnshopPositionHistoryEntities']> {
+    this.pawnshopExecuteGQL.client = this.getClientSubgraph();
+    return this.pawnshopExecuteGQL.fetch(
+      { first: first, skip: skip }
+    ).pipe(
+      map(x => x.data.pawnshopPositionHistoryEntities),
+      retry({ count: RETRY, delay: DELAY }),
+    )
+  }
+
+  fetchAllPawnshopExecuteActions$(): Observable<PawnshopExecuteDataQuery['pawnshopPositionHistoryEntities']> {
+    let pawnshopAllActions: PawnshopExecuteDataQuery['pawnshopPositionHistoryEntities'] = [];
+    let skip = 0;
+    const first = 1000;
+
+    return new Observable(observer => {
+      const pawnshopActions$ = () => {
+        this.pawnshopExecuteActions$(first, skip).subscribe(pawnshopActions => {
           if (pawnshopActions.length > 0) {
             pawnshopAllActions = pawnshopAllActions.concat(pawnshopActions);
             skip += first;
