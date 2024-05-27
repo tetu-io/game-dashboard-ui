@@ -157,12 +157,12 @@ export class TokenTransactionsComponent implements OnInit {
               if (!tokenBalanceRecord[borrower]) {
                 tokenBalanceRecord[borrower] = this.createTokenBalance(borrower, users as UserEntity[]);
               }
-              tokenBalanceRecord[borrower].toPawnshop += +amount;
+              tokenBalanceRecord[borrower].fromPawnshop += +amount;
 
               if (!tokenBalanceRecord[buyer]) {
                 tokenBalanceRecord[buyer] = this.createTokenBalance(buyer, users as UserEntity[]);
               }
-              tokenBalanceRecord[buyer].fromPawnshop += +amount;
+              tokenBalanceRecord[buyer].toPawnshop += +amount;
             }
           }
         }
