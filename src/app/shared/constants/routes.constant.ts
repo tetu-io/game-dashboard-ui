@@ -17,4 +17,5 @@ export const MAIN_ROUTES = {
   [MENU_ITEMS.DAU_CHART]: 'dau-chart',
   [MENU_ITEMS.TX_CHART]: 'tx-chart',
   [MENU_ITEMS.USERS_RATIO_EARN]: 'users-ratio-earn',
+  [MENU_ITEMS.CHURN_RATE]: 'churn-rate',
 };
