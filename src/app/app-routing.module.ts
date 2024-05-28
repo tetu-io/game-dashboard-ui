@@ -66,6 +66,10 @@ const routes: Routes = [
     loadChildren: () => import('./pages/users-ratio-earn/users-ratio-earn.module').then(m => m.UsersRatioEarnModule),
   },
   {
+    path: MAIN_ROUTES[MENU_ITEMS.CHURN_RATE],
+    loadChildren: () => import('./pages/chunk-rate/chunk-rate.module').then(m => m.ChunkRateModule),
+  },
+  {
     path: '',
     pathMatch: 'full',
     redirectTo: MAIN_ROUTES[MENU_ITEMS.USER_STAT],

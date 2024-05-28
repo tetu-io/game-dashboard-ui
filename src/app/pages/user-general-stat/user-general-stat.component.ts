@@ -55,6 +55,7 @@ export class UserGeneralStatComponent implements OnInit {
         let dau = 0;
         let churnRate = 0;
         let activeUser = 0;
+        let inActiveUser = 0;
         let totalHeroes = 0;
         let kFactor = 0;
         // let maxLvl = heroMaxLvl.length > 0 ? heroMaxLvl[0].stats.level : 0;
@@ -192,6 +193,8 @@ export class UserGeneralStatComponent implements OnInit {
 
           if (isActiveUser) {
             activeUser++;
+          } else {
+            inActiveUser++;
           }
 
           for (const item of user.items) {
@@ -224,7 +227,7 @@ export class UserGeneralStatComponent implements OnInit {
           }
         }
 
-        churnRate = activeUser / users.length * 100;
+        churnRate = inActiveUser / users.length * 100;
 
         const totalHeroByBiome: GeneralStatInterface[] = [];
 

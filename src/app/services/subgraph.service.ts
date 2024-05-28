@@ -43,7 +43,7 @@ import {
   UsersSimpleDataGQL,
   UsersSimpleDataQuery,
   UserStatDataGQL,
-  UserStatDataQuery,
+  UserStatDataQuery, UsersTimestampDataGQL, UsersTimestampDataQuery,
 } from '../../../generated/gql';
 import { BehaviorSubject, map, Observable, retry } from 'rxjs';
 import { defaultNetwork, NETWORKS } from '../shared/constants/network.constant';
@@ -87,6 +87,7 @@ export class SubgraphService {
     private tokenomicsGQL: TokenomicsGQL,
     private pawnshopExecuteGQL: PawnshopExecuteDataGQL,
     private userWithHeroGQL: UsersHeroDataGQL,
+    private userTsGQL: UsersTimestampDataGQL,
   ) { }
 
   changeNetwork(network: string): void {
@@ -316,6 +317,39 @@ export class SubgraphService {
     return new Observable(observer => {
       const fetchUsers = () => {
         this.users$(first, skip, actions).subscribe(users => {
+          if (users.length > 0) {
+            allUsers = allUsers.concat(users);
+            skip += first;
+            fetchUsers();
+          } else {
+            observer.next(allUsers);
+            observer.complete();
+          }
+        });
+      };
+
+      return fetchUsers();
+    });
+  }
+
+  usersTs$(first: number, skip: number = 0): Observable<UsersTimestampDataQuery['userEntities']> {
+    this.userTsGQL.client = this.getClientSubgraph();
+    return this.userTsGQL.fetch(
+      { first: first, skip: skip}
+    ).pipe(
+      map(x => x.data.userEntities),
+      retry({ count: RETRY, delay: DELAY }),
+    );
+  }
+
+  fetchAllUsersTs$(): Observable<UsersTimestampDataQuery['userEntities']> {
+    let allUsers: UsersTimestampDataQuery['userEntities'] = [];
+    let skip = 0;
+    const first = 1000;
+
+    return new Observable(observer => {
+      const fetchUsers = () => {
+        this.usersTs$(first, skip).subscribe(users => {
           if (users.length > 0) {
             allUsers = allUsers.concat(users);
             skip += first;
