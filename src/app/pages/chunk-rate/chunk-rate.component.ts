@@ -15,7 +15,7 @@ export class ChunkRateComponent implements OnInit {
 
   options: EChartsOption = {};
   isLoading = false;
-  title = 'Churn Rate (Inactive Users in 7 days - Total Users on that day) * 100';
+  title = 'Churn Rate (Inactive Users in 7 days / Total Users on that day) * 100';
 
   constructor(
     private destroy$: DestroyService,
