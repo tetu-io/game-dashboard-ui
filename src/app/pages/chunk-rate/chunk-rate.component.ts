@@ -15,6 +15,7 @@ export class ChunkRateComponent implements OnInit {
 
   options: EChartsOption = {};
   isLoading = false;
+  title = 'Churn Rate (Inactive Users in 7 days / Total Users on that day) * 100';
 
   constructor(
     private destroy$: DestroyService,
@@ -89,7 +90,7 @@ export class ChunkRateComponent implements OnInit {
     }
     this.options = {
       legend: {
-        data: ['Churn Rate'],
+        data: [this.title],
         align: 'left',
       },
       dataZoom: [
@@ -126,7 +127,7 @@ export class ChunkRateComponent implements OnInit {
         minInterval: 0.1
       },
       series: {
-        name: 'Churn Rate',
+        name: this.title,
         type: 'line',
         data: churnRateArray
       },

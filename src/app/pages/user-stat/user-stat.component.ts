@@ -28,7 +28,7 @@ export class UserStatComponent implements OnInit {
       sortDirections: ['ascend', 'descend', null],
     },
     {
-      name: `Items minted`,
+      name: `Items owned`,
       sortFn: (a: UserItemInterface, b: UserItemInterface) => a.itemsSize - b.itemsSize,
       sortDirections: ['ascend', 'descend', null],
     },

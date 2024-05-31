@@ -45,6 +45,7 @@ export class DauChartComponent implements OnInit {
   private prepareChartData(data: DauStatisticEntity[]) {
     const dau: number[] = [];
     const dates: string[] = [];
+    const wau = this.calculateWAU(data);
 
     data.reverse().forEach(item => {
       dau.push(item.count);
@@ -53,7 +54,7 @@ export class DauChartComponent implements OnInit {
 
     this.options = {
       legend: {
-        data: ['DAU'],
+        data: ['DAU', 'WAU'],
         align: 'left',
       },
       dataZoom: [
@@ -89,13 +90,54 @@ export class DauChartComponent implements OnInit {
       yAxis: {
         minInterval: 1
       },
-      series: {
-        name: 'DAU',
-        type: 'line',
-        data: dau
-      },
+      series: [
+        {
+          name: 'DAU',
+          type: 'line',
+          data: dau,
+        },
+        {
+          name: 'WAU',
+          type: 'line',
+          data: wau,
+        },
+      ],
       animationEasing: 'elasticOut',
       animationDelayUpdate: idx => idx * 5,
     };
+  }
+
+  private calculateWAU(data: DauStatisticEntity[]): number[] {
+
+    const dateCounts: { [key: string]: Set<string> } = {};
+
+    data.forEach(entry => {
+      const date = entry.id;
+      if (!dateCounts[date]) {
+        dateCounts[date] = new Set<string>();
+      }
+      entry.users.forEach(user => dateCounts[date].add(user.id));
+    });
+
+    const result: number[] = [];
+    const dates = Object.keys(dateCounts).sort((a, b) => new Date(a).getTime() - new Date(b).getTime());
+
+    for (let i = 0; i < dates.length; i++) {
+      const endDate = new Date(dates[i]);
+      const startDate = new Date(endDate);
+      startDate.setDate(endDate.getDate() - 6);
+
+      const activeUsers = new Set<string>();
+      dates.forEach(date => {
+        const currentDate = new Date(date);
+        if (currentDate >= startDate && currentDate <= endDate) {
+          dateCounts[date].forEach(user => activeUsers.add(user));
+        }
+      });
+
+      result.push(activeUsers.size);
+    }
+
+    return result;
   }
 }

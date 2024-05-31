@@ -19,9 +19,10 @@ export enum MENU_ITEMS {
   TOKENS_TRANSACTIONS = 'Token transactions',
   PAWNSHOP = 'Pawnshop',
   PAWNSHOP_CHART = 'Pawnshop chart',
-  DAU_CHART = 'DAU',
+  DAU_CHART = 'User activities',
   TX_CHART = 'Total transactions',
   CHURN_RATE = 'Churn rate',
+  CHURN_RATE_V2 = 'Churn rate V2',
 }
 
 export const MENU: { [key: string]: MenuItemInterface } = {
@@ -36,6 +37,10 @@ export const MENU: { [key: string]: MenuItemInterface } = {
   [MENU_ITEMS.CHURN_RATE]: {
     icon: 'line-chart',
     label: MENU_ITEMS.CHURN_RATE,
+  },
+  [MENU_ITEMS.CHURN_RATE_V2]: {
+    icon: 'line-chart',
+    label: MENU_ITEMS.CHURN_RATE_V2,
   },
   [MENU_ITEMS.TOKENOMICS_STAT]: {
     icon: 'line-chart',
