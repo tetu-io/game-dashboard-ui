@@ -70,6 +70,10 @@ const routes: Routes = [
     loadChildren: () => import('./pages/chunk-rate/chunk-rate.module').then(m => m.ChunkRateModule),
   },
   {
+    path: MAIN_ROUTES[MENU_ITEMS.CHURN_RATE_V2],
+    loadChildren: () => import('./pages/chunk-rate-v2/chunk-rate-v2.module').then(m => m.ChunkRateV2Module),
+  },
+  {
     path: '',
     pathMatch: 'full',
     redirectTo: MAIN_ROUTES[MENU_ITEMS.USER_STAT],
