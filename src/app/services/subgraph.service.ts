@@ -200,8 +200,8 @@ export class SubgraphService {
     });
   }
 
-  usersSimple$(first: number, skip: number = 0): Observable<UsersSimpleDataQuery['userEntities']> {
-    this.usersSimpleDataGQL.client = this.getClientSubgraph();
+  usersSimple$(first: number, skip: number = 0, network: string | undefined): Observable<UsersSimpleDataQuery['userEntities']> {
+    this.usersSimpleDataGQL.client = network ? this.getClientSubgraphByNetwork(network) : this.getClientSubgraph();
     return this.usersSimpleDataGQL.fetch(
       { first: first, skip: skip}
     ).pipe(
@@ -210,14 +210,14 @@ export class SubgraphService {
     );
   }
 
-  fetchAllUsersSimple$(): Observable<UsersSimpleDataQuery['userEntities']> {
+  fetchAllUsersSimple$(network: string | undefined = undefined): Observable<UsersSimpleDataQuery['userEntities']> {
     let allUsers: UsersSimpleDataQuery['userEntities'] = [];
     let skip = 0;
     const first = 1000;
 
     return new Observable(observer => {
       const fetchUsers = () => {
-        this.usersSimple$(first, skip).subscribe(users => {
+        this.usersSimple$(first, skip, network).subscribe(users => {
           if (users.length > 0) {
             allUsers = allUsers.concat(users);
             skip += first;
@@ -815,9 +815,8 @@ export class SubgraphService {
     });
   }
 
-
-  private getClientSubgraph(): string {
-    switch (this.networkSubject.value) {
+  private getClientSubgraphByNetwork(network: string): string {
+    switch (network) {
       case NETWORKS.sonic:
         return 'SONIC_GAME_SUBGRAPH';
       case NETWORKS.fantom:
@@ -825,5 +824,9 @@ export class SubgraphService {
       default:
         return '';
     }
+  }
+
+  private getClientSubgraph(): string {
+    return this.getClientSubgraphByNetwork(this.networkSubject.value);
   }
 }

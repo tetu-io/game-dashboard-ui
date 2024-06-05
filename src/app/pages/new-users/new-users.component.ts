@@ -3,7 +3,8 @@ import { EChartsOption, SeriesOption } from 'echarts';
 import { SubgraphService } from '../../services/subgraph.service';
 import { DestroyService } from '../../services/destroy.service';
 import { HeroAction, UserEntity } from '../../../../generated/gql';
-import { takeUntil } from 'rxjs';
+import { forkJoin, from, of, takeUntil } from 'rxjs';
+import { NETWORKS } from '../../shared/constants/network.constant';
 
 @Component({
   selector: 'app-new-users',
@@ -13,6 +14,7 @@ import { takeUntil } from 'rxjs';
 })
 export class NewUsersComponent implements OnInit {
 
+  network: string = '';
   options: EChartsOption = {};
   isLoading = false;
 
@@ -23,7 +25,8 @@ export class NewUsersComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.subgraphService.networkObserver.subscribe(() => {
+    this.subgraphService.networkObserver.subscribe(network => {
+      this.network = network;
       this.isLoading = true;
       this.changeDetectorRef.detectChanges();
       this.prepareData();
@@ -33,11 +36,14 @@ export class NewUsersComponent implements OnInit {
   private prepareData(): void {
     this.isLoading = true;
 
-    this.subgraphService.fetchAllUsersSimple$()
+    forkJoin({
+      users: this.subgraphService.fetchAllUsersSimple$(),
+      usersFromSonic: NETWORKS.fantom == this.network ? this.subgraphService.fetchAllUsersSimple$(NETWORKS.sonic) : of([])
+    })
       .pipe(takeUntil(this.destroy$))
-      .subscribe(users => {
+      .subscribe(({ users, usersFromSonic }) => {
         if (users) {
-          this.prepareChartData(users as UserEntity[]);
+          this.prepareChartData(users as UserEntity[], usersFromSonic as UserEntity[]);
         }
         this.isLoading = false;
         this.changeDetectorRef.detectChanges();
@@ -45,8 +51,7 @@ export class NewUsersComponent implements OnInit {
   }
 
 
-  private prepareChartData(data: UserEntity[]) {
-
+  private prepareChartData(data: UserEntity[], userFromSonic: UserEntity[]) {
     const convertToDateString = (timestamp: string): string => {
       const date = new Date(parseInt(timestamp) * 1000);
       return date.toISOString().split('T')[0];
@@ -72,6 +77,7 @@ export class NewUsersComponent implements OnInit {
     // by refCode
     let series: SeriesOption[] = [];
     let countsRef: number[] = [];
+    let sonicUsers: number[] = [];
     Object.keys(userByDates).map(date => {
       const count = userByDates[date].filter(user => {
         if (user.heroes.filter(hero => hero.refCode !== null).length > 0) {
@@ -79,12 +85,14 @@ export class NewUsersComponent implements OnInit {
         }
         return false;
       }).length;
-
-      // const reinforcementArray = reinforcementByDates[date];
-
-
       countsRef.push(count);
 
+      if (this.network === NETWORKS.fantom) {
+        const countSonic = userByDates[date].filter(user => {
+          return !!userFromSonic.find(sonicUser => sonicUser.id === user.id);
+        }).length;
+        sonicUsers.push(countSonic);
+      }
     });
 
     series.push(
@@ -107,9 +115,20 @@ export class NewUsersComponent implements OnInit {
       }
     )
 
+    const legends = ['New users', 'User created by ref code'];
+    if (this.network === NETWORKS.fantom) {
+      series.push(
+        {
+          name: 'New users from Sonic',
+          type: 'line',
+          data: sonicUsers
+        }
+      );
+      legends.push('New users from Sonic');
+    }
     this.options = {
       legend: {
-        data: ['New users', 'User created by ref code'],
+        data: legends,
         align: 'left',
       },
       dataZoom: [
