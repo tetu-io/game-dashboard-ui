@@ -70,7 +70,7 @@ export class TotalSupllyChartComponent implements OnInit {
     let recordBurn: Record<string, number> = {};
     burn.forEach(b => {
       const dateString = convertToDateString(b.timestamp + '');
-      const value = +(+formatUnits(b.burn)).toFixed(0);
+      const value = +(+formatUnits(b.burn));
       if (!recordBurn[dateString]) {
         recordBurn[dateString] = value;
       } else {
@@ -80,9 +80,11 @@ export class TotalSupllyChartComponent implements OnInit {
 
     const array: number[] = [];
     const burnArray: number[] = [];
+    let prevBurn = 0;
     allDates.forEach(date => {
       array.push(record[date] || 0);
-      burnArray.push(recordBurn[date] || 0);
+      const index = burnArray.push(+((recordBurn[date] || 0)).toFixed(2) + prevBurn);
+      prevBurn = burnArray[index - 1];
     });
 
     this.options = {
