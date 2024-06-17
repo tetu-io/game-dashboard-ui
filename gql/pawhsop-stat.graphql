@@ -1,0 +1,18 @@
+query PawnshopStatData($first: Int!, $skip: Int!) {
+    pawnshopStatisticEntities(
+        first: $first
+        skip: $skip
+        orderBy: id
+        orderDirection: asc
+    ) @namedClient(name: "FANTOM_GAME_SUBGRAPH") {
+        id
+        volume
+        items
+        heroes
+        totalPosition
+        fees
+        avgClosePrice
+        maxClosePrice
+        minClosePrice
+    }
+}

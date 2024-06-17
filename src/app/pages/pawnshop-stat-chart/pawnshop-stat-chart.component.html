@@ -6,11 +6,6 @@
   </nz-spin>
 
   <ng-template #loaded>
-    <div *ngIf="showStat()" class="stat">
-      <h2>Total users: {{totalUsers}}</h2>
-      <h2>Users played in test and prod: {{totalSonicUsers}}</h2>
-      <h2>Users got 5 lvl only on prod: {{totalUsersNotFromSonicWithLvl}}</h2>
-    </div>
     <div
       *ngIf="options; else noDataTpl"
       class="chart"

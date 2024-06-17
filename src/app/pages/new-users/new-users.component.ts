@@ -14,6 +14,9 @@ import { NETWORKS } from '../../shared/constants/network.constant';
 })
 export class NewUsersComponent implements OnInit {
 
+  totalUsers: number = 0;
+  totalSonicUsers: number = 0;
+  totalUsersNotFromSonicWithLvl = 0;
   network: string = '';
   options: EChartsOption = {};
   isLoading = false;
@@ -43,6 +46,7 @@ export class NewUsersComponent implements OnInit {
       .pipe(takeUntil(this.destroy$))
       .subscribe(({ users, usersFromSonic }) => {
         if (users) {
+          this.totalUsers = users.length;
           this.prepareChartData(users as UserEntity[], usersFromSonic as UserEntity[]);
         }
         this.isLoading = false;
@@ -78,6 +82,8 @@ export class NewUsersComponent implements OnInit {
     let series: SeriesOption[] = [];
     let countsRef: number[] = [];
     let sonicUsers: number[] = [];
+    let totalSonicUsers = 0;
+    let totalUsersNotFromSonicWithLvl = 0;
     Object.keys(userByDates).map(date => {
       const count = userByDates[date].filter(user => {
         if (user.heroes.filter(hero => hero.refCode !== null).length > 0) {
@@ -89,11 +95,18 @@ export class NewUsersComponent implements OnInit {
 
       if (this.network === NETWORKS.fantom) {
         const countSonic = userByDates[date].filter(user => {
-          return !!userFromSonic.find(sonicUser => sonicUser.id === user.id);
+          const result = !!userFromSonic.find(sonicUser => sonicUser.id === user.id);
+          if (!result && user.userStat.heroMaxLvl > 4) {
+            totalUsersNotFromSonicWithLvl++;
+          }
+          return result;
         }).length;
+        totalSonicUsers += countSonic;
         sonicUsers.push(countSonic);
       }
     });
+    this.totalSonicUsers = totalSonicUsers;
+    this.totalUsersNotFromSonicWithLvl = totalUsersNotFromSonicWithLvl;
 
     series.push(
       {
@@ -168,5 +181,9 @@ export class NewUsersComponent implements OnInit {
       animationEasing: 'elasticOut',
       animationDelayUpdate: idx => idx * 5,
     };
+  }
+
+  showStat(): boolean {
+    return this.network === NETWORKS.fantom;
   }
 }

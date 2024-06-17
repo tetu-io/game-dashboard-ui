@@ -23,6 +23,8 @@ export enum MENU_ITEMS {
   TX_CHART = 'Total transactions',
   CHURN_RATE = 'Churn rate',
   CHURN_RATE_V2 = 'Churn rate V2',
+  TOTAL_SUPPLY = 'Total supply chart',
+  PAWNSHOP_STAT_CHART = "Pawnshop stat chart",
 }
 
 export const MENU: { [key: string]: MenuItemInterface } = {
@@ -41,6 +43,14 @@ export const MENU: { [key: string]: MenuItemInterface } = {
   [MENU_ITEMS.CHURN_RATE_V2]: {
     icon: 'line-chart',
     label: MENU_ITEMS.CHURN_RATE_V2,
+  },
+  [MENU_ITEMS.TOTAL_SUPPLY]: {
+    icon: 'line-chart',
+    label: MENU_ITEMS.TOTAL_SUPPLY,
+  },
+  [MENU_ITEMS.PAWNSHOP_STAT_CHART]: {
+    icon: 'line-chart',
+    label: MENU_ITEMS.PAWNSHOP_STAT_CHART,
   },
   [MENU_ITEMS.TOKENOMICS_STAT]: {
     icon: 'line-chart',

@@ -1,0 +1,12 @@
+query TotalSupplyHistory($first: Int!, $skip: Int!) {
+    totalSupplyHistoryEntities(
+        first: $first
+        skip: $skip
+        orderBy: timestamp
+        orderDirection: asc
+    ) {
+        id
+        totalSupply
+        timestamp
+    }
+}
