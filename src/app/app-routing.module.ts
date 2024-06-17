@@ -2,7 +2,6 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { MAIN_ROUTES } from './shared/constants/routes.constant';
 import { MENU_ITEMS } from './shared/constants/menu.constant';
-import { UsersRefModule } from './pages/users-ref/users-ref.module';
 
 const routes: Routes = [
   {
@@ -72,6 +71,14 @@ const routes: Routes = [
   {
     path: MAIN_ROUTES[MENU_ITEMS.CHURN_RATE_V2],
     loadChildren: () => import('./pages/chunk-rate-v2/chunk-rate-v2.module').then(m => m.ChunkRateV2Module),
+  },
+  {
+    path: MAIN_ROUTES[MENU_ITEMS.TOTAL_SUPPLY],
+    loadChildren: () => import('./pages/total-suplly-chart/total-suplly-chart.module').then(m => m.TotalSupllyChartModule),
+  },
+  {
+    path: MAIN_ROUTES[MENU_ITEMS.PAWNSHOP_STAT_CHART],
+    loadChildren: () => import('./pages/pawnshop-stat-chart/pawnshop-stat-chart.module').then(m => m.PawnshopStatChartModule),
   },
   {
     path: '',

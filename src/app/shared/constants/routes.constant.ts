@@ -19,4 +19,6 @@ export const MAIN_ROUTES = {
   [MENU_ITEMS.USERS_RATIO_EARN]: 'users-ratio-earn',
   [MENU_ITEMS.CHURN_RATE]: 'churn-rate',
   [MENU_ITEMS.CHURN_RATE_V2]: 'churn-rate-v2',
+  [MENU_ITEMS.TOTAL_SUPPLY]: 'total-supply',
+  [MENU_ITEMS.PAWNSHOP_STAT_CHART]: 'pawnshop-stat-chart',
 };

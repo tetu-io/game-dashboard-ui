@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import {
   AllHeroActionGQL,
-  AllHeroActionQuery,
+  AllHeroActionQuery, BurnDataGQL, BurnDataQuery,
   ControllerDataGQL,
   ControllerDataQuery,
   DauGQL,
@@ -25,7 +25,7 @@ import {
   ItemsDataGQL,
   ItemsDataQuery,
   PawnshopDataGQL,
-  PawnshopDataQuery, PawnshopExecuteDataGQL, PawnshopExecuteDataQuery,
+  PawnshopDataQuery, PawnshopExecuteDataGQL, PawnshopExecuteDataQuery, PawnshopStatDataGQL, PawnshopStatDataQuery,
   StoryDataGQL,
   StoryDataQuery,
   TokenEarnedGQL,
@@ -33,7 +33,7 @@ import {
   TokenGQL, TokenomicsGQL, TokenomicsQuery,
   TokenQuery,
   TokenTransactionsGQL,
-  TokenTransactionsQuery,
+  TokenTransactionsQuery, TotalSupplyHistoryGQL, TotalSupplyHistoryQuery,
   TransactionsGQL,
   TransactionsQuery,
   UsersDataGQL,
@@ -88,6 +88,9 @@ export class SubgraphService {
     private pawnshopExecuteGQL: PawnshopExecuteDataGQL,
     private userWithHeroGQL: UsersHeroDataGQL,
     private userTsGQL: UsersTimestampDataGQL,
+    private totalSupplyHistoryGQL: TotalSupplyHistoryGQL,
+    private pawnshopStatDataGQL: PawnshopStatDataGQL,
+    private burnDataGQL: BurnDataGQL,
   ) { }
 
   changeNetwork(network: string): void {
@@ -362,6 +365,105 @@ export class SubgraphService {
       };
 
       return fetchUsers();
+    });
+  }
+
+  totalSupply$(first: number, skip: number = 0): Observable<TotalSupplyHistoryQuery['totalSupplyHistoryEntities']> {
+    this.totalSupplyHistoryGQL.client = this.getClientSubgraph();
+    return this.totalSupplyHistoryGQL.fetch(
+      { first: first, skip: skip}
+    ).pipe(
+      map(x => x.data.totalSupplyHistoryEntities),
+      retry({ count: RETRY, delay: DELAY }),
+    );
+  }
+
+  fetchAllTotalSupply$(): Observable<TotalSupplyHistoryQuery['totalSupplyHistoryEntities']> {
+    let allData: TotalSupplyHistoryQuery['totalSupplyHistoryEntities'] = [];
+    let skip = 0;
+    const first = 1000;
+
+    return new Observable(observer => {
+      const fetchData = () => {
+        this.totalSupply$(first, skip).subscribe(data => {
+          if (data.length > 0) {
+            allData = allData.concat(data);
+            skip += first;
+            fetchData();
+          } else {
+            observer.next(allData);
+            observer.complete();
+          }
+        });
+      };
+
+      return fetchData();
+    });
+  }
+
+  burn$(first: number, skip: number = 0): Observable<BurnDataQuery['burnHistoryEntities']> {
+    this.burnDataGQL.client = this.getClientSubgraph();
+    return this.burnDataGQL.fetch(
+      { first: first, skip: skip}
+    ).pipe(
+      map(x => x.data.burnHistoryEntities),
+      retry({ count: RETRY, delay: DELAY }),
+    );
+  }
+
+  fetchAllBurn$(): Observable<BurnDataQuery['burnHistoryEntities']> {
+    let allData: BurnDataQuery['burnHistoryEntities'] = [];
+    let skip = 0;
+    const first = 1000;
+
+    return new Observable(observer => {
+      const fetchData = () => {
+        this.burn$(first, skip).subscribe(data => {
+          if (data.length > 0) {
+            allData = allData.concat(data);
+            skip += first;
+            fetchData();
+          } else {
+            observer.next(allData);
+            observer.complete();
+          }
+        });
+      };
+
+      return fetchData();
+    });
+  }
+
+  pawnshopStat$(first: number, skip: number = 0): Observable<PawnshopStatDataQuery['pawnshopStatisticEntities']> {
+    this.pawnshopStatDataGQL.client = this.getClientSubgraph();
+    return this.pawnshopStatDataGQL.fetch(
+      { first: first, skip: skip}
+    ).pipe(
+      map(x => x.data.pawnshopStatisticEntities),
+      retry({ count: RETRY, delay: DELAY }),
+    );
+  }
+
+  fetchAllPawnshopStat$(): Observable<PawnshopStatDataQuery['pawnshopStatisticEntities']> {
+    let allData: PawnshopStatDataQuery['pawnshopStatisticEntities'] = [];
+    let skip = 0;
+    const first = 1000;
+
+    return new Observable(observer => {
+      const fetchData = () => {
+        this.pawnshopStat$(first, skip).subscribe(data => {
+          if (data.length > 0) {
+            allData = allData.concat(data);
+            skip += first;
+            fetchData();
+          } else {
+            observer.next(allData);
+            observer.complete();
+          }
+        });
+      };
+
+      return fetchData();
     });
   }
 

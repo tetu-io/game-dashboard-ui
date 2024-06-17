@@ -1,0 +1,12 @@
+query BurnData($first: Int!, $skip: Int!) {
+    burnHistoryEntities(
+        first: $first
+        skip: $skip
+        orderBy: timestamp
+        orderDirection: asc
+    ) @namedClient(name: "FANTOM_GAME_SUBGRAPH") {
+        id
+        burn
+        timestamp
+    }
+}
