@@ -75,6 +75,20 @@ export class NewUsersComponent implements OnInit {
       return acc;
     }, {} as Record<string, number>);
 
+    const getLast7DaysCounts = (dateString: string) => {
+      const currentDate = new Date(dateString);
+      let sum = 0;
+      for (let i = 0; i < 7; i++) {
+        const previousDate = new Date(currentDate);
+        previousDate.setDate(currentDate.getDate() - i);
+        const previousDateString = previousDate.toISOString().slice(0, 10);
+        if (dateCounts[previousDateString]) {
+          sum += dateCounts[previousDateString];
+        }
+      }
+      return sum;
+    };
+
     const dates = Object.keys(dateCounts).sort();
     const counts = dates.map(date => dateCounts[date]);
 
@@ -82,6 +96,7 @@ export class NewUsersComponent implements OnInit {
     let series: SeriesOption[] = [];
     let countsRef: number[] = [];
     let sonicUsers: number[] = [];
+    let last7DaysCounts: number[] = [];
     let totalSonicUsers = 0;
     let totalUsersNotFromSonicWithLvl = 0;
     Object.keys(userByDates).map(date => {
@@ -92,6 +107,8 @@ export class NewUsersComponent implements OnInit {
         return false;
       }).length;
       countsRef.push(count);
+
+      last7DaysCounts.push(getLast7DaysCounts(date));
 
       if (this.network === NETWORKS.fantom) {
         const countSonic = userByDates[date].filter(user => {
@@ -128,7 +145,15 @@ export class NewUsersComponent implements OnInit {
       }
     )
 
-    const legends = ['New users', 'User created by ref code'];
+    series.push(
+      {
+        name: 'New users for last 7 days',
+        type: 'line',
+        data: last7DaysCounts
+      }
+    )
+
+    const legends = ['New users', 'New users for last 7 days', 'User created by ref code'];
     if (this.network === NETWORKS.fantom) {
       series.push(
         {
