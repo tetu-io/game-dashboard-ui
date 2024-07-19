@@ -7,7 +7,7 @@ query Dau($first: Int!, $skip: Int!) {
     ) {
         id
         count
-        users {
+        users(first: 1000) {
             id
         }
     }
