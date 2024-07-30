@@ -15,4 +15,5 @@ generates:
         Bytes: string
         Int8: number
         Timestamp: string
-schema: https://api.studio.thegraph.com/query/48757/game/v0.0.10
+schema: >-
+  https://graph.public-sonic.fantom.network/gql/subgraphs/name/alexandersazonof/sacra-sonic-test

@@ -1,9 +1,9 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { DestroyService } from '../../services/destroy.service';
 import { SubgraphService } from '../../services/subgraph.service';
-import { DauStatisticEntity, HeroAction, UserEntity } from '../../../../generated/gql';
+import { DauStatisticEntity, HeroAction, UserEntity, WauStatisticEntity } from '../../../../generated/gql';
 import { EChartsOption } from 'echarts';
-import { takeUntil } from 'rxjs';
+import { forkJoin, takeUntil } from 'rxjs';
 
 @Component({
   selector: 'app-dau-chart',
@@ -32,24 +32,31 @@ export class DauChartComponent implements OnInit {
 
   private prepareData(): void {
     this.isLoading = true;
-    this.subgraphService
-      .fetchAllDau$()
+    forkJoin([
+      this.subgraphService.fetchAllDau$(),
+      this.subgraphService.fetchAllWau$()
+    ])
       .pipe(takeUntil(this.destroy$))
-      .subscribe(data => {
-        this.prepareChartData(data as DauStatisticEntity[]);
+      .subscribe(([dau, wau]) => {
+        this.prepareChartData(dau as DauStatisticEntity[], wau as WauStatisticEntity[]);
         this.isLoading = false;
         this.changeDetectorRef.detectChanges();
       });
   }
 
-  private prepareChartData(data: DauStatisticEntity[]) {
+  private prepareChartData(dauArray: DauStatisticEntity[], wauArray: WauStatisticEntity[]) {
     const dau: number[] = [];
     const dates: string[] = [];
-    const wau = this.calculateWAU(data);
+    // const wau = this.calculateWAU(dauArray);
+    const wau: number[] = [];
 
-    data.reverse().forEach(item => {
+    dauArray.reverse().forEach(item => {
       dau.push(item.count);
       dates.push(item.id);
+    });
+
+    wauArray.reverse().forEach(item => {
+      wau.push(item.count);
     });
 
     this.options = {

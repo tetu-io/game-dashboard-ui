@@ -1,0 +1,14 @@
+query Wau($first: Int!, $skip: Int!) {
+    waustatisticEntities(
+        first: $first
+        skip: $skip
+        orderBy: id
+        orderDirection: desc
+    ) {
+        id
+        count
+        users(first: 1000) {
+            id
+        }
+    }
+}
