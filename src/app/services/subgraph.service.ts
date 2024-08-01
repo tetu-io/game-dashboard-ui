@@ -43,7 +43,7 @@ import {
   UsersSimpleDataGQL,
   UsersSimpleDataQuery,
   UserStatDataGQL,
-  UserStatDataQuery, UsersTimestampDataGQL, UsersTimestampDataQuery,
+  UserStatDataQuery, UsersTimestampDataGQL, UsersTimestampDataQuery, WauGQL, WauQuery,
 } from '../../../generated/gql';
 import { BehaviorSubject, map, Observable, retry } from 'rxjs';
 import { defaultNetwork, NETWORKS } from '../shared/constants/network.constant';
@@ -91,6 +91,7 @@ export class SubgraphService {
     private totalSupplyHistoryGQL: TotalSupplyHistoryGQL,
     private pawnshopStatDataGQL: PawnshopStatDataGQL,
     private burnDataGQL: BurnDataGQL,
+    private wauGQL: WauGQL
   ) { }
 
   changeNetwork(network: string): void {
@@ -491,6 +492,39 @@ export class SubgraphService {
             fetchDau();
           } else {
             observer.next(allDau);
+            observer.complete();
+          }
+        });
+      };
+
+      return fetchDau();
+    });
+  }
+
+  wau$(first: number, skip: number = 0): Observable<WauQuery['waustatisticEntities']> {
+    this.wauGQL.client = this.getClientSubgraph();
+    return this.wauGQL.fetch(
+      { first: first, skip: skip}
+    ).pipe(
+      map(x => x.data.waustatisticEntities),
+      retry({ count: RETRY, delay: DELAY }),
+    );
+  }
+
+  fetchAllWau$(): Observable<WauQuery['waustatisticEntities']> {
+    let allWau: WauQuery['waustatisticEntities'] = [];
+    let skip = 0;
+    const first = 1000;
+
+    return new Observable(observer => {
+      const fetchDau = () => {
+        this.wau$(first, skip).subscribe(data => {
+          if (data.length > 0) {
+            allWau = allWau.concat(data);
+            skip += first;
+            fetchDau();
+          } else {
+            observer.next(allWau);
             observer.complete();
           }
         });
