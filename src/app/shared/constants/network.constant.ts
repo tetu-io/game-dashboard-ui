@@ -8,7 +8,7 @@ export const NETWORKS = {
 }
 
 export function defaultNetwork(): string {
-  return NETWORKS.sonic;
+  return NETWORKS.fantom;
 }
 
 export function isExcitingNetwork(network: string): boolean {
@@ -45,8 +45,8 @@ export const CHAIN_ID = new Map<string, number>([
 export const NETWORKS_URLS = new Map<string, string>([
   ['sepolia', 'https://sepolia.sacra.cc'],
   ['mumbai', 'https://mumbai.sacra.cc'],
-  ['sonic', 'https://sonic-beta.sacra.cc'],
-  ['fantom', 'https://sacra.game/']
+  ['sonic', 'https://sonic-beta.sacra.game'],
+  ['fantom', 'https://fantom.sacra.game']
 ]);
 
 export const RPC_URLS = new Map<number, string>([

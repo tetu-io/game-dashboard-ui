@@ -1,7 +1,9 @@
 import { Injectable } from '@angular/core';
 import {
   AllHeroActionGQL,
-  AllHeroActionQuery, BurnDataGQL, BurnDataQuery,
+  AllHeroActionQuery,
+  BurnDataGQL,
+  BurnDataQuery,
   ControllerDataGQL,
   ControllerDataQuery,
   DauGQL,
@@ -15,7 +17,9 @@ import {
   HeroMaxLevelDataQuery,
   HeroQuery,
   HeroSimpleDataGQL,
-  HeroSimpleDataQuery, HeroStatDataGQL, HeroStatDataQuery,
+  HeroSimpleDataQuery,
+  HeroStatDataGQL,
+  HeroStatDataQuery,
   HeroTokenEarnedDataGQL,
   HeroTokenEarnedDataQuery,
   HeroTokenVaultStatisticDataGQL,
@@ -24,26 +28,44 @@ import {
   ItemsActionDataQuery,
   ItemsDataGQL,
   ItemsDataQuery,
+  OpenChamberByChambersDataGQL,
+  OpenChamberByChambersDataQuery,
+  OpenChamberDataGQL,
+  OpenChamberDataQuery,
   PawnshopDataGQL,
-  PawnshopDataQuery, PawnshopExecuteDataGQL, PawnshopExecuteDataQuery, PawnshopStatDataGQL, PawnshopStatDataQuery,
+  PawnshopDataQuery,
+  PawnshopExecuteDataGQL,
+  PawnshopExecuteDataQuery,
+  PawnshopStatDataGQL,
+  PawnshopStatDataQuery,
   StoryDataGQL,
   StoryDataQuery,
   TokenEarnedGQL,
   TokenEarnedQuery,
-  TokenGQL, TokenomicsGQL, TokenomicsQuery,
+  TokenGQL,
+  TokenomicsGQL,
+  TokenomicsQuery,
   TokenQuery,
   TokenTransactionsGQL,
-  TokenTransactionsQuery, TotalSupplyHistoryGQL, TotalSupplyHistoryQuery,
+  TokenTransactionsQuery,
+  TotalSupplyHistoryGQL,
+  TotalSupplyHistoryQuery,
   TransactionsGQL,
   TransactionsQuery,
   UsersDataGQL,
-  UsersDataQuery, UsersHeroDataGQL, UsersHeroDataQuery,
+  UsersDataQuery,
+  UsersHeroDataGQL,
+  UsersHeroDataQuery,
   UsersRefCodeDataGQL,
   UsersRefCodeDataQuery,
   UsersSimpleDataGQL,
   UsersSimpleDataQuery,
   UserStatDataGQL,
-  UserStatDataQuery, UsersTimestampDataGQL, UsersTimestampDataQuery, WauGQL, WauQuery,
+  UserStatDataQuery,
+  UsersTimestampDataGQL,
+  UsersTimestampDataQuery,
+  WauGQL,
+  WauQuery,
 } from '../../../generated/gql';
 import { BehaviorSubject, map, Observable, retry } from 'rxjs';
 import { defaultNetwork, NETWORKS } from '../shared/constants/network.constant';
@@ -91,7 +113,9 @@ export class SubgraphService {
     private totalSupplyHistoryGQL: TotalSupplyHistoryGQL,
     private pawnshopStatDataGQL: PawnshopStatDataGQL,
     private burnDataGQL: BurnDataGQL,
-    private wauGQL: WauGQL
+    private wauGQL: WauGQL,
+    private openChamberDataGQL: OpenChamberDataGQL,
+    private openChamberByChambersDataGQL: OpenChamberByChambersDataGQL,
   ) { }
 
   changeNetwork(network: string): void {
@@ -168,6 +192,51 @@ export class SubgraphService {
       };
 
       return fetchHero();
+    });
+  }
+
+  openChamber$(first: number, skip: number = 0): Observable<OpenChamberDataQuery['openedChamberEntities']> {
+    this.openChamberDataGQL.client = this.getClientSubgraph();
+    return this.openChamberDataGQL.fetch(
+      { first: first, skip: skip}
+    ).pipe(
+      map(x => x.data.openedChamberEntities),
+      retry({ count: RETRY, delay: DELAY }),
+    );
+  }
+
+  openChamberByChambers$(first: number, skip: number = 0, chambers: string[] = []): Observable<OpenChamberByChambersDataQuery['openedChamberEntities']> {
+    this.openChamberByChambersDataGQL.client = this.getClientSubgraph();
+    return this.openChamberByChambersDataGQL.fetch(
+      { first: first, skip: skip, chambers: chambers}
+    ).pipe(
+      map(x => x.data.openedChamberEntities),
+      retry({ count: RETRY, delay: DELAY }),
+    );
+  }
+
+
+
+  fetchAllOpenChamber$(): Observable<OpenChamberDataQuery['openedChamberEntities']> {
+    let allData: OpenChamberDataQuery['openedChamberEntities'] = [];
+    let skip = 0;
+    const first = 1000;
+
+    return new Observable(observer => {
+      const fetchData = () => {
+        this.openChamber$(first, skip).subscribe(data => {
+          if (data.length > 0) {
+            allData = allData.concat(data);
+            skip += first;
+            fetchData();
+          } else {
+            observer.next(allData);
+            observer.complete();
+          }
+        });
+      };
+
+      return fetchData();
     });
   }
 

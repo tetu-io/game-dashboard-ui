@@ -1,0 +1,30 @@
+query OpenChamberByChambersData($first: Int!, $skip: Int!, $chambers: [String!]) {
+    openedChamberEntities(
+        where: {
+            chamber_in: $chambers
+            chamber_: { isBattle: true }
+        }
+        first: $first
+        skip: $skip
+        orderBy: id
+        orderDirection: desc
+    ) @namedClient(name: "FANTOM_GAME_SUBGRAPH") {
+        id
+        dungeon {
+            id
+        }
+        enteredHero {
+            id
+            heroId
+            meta {
+                id
+            }
+        }
+        completed
+        stage
+        iteration
+        chamber {
+            id
+        }
+    }
+}
