@@ -81,6 +81,10 @@ const routes: Routes = [
     loadChildren: () => import('./pages/pawnshop-stat-chart/pawnshop-stat-chart.module').then(m => m.PawnshopStatChartModule),
   },
   {
+    path: MAIN_ROUTES[MENU_ITEMS.MONSTER_FIGHTS],
+    loadChildren: () => import('./pages/monster-fights/monster-fights.module').then(m => m.MonsterFightsModule),
+  },
+  {
     path: '',
     pathMatch: 'full',
     redirectTo: MAIN_ROUTES[MENU_ITEMS.USER_STAT],

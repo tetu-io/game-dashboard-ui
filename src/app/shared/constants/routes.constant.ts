@@ -13,6 +13,7 @@ export const MAIN_ROUTES = {
   [MENU_ITEMS.TOKENOMICS]: 'tokenomics',
   [MENU_ITEMS.TOKENOMICS_CHART]: 'tokenomics-stat',
   [MENU_ITEMS.TOKENS_TRANSACTIONS]: 'token-transactions',
+  [MENU_ITEMS.MONSTER_FIGHTS]: 'monster-fights',
   [MENU_ITEMS.PAWNSHOP_CHART]: 'pawnshop-chart',
   [MENU_ITEMS.DAU_CHART]: 'dau-chart',
   [MENU_ITEMS.TX_CHART]: 'tx-chart',

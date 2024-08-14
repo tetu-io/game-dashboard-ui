@@ -1,0 +1,51 @@
+<div class="monsters">
+  <nz-select (ngModelChange)="selectMonster($event)" nzMode="tags" nzPlaceHolder="Monsters" [(ngModel)]="selectedMonsters">
+    <nz-option *ngFor="let option of monsterList" [nzLabel]="option.label" [nzValue]="option.value"></nz-option>
+  </nz-select>
+</div>
+
+<nz-table #filterTable [nzData]="monsterBattleInfos"
+          [nzShowPagination]="false"
+          [nzLoading]="isLoading"
+          [nzPageSize]="pageSize"
+          nzTableLayout="auto">
+  <thead>
+  <tr>
+    <th
+      *ngFor="let column of columns"
+      [nzSortFn]="column.sortFn"
+      [nzSortDirections]="column.sortDirections"
+    >
+      {{ column.name }}
+    </th>
+  </tr>
+  </thead>
+  <tbody>
+  <tr *ngFor="let data of filterTable.data">
+    <td>{{ data.monster }}</td>
+    <td>{{ data.isCompleted }}</td>
+    <td>
+      <a [href]="data.link" target="_blank">Link on UI</a>
+    </td>
+
+  </tr>
+  </tbody>
+</nz-table>
+<div class="pagination">
+  <button
+    class="pagination__btn"
+    [disabled]="currentPage === 0"
+    nz-button
+    nzType="default"
+    (click)="prev()">
+    Pred
+  </button>
+  <button
+    class="pagination__btn"
+    [disabled]="monsterBattleInfos.length !== pageSize"
+    nz-button
+    nzType="default"
+    (click)="next()">
+    Next
+  </button>
+</div>
