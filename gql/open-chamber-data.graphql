@@ -1,12 +1,12 @@
-query OpenChamberData($first: Int!, $skip: Int!) {
+query OpenChamberData($first: Int!, $skip: Int!, $orderDirection: OrderDirection!) {
     openedChamberEntities(
         where: {
             chamber_: { isBattle: true }
         }
         first: $first
         skip: $skip
-        orderBy: id
-        orderDirection: desc
+        orderBy: timestamp
+        orderDirection: $orderDirection
     ) @namedClient(name: "FANTOM_GAME_SUBGRAPH") {
         id
         dungeon {
@@ -25,5 +25,14 @@ query OpenChamberData($first: Int!, $skip: Int!) {
         chamber {
             id
         }
+        actions(
+            orderBy: id
+            orderDirection: desc
+            first: 1
+        ) {
+            completed
+            kill
+        }
+        timestamp
     }
 }

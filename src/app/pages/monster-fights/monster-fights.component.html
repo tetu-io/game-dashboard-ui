@@ -15,6 +15,7 @@
       *ngFor="let column of columns"
       [nzSortFn]="column.sortFn"
       [nzSortDirections]="column.sortDirections"
+      (click)="sort(column.name)"
     >
       {{ column.name }}
     </th>
@@ -23,9 +24,12 @@
   <tbody>
   <tr *ngFor="let data of filterTable.data">
     <td>{{ data.monster }}</td>
-    <td>{{ data.isCompleted }}</td>
+    <td>{{ data.status }}</td>
     <td>
       <a [href]="data.link" target="_blank">Link on UI</a>
+    </td>
+    <td>
+      {{ getFormattedDate(data.date) }}
     </td>
 
   </tr>
@@ -38,7 +42,7 @@
     nz-button
     nzType="default"
     (click)="prev()">
-    Pred
+    Prev
   </button>
   <button
     class="pagination__btn"

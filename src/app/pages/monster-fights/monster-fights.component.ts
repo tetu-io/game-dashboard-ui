@@ -3,14 +3,15 @@ import { DestroyService } from '../../services/destroy.service';
 import { SubgraphService } from '../../services/subgraph.service';
 import { getChainId, NETWORKS_URLS } from '../../shared/constants/network.constant';
 import { ColumnItem } from '../../models/column-item.interface';
-import { OpenedChamberEntity } from '../../../../generated/gql';
+import { OpenedChamberEntity, OrderDirection } from '../../../../generated/gql';
 import { finalize, takeUntil } from 'rxjs';
 import { getMonsterName, MONSTER_NAMES } from '../../shared/constants/game.constant';
 
 interface MonsterBattleInfo {
   monster: string;
-  isCompleted: boolean;
+  status: string;
   link: string;
+  date: number;
 }
 
 @Component({
@@ -28,8 +29,8 @@ export class MonsterFightsComponent implements OnInit {
       sortDirections: ['ascend', 'descend', null],
     },
     {
-      name: 'Completed',
-      sortFn: (a: MonsterBattleInfo, b: MonsterBattleInfo) => a.isCompleted > b.isCompleted ? 1 : a.isCompleted < b.isCompleted ? -1 : 0,
+      name: 'Status',
+      sortFn: (a: MonsterBattleInfo, b: MonsterBattleInfo) => a.status.localeCompare(b.status),
       sortDirections: ['ascend', 'descend', null],
     },
     {
@@ -37,6 +38,11 @@ export class MonsterFightsComponent implements OnInit {
       sortFn: (a: MonsterBattleInfo, b: MonsterBattleInfo) => a.link.localeCompare(b.link),
       sortDirections: ['ascend', 'descend', null],
     },
+    {
+      name: 'Date',
+      sortFn: null,
+      sortDirections: ['ascend', 'descend'],
+    }
   ];
 
   monsterList: Array<{ label: string; value: string }> = [];
@@ -48,6 +54,7 @@ export class MonsterFightsComponent implements OnInit {
   pageSize = 100;
   monsterBattleInfos: MonsterBattleInfo[] = [];
   currentPage = 0;
+  currentOrder: OrderDirection = OrderDirection.Desc;
 
   constructor(
     private destroy$: DestroyService,
@@ -73,8 +80,8 @@ export class MonsterFightsComponent implements OnInit {
     const skip = this.pageSize * this.currentPage;
     (
       this.selectedMonsters.length > 0 ?
-        this.subgraphService.openChamberByChambers$(this.pageSize, skip, this.selectedMonsters) :
-        this.subgraphService.openChamber$(this.pageSize, skip)
+        this.subgraphService.openChamberByChambers$(this.pageSize, skip, this.selectedMonsters, this.currentOrder) :
+        this.subgraphService.openChamber$(this.pageSize, skip, this.currentOrder)
     )
       .pipe(
         takeUntil(this.destroy$)
@@ -82,10 +89,19 @@ export class MonsterFightsComponent implements OnInit {
       .subscribe(data => {
         if (data) {
           this.monsterBattleInfos = (data as OpenedChamberEntity[]).map(chamber => {
+            let status = '';
+            if (!chamber.completed) {
+              status = 'In progress';
+            } else if (chamber.actions.length > 0 && !chamber.actions[0].kill) {
+              status = 'Won';
+            } else {
+              status = 'Lose';
+            }
             return {
               monster: `${getMonsterName(+chamber.chamber.id)} (${chamber.chamber.id})`,
-              isCompleted: chamber.completed,
+              status: status,
               link: this.createFightUrl(chamber),
+              date: +chamber.timestamp * 1000
             };
           });
         }
@@ -113,5 +129,15 @@ export class MonsterFightsComponent implements OnInit {
   prev(): void {
     this.currentPage--;
     this.prepareData();
+  }
+
+  sort(name: string): void {
+    this.currentOrder = this.currentOrder === OrderDirection.Asc ? OrderDirection.Desc : OrderDirection.Asc;
+    this.prepareData();
+  }
+
+  getFormattedDate(timestamp: number): string {
+    const date = new Date(timestamp);
+    return date.toISOString().slice(0, 16).replace('T', ' ');
   }
 }

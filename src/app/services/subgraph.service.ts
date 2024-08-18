@@ -31,7 +31,7 @@ import {
   OpenChamberByChambersDataGQL,
   OpenChamberByChambersDataQuery,
   OpenChamberDataGQL,
-  OpenChamberDataQuery,
+  OpenChamberDataQuery, OrderDirection,
   PawnshopDataGQL,
   PawnshopDataQuery,
   PawnshopExecuteDataGQL,
@@ -195,20 +195,20 @@ export class SubgraphService {
     });
   }
 
-  openChamber$(first: number, skip: number = 0): Observable<OpenChamberDataQuery['openedChamberEntities']> {
+  openChamber$(first: number, skip: number = 0, orderDirection: OrderDirection = OrderDirection.Desc): Observable<OpenChamberDataQuery['openedChamberEntities']> {
     this.openChamberDataGQL.client = this.getClientSubgraph();
     return this.openChamberDataGQL.fetch(
-      { first: first, skip: skip}
+      { first: first, skip: skip, orderDirection: orderDirection}
     ).pipe(
       map(x => x.data.openedChamberEntities),
       retry({ count: RETRY, delay: DELAY }),
     );
   }
 
-  openChamberByChambers$(first: number, skip: number = 0, chambers: string[] = []): Observable<OpenChamberByChambersDataQuery['openedChamberEntities']> {
+  openChamberByChambers$(first: number, skip: number = 0, chambers: string[] = [], orderDirection: OrderDirection = OrderDirection.Desc): Observable<OpenChamberByChambersDataQuery['openedChamberEntities']> {
     this.openChamberByChambersDataGQL.client = this.getClientSubgraph();
     return this.openChamberByChambersDataGQL.fetch(
-      { first: first, skip: skip, chambers: chambers}
+      { first: first, skip: skip, chambers: chambers, orderDirection: orderDirection}
     ).pipe(
       map(x => x.data.openedChamberEntities),
       retry({ count: RETRY, delay: DELAY }),
