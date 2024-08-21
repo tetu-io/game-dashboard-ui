@@ -6,10 +6,12 @@ import { ColumnItem } from '../../models/column-item.interface';
 import { OpenedChamberEntity, OrderDirection } from '../../../../generated/gql';
 import { finalize, takeUntil } from 'rxjs';
 import { getMonsterName, MONSTER_NAMES } from '../../shared/constants/game.constant';
+import { HEROES_CLASSES } from '../../shared/constants/heroes.constant';
 
 interface MonsterBattleInfo {
   monster: string;
   status: string;
+  heroClass: string;
   link: string;
   date: number;
 }
@@ -26,6 +28,11 @@ export class MonsterFightsComponent implements OnInit {
     {
       name: 'Monster name',
       sortFn: (a: MonsterBattleInfo, b: MonsterBattleInfo) => a.monster.localeCompare(b.monster),
+      sortDirections: ['ascend', 'descend', null],
+    },
+    {
+      name: 'Hero class',
+      sortFn: (a: MonsterBattleInfo, b: MonsterBattleInfo) => a.heroClass.localeCompare(b.heroClass),
       sortDirections: ['ascend', 'descend', null],
     },
     {
@@ -92,13 +99,14 @@ export class MonsterFightsComponent implements OnInit {
             let status = '';
             if (!chamber.completed) {
               status = 'In progress';
-            } else if (chamber.actions.length > 0 && !chamber.actions[0].kill) {
+            } else if (chamber.actions.length > 0 && !chamber.actions[0].kill && chamber.actions[0].completed) {
               status = 'Won';
             } else {
               status = 'Lose';
             }
             return {
               monster: `${getMonsterName(+chamber.chamber.id)} (${chamber.chamber.id})`,
+              heroClass: HEROES_CLASSES.get(chamber.enteredHero.meta.heroClass + '') || '',
               status: status,
               link: this.createFightUrl(chamber),
               date: +chamber.timestamp * 1000

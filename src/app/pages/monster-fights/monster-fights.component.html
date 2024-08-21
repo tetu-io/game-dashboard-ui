@@ -24,6 +24,7 @@
   <tbody>
   <tr *ngFor="let data of filterTable.data">
     <td>{{ data.monster }}</td>
+    <td>{{ data.heroClass }}</td>
     <td>{{ data.status }}</td>
     <td>
       <a [href]="data.link" target="_blank">Link on UI</a>

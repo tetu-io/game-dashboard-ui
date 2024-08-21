@@ -17,6 +17,7 @@ query OpenChamberData($first: Int!, $skip: Int!, $orderDirection: OrderDirection
             heroId
             meta {
                 id
+                heroClass
             }
         }
         completed
@@ -26,7 +27,7 @@ query OpenChamberData($first: Int!, $skip: Int!, $orderDirection: OrderDirection
             id
         }
         actions(
-            orderBy: id
+            orderBy: turn
             orderDirection: desc
             first: 1
         ) {
