@@ -29,7 +29,7 @@ import {
   ItemsDataGQL,
   ItemsDataQuery,
   OpenChamberByChambersDataGQL,
-  OpenChamberByChambersDataQuery,
+  OpenChamberByChambersDataQuery, OpenChamberByHeroDataGQL,
   OpenChamberDataGQL,
   OpenChamberDataQuery, OrderDirection,
   PawnshopDataGQL,
@@ -116,6 +116,7 @@ export class SubgraphService {
     private wauGQL: WauGQL,
     private openChamberDataGQL: OpenChamberDataGQL,
     private openChamberByChambersDataGQL: OpenChamberByChambersDataGQL,
+    private openChamberByHeroGQL: OpenChamberByHeroDataGQL
   ) { }
 
   changeNetwork(network: string): void {
@@ -195,10 +196,10 @@ export class SubgraphService {
     });
   }
 
-  openChamber$(first: number, skip: number = 0, orderDirection: OrderDirection = OrderDirection.Desc): Observable<OpenChamberDataQuery['openedChamberEntities']> {
+  openChamber$(first: number, skip: number = 0, orderDirection: OrderDirection = OrderDirection.Desc, biomes: number[] = [1,2,3,4]): Observable<OpenChamberDataQuery['openedChamberEntities']> {
     this.openChamberDataGQL.client = this.getClientSubgraph();
     return this.openChamberDataGQL.fetch(
-      { first: first, skip: skip, orderDirection: orderDirection}
+      { first: first, skip: skip, orderDirection: orderDirection, biomes: biomes}
     ).pipe(
       map(x => x.data.openedChamberEntities),
       retry({ count: RETRY, delay: DELAY }),
@@ -209,6 +210,16 @@ export class SubgraphService {
     this.openChamberByChambersDataGQL.client = this.getClientSubgraph();
     return this.openChamberByChambersDataGQL.fetch(
       { first: first, skip: skip, chambers: chambers, orderDirection: orderDirection}
+    ).pipe(
+      map(x => x.data.openedChamberEntities),
+      retry({ count: RETRY, delay: DELAY }),
+    );
+  }
+
+  openChamberByHeroes$(first: number, skip: number = 0, heroes: string[] = [], orderDirection: OrderDirection = OrderDirection.Desc, biomes: number[] = [1,2,3,4]): Observable<OpenChamberByChambersDataQuery['openedChamberEntities']> {
+    this.openChamberByHeroGQL.client = this.getClientSubgraph();
+    return this.openChamberByHeroGQL.fetch(
+      { first: first, skip: skip, heroes: heroes, orderDirection: orderDirection, biomes: biomes}
     ).pipe(
       map(x => x.data.openedChamberEntities),
       retry({ count: RETRY, delay: DELAY }),

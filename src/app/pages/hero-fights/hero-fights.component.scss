@@ -1,0 +1,23 @@
+.pagination {
+  margin-top: 10px;
+  display: flex;
+  justify-content: end;
+  width: 100%;
+  &__btn {
+    margin-right: 10px;
+  }
+}
+
+nz-select {
+  width: 100%;
+}
+
+.heroes {
+  width: 300px;
+  margin-bottom: 30px;
+}
+
+.biome {
+  margin-left: 30px;
+  margin-bottom: 30px;
+}

@@ -8,6 +8,12 @@ export type ItemAddressesType = {
   CONS_19: string; // POISON
   CONS_20: string; // DAMAGE_MIN
   CONS_21: string; // lifeChances
+  CONS_27: string, // Burdock Leaf, ???
+  CONS_28: string, // Pink Vine, ???
+  CONS_29: string, // Dull Blood Tear, 500 exp
+  CONS_33: string, // Watchman's Crystal Whistle, call guild help
+  CONS_34: string, // Sacra Tree Twig, return from dung
+  CONS_35: string, // Blessed Water loot box consumable to clear temporally attributes
   HELM_1: string;
   HELM_6: string;
   BODY_1: string;
@@ -48,6 +54,7 @@ export type ItemAddressesType = {
   CONS_7: string;
   CONS_8: string;
   CONS_22: string;
+  CONS_30: string, // Feeble Blood Tear, 2k exp
   HELM_2: string;
   HELM_7: string;
   BODY_2: string;
@@ -91,6 +98,7 @@ export type ItemAddressesType = {
   CONS_12: string;
   CONS_23: string;
   CONS_24: string;
+  CONS_31: string, // Sharp Blood Tear, 5k exp
   HELM_3: string;
   HELM_8: string;
   BODY_3: string;
@@ -131,6 +139,7 @@ export type ItemAddressesType = {
   CONS_16: string;
   CONS_25: string;
   CONS_26: string;
+  CONS_32: string, // Saturated Blood Tear, 10k exp
   HELM_4: string;
   HELM_5: string;
   BODY_4: string;
@@ -222,6 +231,7 @@ export type MonstersAddressesType = {
   OLD_WHORE_10: number;
   TRAINING_BUDDY_33: number;
   FEROCIOUS_WIFE_33: number;
+  STRABAN_KNIGHT_10: number,
 
   BLOODCURDLING_WOLFS_34: number;
   SOMBER_HANGMAN_34: number;
@@ -247,6 +257,9 @@ export type MonstersAddressesType = {
   BAD_SEED_33: number;
   BAD_SEED_35: number;
   RIPE_MIDNIGHTER_2: number;
+  WOUNDED_DEMOLDER_10: number,
+  HANGOVER_WILLY_10: number,
+  VENOMOUS_SPIDER_10: number,
 
   MOCK2: number;
   DEMOLDER_WARRIOR_34: number;
@@ -270,6 +283,10 @@ export type MonstersAddressesType = {
   FACELESS_10: number;
   LONE_BARD_35: number;
   FOREST_WITCH_35: number;
+  DEMOLDER_CHAMPION_SCALD_10: number;
+  DEMOLDER_CHAMPION_THORN_10: number;
+  DEMOLDER_CHAMPION_GEKK_10: number;
+  MIGHTY_RUIN_KEEPER_10: number;
 
   MOCK3: number;
   GIANT_WASP_34: number;
@@ -295,6 +312,9 @@ export type MonstersAddressesType = {
   DARK_ADVENTURERS_35: number;
   SPICY_MIDNIGHTER_2: number;
   DARK_ESSENCE_35: number;
+  KNIGHT_HAMMERGINA_10: number;
+  FULLMOON_DARK_ESSENCE_10: number;
+  SUPERGOOSE_10: number;
 
   // 1-2 biome new
   // ORDINARY_GOOSE: string,

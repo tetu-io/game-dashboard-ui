@@ -3,6 +3,8 @@ query HeroSimpleData($first: Int!, $skip: Int!) {
         first: $first
         skip: $skip
     ) @namedClient(name: "FANTOM_GAME_SUBGRAPH") {
+        id
+        uniqName
         meta {
             heroClass
         }

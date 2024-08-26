@@ -18,7 +18,6 @@ export const SHRINE_PREFIX = 'SACRA_';
 export const SHRINE_POSTFIX = '_SHRINE';
 
 export class TetuGame {
-
   public static DUNGEONS: DungeonsType = {
     BIOME_1_ALIVE_AGAIN_1_F2P: 100,
     BIOME_1_ALIVE_AGAIN_1: 101,
@@ -100,6 +99,15 @@ export class TetuGame {
     CONS_19: ITEM_PREFIX + 'CONS_19' + ITEM_POSTFIX,
     CONS_20: ITEM_PREFIX + 'CONS_20' + ITEM_POSTFIX,
     CONS_21: ITEM_PREFIX + 'CONS_21' + ITEM_POSTFIX,
+    CONS_27: ITEM_PREFIX + 'CONS_27' + ITEM_POSTFIX,
+    CONS_28: ITEM_PREFIX + 'CONS_28' + ITEM_POSTFIX,
+    CONS_29: ITEM_PREFIX + 'CONS_29' + ITEM_POSTFIX,
+    CONS_30: ITEM_PREFIX + 'CONS_30' + ITEM_POSTFIX,
+    CONS_31: ITEM_PREFIX + 'CONS_31' + ITEM_POSTFIX,
+    CONS_32: ITEM_PREFIX + 'CONS_32' + ITEM_POSTFIX,
+    CONS_33: ITEM_PREFIX + 'CONS_33' + ITEM_POSTFIX,
+    CONS_34: ITEM_PREFIX + 'CONS_34' + ITEM_POSTFIX,
+    CONS_35: ITEM_PREFIX + 'CONS_35' + ITEM_POSTFIX,
     HELM_1: ITEM_PREFIX + 'HELM_1' + ITEM_POSTFIX,
     HELM_6: ITEM_PREFIX + 'HELM_6' + ITEM_POSTFIX,
     BODY_1: ITEM_PREFIX + 'BODY_1' + ITEM_POSTFIX,
@@ -303,6 +311,7 @@ export class TetuGame {
     OLD_WHORE_10: genObjectId(1, 10, 45),
     TRAINING_BUDDY_33: genObjectId(1, 33, 46),
     FEROCIOUS_WIFE_33: genObjectId(1, 33, 47),
+    STRABAN_KNIGHT_10: genObjectId(1, 10, 48),
 
     BLOODCURDLING_WOLFS_34: genObjectId(2, 34, 1),
     SOMBER_HANGMAN_34: genObjectId(2, 34, 2),
@@ -329,6 +338,9 @@ export class TetuGame {
     BAD_SEED_33: genObjectId(2, 33, 23),
     BAD_SEED_35: genObjectId(2, 35, 24),
     RIPE_MIDNIGHTER_2: genObjectId(2, 2, 25),
+    WOUNDED_DEMOLDER_10: genObjectId(2, 10, 26),
+    HANGOVER_WILLY_10: genObjectId(2, 10, 27),
+    VENOMOUS_SPIDER_10: genObjectId(2, 10, 28),
 
     DEMOLDER_WARRIOR_34: genObjectId(3, 34, 1),
     DEMOLDER_SERGEANT_34: genObjectId(3, 34, 2),
@@ -352,6 +364,10 @@ export class TetuGame {
     FACELESS_10: genObjectId(3, 10, 20),
     LONE_BARD_35: genObjectId(3, 35, 21),
     FOREST_WITCH_35: genObjectId(3, 35, 22),
+    DEMOLDER_CHAMPION_SCALD_10: genObjectId(3, 10, 23),
+    DEMOLDER_CHAMPION_THORN_10: genObjectId(3, 10, 24),
+    DEMOLDER_CHAMPION_GEKK_10: genObjectId(3, 10, 25),
+    MIGHTY_RUIN_KEEPER_10: genObjectId(3, 10, 26),
 
     GIANT_WASP_34: genObjectId(4, 34, 1),
     MOONHUNTER_34: genObjectId(4, 34, 2),
@@ -376,6 +392,9 @@ export class TetuGame {
     DARK_ADVENTURERS_35: genObjectId(4, 35, 21),
     SPICY_MIDNIGHTER_2: genObjectId(4, 2, 22),
     DARK_ESSENCE_35: genObjectId(4, 35, 23),
+    KNIGHT_HAMMERGINA_10: genObjectId(4, 10, 24),
+    FULLMOON_DARK_ESSENCE_10: genObjectId(4, 10, 25),
+    SUPERGOOSE_10: genObjectId(4, 10, 26),
   };
 
   public static SHRINES: SpecificChambers = {
@@ -443,8 +462,8 @@ export class TetuGame {
     STORY141_GUILT_II: genObjectId(1, 30, 141),
     STORY142_WALKING_BRAD: genObjectId(1, 30, 142),
     STORY143_YOU_RE_NOT_ALONE: genObjectId(1, 30, 143),
-    STORY144_LIONHEART: genObjectId(1,29,144),
-    STORY145_LIONHEART_II:genObjectId(1,31,145),
+    STORY144_LIONHEART: genObjectId(1, 29, 144),
+    STORY145_LIONHEART_II: genObjectId(1, 31, 145),
     STORY146_PAIN_AND_PLEASURE: genObjectId(1, 29, 146),
     STORY169_RESTLESS: genObjectId(1, 31, 169),
     STORY170_CATFIGHT: genObjectId(1, 7, 170),
@@ -483,11 +502,11 @@ export class TetuGame {
     STORY231_POSTMAN: genObjectId(2, 28, 231),
     STORY232_IN_FROM_COLD: genObjectId(2, 29, 232),
     STORY233_IN_FROM_COLD_II: genObjectId(2, 29, 233),
-    STORY234_MOURNING_MARCH:genObjectId(2,28,234),
-    STORY235_DRUNK_DISPUTE_II:genObjectId(2,28,235),
-    STORY236_FOG_GATE:genObjectId(2,28,236),
-    STORY237_HEY_STRANGER:genObjectId(2,28,237),
-    STORY238_HELPING_HANDS:genObjectId(2,28,238),
+    STORY234_MOURNING_MARCH: genObjectId(2, 28, 234),
+    STORY235_DRUNK_DISPUTE_II: genObjectId(2, 28, 235),
+    STORY236_FOG_GATE: genObjectId(2, 28, 236),
+    STORY237_HEY_STRANGER: genObjectId(2, 28, 237),
+    STORY238_HELPING_HANDS: genObjectId(2, 28, 238),
 
     STORY301_SACRA_HUNT: genObjectId(3, 29, 301),
     STORY302_THE_GUTTERS: genObjectId(3, 21, 302),
@@ -520,7 +539,6 @@ export class TetuGame {
     STORY329_SHORT_MAN: genObjectId(3, 29, 329),
     STORY330_DARK_SOUL: genObjectId(3, 31, 330),
     STORY332_BROOD_NEED_FOOD: genObjectId(3, 29, 332),
-
 
     STORY401_WAY_OUT: genObjectId(4, 29, 401),
     STORY402_YOU_AGAIN: genObjectId(4, 31, 402),

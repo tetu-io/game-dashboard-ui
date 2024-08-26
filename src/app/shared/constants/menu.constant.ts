@@ -18,6 +18,7 @@ export enum MENU_ITEMS {
   TOKENOMICS_CHART = 'Tokenomics chart',
   TOKENS_TRANSACTIONS = 'Token transactions',
   MONSTER_FIGHTS = 'Monster fights',
+  HERO_FIGHTS = 'Hero fights',
   PAWNSHOP = 'Pawnshop',
   PAWNSHOP_CHART = 'Pawnshop chart',
   DAU_CHART = 'User activities',
@@ -56,6 +57,10 @@ export const MENU: { [key: string]: MenuItemInterface } = {
   [MENU_ITEMS.MONSTER_FIGHTS]: {
     icon: 'line-chart',
     label: MENU_ITEMS.MONSTER_FIGHTS,
+  },
+  [MENU_ITEMS.HERO_FIGHTS]: {
+    icon: 'line-chart',
+    label: MENU_ITEMS.HERO_FIGHTS,
   },
   [MENU_ITEMS.TOKENOMICS_STAT]: {
     icon: 'line-chart',

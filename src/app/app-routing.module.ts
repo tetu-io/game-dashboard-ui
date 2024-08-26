@@ -85,6 +85,10 @@ const routes: Routes = [
     loadChildren: () => import('./pages/monster-fights/monster-fights.module').then(m => m.MonsterFightsModule),
   },
   {
+    path: MAIN_ROUTES[MENU_ITEMS.HERO_FIGHTS],
+    loadChildren: () => import('./pages/hero-fights/hero-fights.module').then(m => m.HeroFightsModule),
+  },
+  {
     path: '',
     pathMatch: 'full',
     redirectTo: MAIN_ROUTES[MENU_ITEMS.USER_STAT],
