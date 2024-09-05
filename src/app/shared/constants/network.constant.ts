@@ -5,6 +5,7 @@ export const NETWORKS = {
   // mumbai: 'mumbai',
   sonic: 'sonic',
   fantom: 'fantom',
+  real: 'real',
 }
 
 export function defaultNetwork(): string {
@@ -40,18 +41,21 @@ export function getSkipAddresses(network: string): string[] {
 export const CHAIN_ID = new Map<string, number>([
   ['sonic', 64165],
   ['fantom', 250],
+  ['real', 111188]
 ]);
 
 export const NETWORKS_URLS = new Map<string, string>([
   ['sepolia', 'https://sepolia.sacra.cc'],
   ['mumbai', 'https://mumbai.sacra.cc'],
   ['sonic', 'https://sonic-beta.sacra.game'],
-  ['fantom', 'https://fantom.sacra.game']
+  ['fantom', 'https://fantom.sacra.game'],
+  ['real', 'https://real.sacra.game'],
 ]);
 
 export const RPC_URLS = new Map<number, string>([
   [64165, 'https://rpc.sonic.fantom.network/'],
   [250, 'https://rpc.ftm.tools/'],
+  [111188, 'https://tangible-real.gateway.tenderly.co/']
 ]);
 
 export const ON_CHAIN_CALL_RETRY = 3;

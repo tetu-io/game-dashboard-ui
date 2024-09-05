@@ -1037,6 +1037,8 @@ export class SubgraphService {
         return 'SONIC_GAME_SUBGRAPH';
       case NETWORKS.fantom:
         return 'FANTOM_GAME_SUBGRAPH';
+      case NETWORKS.real:
+        return 'REAL_GAME_SUBGRAPH';
       default:
         return '';
     }
