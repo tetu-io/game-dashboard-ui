@@ -1,6 +1,7 @@
-query OpenChamberData($first: Int!, $skip: Int!, $biomes: [Int!], $orderDirection: OrderDirection!) {
+query OpenChamberByHeroData($first: Int!, $skip: Int!, $heroes: [String!], $biomes: [Int!], $orderDirection: OrderDirection!) {
     openedChamberEntities(
         where: {
+            enteredHero_in: $heroes
             chamber_: {
                 biome_in: $biomes
                 isBattle: true

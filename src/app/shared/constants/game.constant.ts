@@ -3,7 +3,8 @@ import { TetuGame } from './TetuGame';
 export function getMonsterName(monsterId: number): string {
   const name = MONSTER_NAMES.get(monsterId);
   if (!name) {
-    throw new Error(`No name found for ${monsterId}`);
+    console.log(`No name found for ${monsterId}`);
+    return 'Unknown';
   }
   return name;
 }

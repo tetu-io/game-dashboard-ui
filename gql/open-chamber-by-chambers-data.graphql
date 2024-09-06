@@ -16,6 +16,7 @@ query OpenChamberByChambersData($first: Int!, $skip: Int!, $chambers: [String!],
         enteredHero {
             id
             heroId
+            uniqName
             meta {
                 id
                 heroClass
@@ -26,6 +27,7 @@ query OpenChamberByChambersData($first: Int!, $skip: Int!, $chambers: [String!],
         iteration
         chamber {
             id
+            biome
         }
         actions(
             orderBy: turn

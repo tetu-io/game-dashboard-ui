@@ -1,0 +1,81 @@
+<div class="g-flex g-flex--align-center">
+  <div class="heroes">
+    <nz-select (ngModelChange)="selectMonster($event)" nzMode="tags" nzPlaceHolder="Heroes" [(ngModel)]="selectedHeroes">
+      <nz-option *ngFor="let option of heroList" [nzLabel]="option.label" [nzValue]="option.value"></nz-option>
+    </nz-select>
+  </div>
+
+  <div class="biome">
+    <form nz-form [formGroup]="form">
+      <nz-form-item>
+        <nz-form-label nzFor="size">Biome</nz-form-label>
+        <nz-form-control>
+          <nz-select
+            id="size"
+            formControlName="size"
+            (ngModelChange)="biomeChange($event)"
+          >
+            <nz-option nzValue="All" nzLabel="All"></nz-option>
+            <nz-option nzValue="1" nzLabel="1"></nz-option>
+            <nz-option nzValue="2" nzLabel="2"></nz-option>
+            <nz-option nzValue="3" nzLabel="3"></nz-option>
+            <nz-option nzValue="4" nzLabel="4"></nz-option>
+          </nz-select>
+        </nz-form-control>
+      </nz-form-item>
+    </form>
+  </div>
+</div>
+
+<nz-table #filterTable [nzData]="heroBattleInfos"
+          [nzShowPagination]="false"
+          [nzLoading]="isLoading"
+          [nzPageSize]="pageSize"
+          nzTableLayout="auto">
+  <thead>
+  <tr>
+    <th
+      *ngFor="let column of columns"
+      [nzSortFn]="column.sortFn"
+      [nzSortDirections]="column.sortDirections"
+      (click)="sort(column.name)"
+    >
+      {{ column.name }}
+    </th>
+  </tr>
+  </thead>
+  <tbody>
+  <tr *ngFor="let data of filterTable.data">
+    <td>{{ data.heroName }}</td>
+    <td>{{ data.monster }}</td>
+    <td>{{ data.heroClass }}</td>
+    <td>{{ data.status }}</td>
+    <td>{{ data.biome }}</td>
+    <td>
+      <a [href]="data.link" target="_blank">Link on UI</a>
+    </td>
+    <td>
+      {{ getFormattedDate(data.date) }}
+    </td>
+
+  </tr>
+  </tbody>
+</nz-table>
+<div class="pagination">
+  <button
+    class="pagination__btn"
+    [disabled]="currentPage === 0"
+    nz-button
+    nzType="default"
+    (click)="prev()">
+    Prev
+  </button>
+  <button
+    class="pagination__btn"
+    [disabled]="heroBattleInfos.length !== pageSize"
+    nz-button
+    nzType="default"
+    (click)="next()">
+    Next
+  </button>
+</div>
