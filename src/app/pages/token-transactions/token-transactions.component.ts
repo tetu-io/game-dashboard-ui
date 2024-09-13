@@ -7,7 +7,7 @@ import { ColumnItem } from '../../models/column-item.interface';
 import { formatUnits } from 'ethers';
 import { TokenBalance } from '../../models/token-balance.interface';
 import { GET_CORE_ADDRESSES } from '../../shared/constants/addresses.constant';
-import { getChainId, getPools, getSkipAddresses } from '../../shared/constants/network.constant';
+import { CHAIN_ID, getChainId, getPools, getSkipAddresses } from '../../shared/constants/network.constant';
 import { UserEntity } from '../../../../generated/gql';
 
 @Component({
@@ -106,6 +106,11 @@ export class TokenTransactionsComponent implements OnInit {
         const tokenBalanceRecord: Record<string, TokenBalance> = {};
         if (transactions) {
           for (let tx of transactions) {
+            let price = +tx.price;
+            // TODO remove after subgraph sync
+            if (this.chainId === 111188) {
+              price = price / 10;
+            }
             if (this.skipAddresses(tx.from) || this.skipAddresses(tx.to)) {
               continue;
             }
@@ -115,14 +120,14 @@ export class TokenTransactionsComponent implements OnInit {
                 tokenBalanceRecord[tx.to] = this.createTokenBalance(tx.to, users as UserEntity[])
               }
               tokenBalanceRecord[tx.to].fromPool += amount;
-              tokenBalanceRecord[tx.to].fromPoolUsd += amount * +tx.price;
+              tokenBalanceRecord[tx.to].fromPoolUsd += amount * price;
               // to pool
             } else if (this.isPool(tx.to)) {
               if (!tokenBalanceRecord[tx.from]) {
                 tokenBalanceRecord[tx.from] = this.createTokenBalance(tx.from, users as UserEntity[]);
               }
               tokenBalanceRecord[tx.from].toPool += amount;
-              tokenBalanceRecord[tx.from].toPoolUsd += amount * +tx.price;
+              tokenBalanceRecord[tx.from].toPoolUsd += amount * price;
             } else if (this.isDungeon(tx.from)) {
               if (!tokenBalanceRecord[tx.to]) {
                 tokenBalanceRecord[tx.to] = this.createTokenBalance(tx.to, users as UserEntity[]);

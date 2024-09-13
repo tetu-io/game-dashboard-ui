@@ -1,4 +1,5 @@
 import { FANTOM_POOLS, FANTOM_SKIP_ADDRESSES } from './fantom.constant';
+import { REAL_POOLS, REAL_SKIP_ADDRESSES } from './real.constants';
 
 export const NETWORKS = {
   // sepolia: 'sepolia',
@@ -28,12 +29,18 @@ export function getPools(network: string): string[] {
   if (network === 'fantom') {
     return FANTOM_POOLS;
   }
+  if (network === 'real') {
+    return REAL_POOLS;
+  }
   return [];
 }
 
 export function getSkipAddresses(network: string): string[] {
   if (network === 'fantom') {
     return FANTOM_SKIP_ADDRESSES;
+  }
+  if (network === 'real') {
+    return REAL_SKIP_ADDRESSES;
   }
   return [];
 }
