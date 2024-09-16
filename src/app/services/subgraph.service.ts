@@ -1033,8 +1033,6 @@ export class SubgraphService {
 
   private getClientSubgraphByNetwork(network: string): string {
     switch (network) {
-      case NETWORKS.sonic:
-        return 'SONIC_GAME_SUBGRAPH';
       case NETWORKS.fantom:
         return 'FANTOM_GAME_SUBGRAPH';
       case NETWORKS.real:
