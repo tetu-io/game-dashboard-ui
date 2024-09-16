@@ -4,7 +4,7 @@ import { REAL_POOLS, REAL_SKIP_ADDRESSES } from './real.constants';
 export const NETWORKS = {
   // sepolia: 'sepolia',
   // mumbai: 'mumbai',
-  sonic: 'sonic',
+  // sonic: 'sonic',
   fantom: 'fantom',
   real: 'real',
 }
