@@ -29,9 +29,11 @@ import {
   ItemsDataGQL,
   ItemsDataQuery,
   OpenChamberByChambersDataGQL,
-  OpenChamberByChambersDataQuery, OpenChamberByHeroDataGQL,
+  OpenChamberByChambersDataQuery,
+  OpenChamberByHeroDataGQL,
   OpenChamberDataGQL,
-  OpenChamberDataQuery, OrderDirection,
+  OpenChamberDataQuery,
+  OrderDirection,
   PawnshopDataGQL,
   PawnshopDataQuery,
   PawnshopExecuteDataGQL,
@@ -449,10 +451,10 @@ export class SubgraphService {
     });
   }
 
-  totalSupply$(first: number, skip: number = 0): Observable<TotalSupplyHistoryQuery['totalSupplyHistoryEntities']> {
+  totalSupply$(first: number, skip: number = 0, timestamp: string = "0", order: OrderDirection = OrderDirection.Desc): Observable<TotalSupplyHistoryQuery['totalSupplyHistoryEntities']> {
     this.totalSupplyHistoryGQL.client = this.getClientSubgraph();
     return this.totalSupplyHistoryGQL.fetch(
-      { first: first, skip: skip}
+      { first: first, skip: skip, timestamp: timestamp, orderDirection: order}
     ).pipe(
       map(x => x.data.totalSupplyHistoryEntities),
       retry({ count: RETRY, delay: DELAY }),
@@ -482,10 +484,10 @@ export class SubgraphService {
     });
   }
 
-  burn$(first: number, skip: number = 0): Observable<BurnDataQuery['burnHistoryEntities']> {
+  burn$(first: number, skip: number = 0, timestamp: string = "0", order: OrderDirection = OrderDirection.Desc): Observable<BurnDataQuery['burnHistoryEntities']> {
     this.burnDataGQL.client = this.getClientSubgraph();
     return this.burnDataGQL.fetch(
-      { first: first, skip: skip}
+      { first: first, skip: skip, timestamp: timestamp, orderDirection: order }
     ).pipe(
       map(x => x.data.burnHistoryEntities),
       retry({ count: RETRY, delay: DELAY }),
