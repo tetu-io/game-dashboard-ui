@@ -1,0 +1,31 @@
+<div class="g-flex g-flex--align-center">
+  <div class="items">
+    <nz-select (ngModelChange)="selectItem($event)" nzMode="default" nzPlaceHolder="Items" [(ngModel)]="selectedItem">
+      <nz-option *ngFor="let option of itemArray" [nzLabel]="option.label" [nzValue]="option.value"></nz-option>
+    </nz-select>
+  </div>
+</div>
+
+<div class="chart-container g-flex-column__item">
+
+  <nz-spin
+    *ngIf="isLoading; else loaded"
+    class="loader g-flex-column__item-fixed">
+  </nz-spin>
+
+  <ng-template #loaded>
+    <div
+      *ngIf="options; else noDataTpl"
+      class="chart"
+      echarts
+      [options]="options">
+    </div>
+
+    <ng-template #noDataTpl>
+      <nz-empty nzNotFoundImage="simple">
+      </nz-empty>
+    </ng-template>
+  </ng-template>
+</div>
+
+

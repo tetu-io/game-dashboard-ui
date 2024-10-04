@@ -89,9 +89,13 @@ const routes: Routes = [
     loadChildren: () => import('./pages/hero-fights/hero-fights.module').then(m => m.HeroFightsModule),
   },
   {
+    path: MAIN_ROUTES[MENU_ITEMS.PAWNSHOP_PRICE_RANGE],
+    loadChildren: () => import('./pages/pawnshop-price-range/pawnshop-price-range.module').then(m => m.PawnshopPriceRangeModule),
+  },
+  {
     path: '',
     pathMatch: 'full',
-    redirectTo: MAIN_ROUTES[MENU_ITEMS.USER_STAT],
+    redirectTo: MAIN_ROUTES[MENU_ITEMS.DAU_CHART],
   },
 ];
 

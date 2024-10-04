@@ -1,0 +1,13 @@
+query PawnshopOpenPositionData($item: String!, $first: Int!, $skip: Int!) {
+    pawnshopPositionEntities(
+        where:{
+            open: true
+            collateralItem_starts_with: $item
+            acquiredAmount_gt: 0
+        }
+        first: $first
+        skip: $skip
+    ) @namedClient(name: "FANTOM_GAME_SUBGRAPH") {
+        acquiredAmount
+    }
+}
