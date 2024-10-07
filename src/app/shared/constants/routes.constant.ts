@@ -23,4 +23,5 @@ export const MAIN_ROUTES = {
   [MENU_ITEMS.CHURN_RATE_V2]: 'churn-rate-v2',
   [MENU_ITEMS.TOTAL_SUPPLY]: 'total-supply',
   [MENU_ITEMS.PAWNSHOP_STAT_CHART]: 'pawnshop-stat-chart',
+  [MENU_ITEMS.PAWNSHOP_PRICE_RANGE]: 'pawnshop-price-range',
 };

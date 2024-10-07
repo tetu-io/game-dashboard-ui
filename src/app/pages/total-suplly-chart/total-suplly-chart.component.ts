@@ -2,9 +2,11 @@ import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit } from '@
 import { EChartsOption } from 'echarts';
 import { DestroyService } from '../../services/destroy.service';
 import { SubgraphService } from '../../services/subgraph.service';
-import { forkJoin, takeUntil } from 'rxjs';
-import { BurnHistoryEntity, HeroAction, TotalSupplyHistoryEntity } from '../../../../generated/gql';
-import { formatUnits, parseUnits } from 'ethers';
+import { forkJoin, map, of, switchMap, takeUntil } from 'rxjs';
+import { BurnHistoryEntity, OrderDirection, TotalSupplyHistoryEntity } from '../../../../generated/gql';
+import { formatUnits } from 'ethers';
+
+const DAY_IN_SECONDS = 86400;
 
 @Component({
   selector: 'app-total-suplly-chart',
@@ -35,14 +37,45 @@ export class TotalSupllyChartComponent implements OnInit {
     this.isLoading = true;
 
     forkJoin({
-      totalSupply: this.subgraphService.fetchAllTotalSupply$(),
-      burn: this.subgraphService.fetchAllBurn$(),
+      totalSupply: this.subgraphService.totalSupply$(1, 0 , "0", OrderDirection.Asc),
+      burn: this.subgraphService.burn$(1, 0, "0", OrderDirection.Asc),
     })
-      .pipe(takeUntil(this.destroy$))
-      .subscribe(({ totalSupply, burn }) => {
-        if (totalSupply) {
-          this.prepareChartData(totalSupply as TotalSupplyHistoryEntity[], burn as BurnHistoryEntity[]);
-        }
+      .pipe(
+        takeUntil(this.destroy$),
+        switchMap(({ totalSupply, burn }) => {
+          if (totalSupply && totalSupply.length > 0 && burn && burn.length > 0) {
+            const currentTimestamp = new Date().getTime() / 1000;
+            let timestamp = +totalSupply[0].timestamp + DAY_IN_SECONDS;
+            const timestampList: string[] = []
+            while (timestamp < currentTimestamp) {
+              timestampList.push(timestamp + '');
+              timestamp = +timestamp + DAY_IN_SECONDS;
+            }
+
+            const totalSupplyRequests = timestampList.map(timestamp =>
+              this.subgraphService.totalSupply$(1, 0, timestamp, OrderDirection.Asc)
+            );
+
+            const burnRequests = timestampList.map(timestamp =>
+              this.subgraphService.burn$(1, 0, timestamp, OrderDirection.Asc)
+            );
+
+            return forkJoin({
+              totalSupplyResponses: forkJoin(totalSupplyRequests),
+              burnResponses: forkJoin(burnRequests),
+            }).pipe(
+              map(({ totalSupplyResponses, burnResponses }) => ({
+                totalSupplyList: (totalSupplyResponses as TotalSupplyHistoryEntity[][]).flat(),
+                burnList: (burnResponses as BurnHistoryEntity[][]).flat(),
+              }))
+            );
+          } else {
+            return of({ totalSupplyList: [], burnList: [] });
+          }
+        })
+        )
+      .subscribe(({ totalSupplyList, burnList }) => {
+        this.prepareChartData(totalSupplyList as TotalSupplyHistoryEntity[], burnList as BurnHistoryEntity[]);
         this.isLoading = false;
         this.changeDetectorRef.detectChanges();
       })

@@ -1,9 +1,12 @@
-query TotalSupplyHistory($first: Int!, $skip: Int!) {
+query TotalSupplyHistory($timestamp: BigInt!, $first: Int!, $skip: Int!, $orderDirection: OrderDirection) {
     totalSupplyHistoryEntities(
+        where: {
+            timestamp_gt: $timestamp
+        }
         first: $first
         skip: $skip
         orderBy: timestamp
-        orderDirection: asc
+        orderDirection: $orderDirection
     ) {
         id
         totalSupply

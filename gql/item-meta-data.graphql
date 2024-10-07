@@ -1,0 +1,9 @@
+query ItemMetaData($first: Int!, $skip: Int!) {
+    itemMetaEntities(
+        first: $first
+        skip: $skip
+    ) @namedClient(name: "FANTOM_GAME_SUBGRAPH") {
+        id
+        name
+    }
+}

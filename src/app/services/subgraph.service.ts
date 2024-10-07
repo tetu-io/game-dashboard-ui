@@ -23,19 +23,21 @@ import {
   HeroTokenEarnedDataGQL,
   HeroTokenEarnedDataQuery,
   HeroTokenVaultStatisticDataGQL,
-  HeroTokenVaultStatisticDataQuery,
+  HeroTokenVaultStatisticDataQuery, ItemMetaDataGQL, ItemMetaDataQuery,
   ItemsActionDataGQL,
   ItemsActionDataQuery,
   ItemsDataGQL,
   ItemsDataQuery,
   OpenChamberByChambersDataGQL,
-  OpenChamberByChambersDataQuery, OpenChamberByHeroDataGQL,
+  OpenChamberByChambersDataQuery,
+  OpenChamberByHeroDataGQL,
   OpenChamberDataGQL,
-  OpenChamberDataQuery, OrderDirection,
+  OpenChamberDataQuery,
+  OrderDirection,
   PawnshopDataGQL,
   PawnshopDataQuery,
   PawnshopExecuteDataGQL,
-  PawnshopExecuteDataQuery,
+  PawnshopExecuteDataQuery, PawnshopOpenPositionDataGQL, PawnshopOpenPositionDataQuery,
   PawnshopStatDataGQL,
   PawnshopStatDataQuery,
   StoryDataGQL,
@@ -116,7 +118,9 @@ export class SubgraphService {
     private wauGQL: WauGQL,
     private openChamberDataGQL: OpenChamberDataGQL,
     private openChamberByChambersDataGQL: OpenChamberByChambersDataGQL,
-    private openChamberByHeroGQL: OpenChamberByHeroDataGQL
+    private openChamberByHeroGQL: OpenChamberByHeroDataGQL,
+    private itemMetaDataGQL: ItemMetaDataGQL,
+    private pawnshopOpenPositionDataGQL: PawnshopOpenPositionDataGQL
   ) { }
 
   changeNetwork(network: string): void {
@@ -449,10 +453,10 @@ export class SubgraphService {
     });
   }
 
-  totalSupply$(first: number, skip: number = 0): Observable<TotalSupplyHistoryQuery['totalSupplyHistoryEntities']> {
+  totalSupply$(first: number, skip: number = 0, timestamp: string = "0", order: OrderDirection = OrderDirection.Desc): Observable<TotalSupplyHistoryQuery['totalSupplyHistoryEntities']> {
     this.totalSupplyHistoryGQL.client = this.getClientSubgraph();
     return this.totalSupplyHistoryGQL.fetch(
-      { first: first, skip: skip}
+      { first: first, skip: skip, timestamp: timestamp, orderDirection: order}
     ).pipe(
       map(x => x.data.totalSupplyHistoryEntities),
       retry({ count: RETRY, delay: DELAY }),
@@ -482,10 +486,10 @@ export class SubgraphService {
     });
   }
 
-  burn$(first: number, skip: number = 0): Observable<BurnDataQuery['burnHistoryEntities']> {
+  burn$(first: number, skip: number = 0, timestamp: string = "0", order: OrderDirection = OrderDirection.Desc): Observable<BurnDataQuery['burnHistoryEntities']> {
     this.burnDataGQL.client = this.getClientSubgraph();
     return this.burnDataGQL.fetch(
-      { first: first, skip: skip}
+      { first: first, skip: skip, timestamp: timestamp, orderDirection: order }
     ).pipe(
       map(x => x.data.burnHistoryEntities),
       retry({ count: RETRY, delay: DELAY }),
@@ -928,6 +932,72 @@ export class SubgraphService {
       };
 
       pawnshopActions$();
+    });
+  }
+
+  itemsMeta$(first: number, skip: number = 0): Observable<ItemMetaDataQuery['itemMetaEntities']> {
+    this.itemMetaDataGQL.client = this.getClientSubgraph();
+    return this.itemMetaDataGQL.fetch(
+      { first: first, skip: skip }
+    ).pipe(
+      map(x => x.data.itemMetaEntities),
+      retry({ count: RETRY, delay: DELAY }),
+    )
+  }
+
+  fetchAllItemsMeta$(): Observable<ItemMetaDataQuery['itemMetaEntities']> {
+    let allData: ItemMetaDataQuery['itemMetaEntities'] = [];
+    let skip = 0;
+    const first = 1000;
+
+    return new Observable(observer => {
+      const action$ = () => {
+        this.itemsMeta$(first, skip).subscribe(data => {
+          if (data.length > 0) {
+            allData = allData.concat(data);
+            skip += first;
+            action$();
+          } else {
+            observer.next(allData);
+            observer.complete();
+          }
+        });
+      };
+
+      action$();
+    });
+  }
+
+  pawnshopOpenPositions$(item: string, first: number, skip: number = 0): Observable<PawnshopOpenPositionDataQuery['pawnshopPositionEntities']> {
+    this.pawnshopOpenPositionDataGQL.client = this.getClientSubgraph();
+    return this.pawnshopOpenPositionDataGQL.fetch(
+      { item: item, first: first, skip: skip }
+    ).pipe(
+      map(x => x.data.pawnshopPositionEntities),
+      retry({ count: RETRY, delay: DELAY }),
+    )
+  }
+
+  fetchAllPawnshopOpenPositions$(item: string): Observable<PawnshopOpenPositionDataQuery['pawnshopPositionEntities']> {
+    let allData: PawnshopOpenPositionDataQuery['pawnshopPositionEntities'] = [];
+    let skip = 0;
+    const first = 1000;
+
+    return new Observable(observer => {
+      const action$ = () => {
+        this.pawnshopOpenPositions$(item, first, skip).subscribe(data => {
+          if (data.length > 0) {
+            allData = allData.concat(data);
+            skip += first;
+            action$();
+          } else {
+            observer.next(allData);
+            observer.complete();
+          }
+        });
+      };
+
+      action$();
     });
   }
 
