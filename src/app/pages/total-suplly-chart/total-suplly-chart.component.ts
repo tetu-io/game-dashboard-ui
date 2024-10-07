@@ -113,11 +113,9 @@ export class TotalSupllyChartComponent implements OnInit {
 
     const array: number[] = [];
     const burnArray: number[] = [];
-    let prevBurn = 0;
     allDates.forEach(date => {
       array.push(record[date] || 0);
-      const index = burnArray.push(+((recordBurn[date] || 0)).toFixed(2) + prevBurn);
-      prevBurn = burnArray[index - 1];
+      burnArray.push(+((recordBurn[date] || 0).toFixed(0)));
     });
 
     this.options = {
