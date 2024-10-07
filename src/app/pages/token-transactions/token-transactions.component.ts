@@ -107,10 +107,6 @@ export class TokenTransactionsComponent implements OnInit {
         if (transactions) {
           for (let tx of transactions) {
             let price = +tx.price;
-            // TODO remove after subgraph sync
-            if (this.chainId === 111188) {
-              price = price / 10;
-            }
             if (this.skipAddresses(tx.from) || this.skipAddresses(tx.to)) {
               continue;
             }
