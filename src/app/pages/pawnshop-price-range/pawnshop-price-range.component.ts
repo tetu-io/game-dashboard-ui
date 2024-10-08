@@ -34,7 +34,7 @@ export class PawnshopPriceRangeComponent implements OnInit {
       this.network = network;
       this.chainId = getChainId(network);
       this.isLoading = true;
-      this.subgraphService.fetchAllItemsMeta$()
+      this.subgraphService.fetchAllItemsMeta$(this.destroy$)
         .pipe(
           takeUntil(this.destroy$)
         )
@@ -57,14 +57,17 @@ export class PawnshopPriceRangeComponent implements OnInit {
 
     if (this.selectedItem) {
       this.isLoading = true;
-      this.subgraphService.fetchAllPawnshopOpenPositions$(this.selectedItem)
+      this.subgraphService.fetchAllPawnshopOpenPositions$(this.selectedItem, this.destroy$)
         .pipe(
           takeUntil(this.destroy$)
         )
         .subscribe(data => {
           if (data) {
             const rangePrice = this.groupByRange(data as PawnshopPositionEntity[]);
-            console.log(rangePrice);
+
+
+            const values: any[] = Object.values(rangePrice);
+            values.unshift(null)
 
             this.options = {
               legend: {
@@ -96,7 +99,7 @@ export class PawnshopPriceRangeComponent implements OnInit {
                 },
               },
               xAxis: {
-                data: Object.keys(rangePrice),
+                data: ['', ...Object.keys(rangePrice)],
                 type: 'category',
                 boundaryGap: false,
                 axisLine: { onZero: false },
@@ -108,7 +111,7 @@ export class PawnshopPriceRangeComponent implements OnInit {
                 {
                   name: 'Prices',
                   type: 'bar',
-                  data: Object.values(rangePrice),
+                  data: values,
                 }
               ],
               animationEasing: 'elasticOut',

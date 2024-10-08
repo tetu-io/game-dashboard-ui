@@ -9,7 +9,8 @@ import { DauStatisticEntity, UserEntity } from '../../../../generated/gql';
   selector: 'app-chunk-rate',
   templateUrl: './chunk-rate.component.html',
   styleUrls: ['./chunk-rate.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  providers: [DestroyService]
 })
 export class ChunkRateComponent implements OnInit {
 
@@ -34,8 +35,8 @@ export class ChunkRateComponent implements OnInit {
   private prepareData(): void {
     this.isLoading = true;
     forkJoin({
-      dau: this.subgraphService.fetchAllDau$(),
-      users: this.subgraphService.fetchAllUsersTs$()
+      dau: this.subgraphService.fetchAllDau$(this.destroy$),
+      users: this.subgraphService.fetchAllUsersTs$(this.destroy$)
     })
       .pipe(takeUntil(this.destroy$))
       .subscribe(({ dau,

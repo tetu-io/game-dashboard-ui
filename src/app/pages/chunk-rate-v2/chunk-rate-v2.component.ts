@@ -35,8 +35,8 @@ export class ChunkRateV2Component implements OnInit {
   private prepareData(): void {
     this.isLoading = true;
     forkJoin({
-      dau: this.subgraphService.fetchAllDau$(),
-      users: this.subgraphService.fetchAllUsersTs$()
+      dau: this.subgraphService.fetchAllDau$(this.destroy$),
+      users: this.subgraphService.fetchAllUsersTs$(this.destroy$)
     })
       .pipe(takeUntil(this.destroy$))
       .subscribe(({ dau, users

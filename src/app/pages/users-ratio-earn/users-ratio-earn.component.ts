@@ -10,7 +10,8 @@ import { parseUnits, formatUnits } from 'ethers';
   selector: 'app-users-ratio-earn',
   templateUrl: './users-ratio-earn.component.html',
   styleUrls: ['./users-ratio-earn.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  providers: [DestroyService]
 })
 export class UsersRatioEarnComponent implements OnInit {
 
@@ -37,9 +38,9 @@ export class UsersRatioEarnComponent implements OnInit {
 
     forkJoin(
       {
-        spentOnHero: this.subgraphService.fetchHeroActionsByType$([0, 2]),
-        earned: this.subgraphService.fetchAllHeroTokenEarned$(),
-        spentOnItem: this.subgraphService.fetchAllItemActions$()
+        spentOnHero: this.subgraphService.fetchHeroActionsByType$([0, 2], this.destroy$),
+        earned: this.subgraphService.fetchAllHeroTokenEarned$(this.destroy$),
+        spentOnItem: this.subgraphService.fetchAllItemActions$(this.destroy$)
       }
     ).pipe(takeUntil(this.destroy$))
       .subscribe(({ spentOnHero, earned, spentOnItem }) => {

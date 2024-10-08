@@ -14,7 +14,8 @@ import { UserEntity } from '../../../../generated/gql';
   selector: 'app-token-transactions',
   templateUrl: './token-transactions.component.html',
   styleUrls: ['./token-transactions.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  providers: [DestroyService]
 })
 export class TokenTransactionsComponent implements OnInit {
 
@@ -94,9 +95,9 @@ export class TokenTransactionsComponent implements OnInit {
     this.isLoading = true;
     const gameToken = GET_CORE_ADDRESSES(this.chainId).gameToken.toLowerCase();
     forkJoin({
-      pawnshopActions: this.subgraphService.fetchAllPawnshopExecuteActions$(),
-      transactions: this.subgraphService.fetchAllTokenTransactions$(gameToken),
-      users: this.subgraphService.fetchAllUsersWithHero$()
+      pawnshopActions: this.subgraphService.fetchAllPawnshopExecuteActions$(this.destroy$),
+      transactions: this.subgraphService.fetchAllTokenTransactions$(gameToken, this.destroy$),
+      users: this.subgraphService.fetchAllUsersWithHero$(this.destroy$)
     })
       .pipe(
         takeUntil(this.destroy$)

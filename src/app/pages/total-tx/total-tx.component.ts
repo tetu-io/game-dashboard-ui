@@ -9,7 +9,8 @@ import { TotalTxStatisticEntity } from '../../../../generated/gql';
   selector: 'app-total-tx',
   templateUrl: './total-tx.component.html',
   styleUrls: ['./total-tx.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  providers: [DestroyService]
 })
 export class TotalTxComponent implements OnInit {
 
@@ -33,7 +34,7 @@ export class TotalTxComponent implements OnInit {
   private prepareData(): void {
     this.isLoading = true;
     this.subgraphService
-      .fetchTransactions$()
+      .fetchTransactions$(this.destroy$)
       .pipe(takeUntil(this.destroy$))
       .subscribe(data => {
         this.prepareChartData(data as TotalTxStatisticEntity[]);

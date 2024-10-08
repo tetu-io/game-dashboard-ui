@@ -16,7 +16,8 @@ interface StoryPageCount {
   selector: 'app-story-stat',
   templateUrl: './story-stat.component.html',
   styleUrls: ['./story-stat.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  providers: [DestroyService]
 })
 export class StoryStatComponent implements OnInit {
 
@@ -58,7 +59,7 @@ export class StoryStatComponent implements OnInit {
 
   prepareData(): void {
     this.isLoading = true;
-    this.subgraphService.fetchAllStories$()
+    this.subgraphService.fetchAllStories$(this.destroy$)
       .pipe(takeUntil(this.destroy$))
       .subscribe(users => {
         if (users) {

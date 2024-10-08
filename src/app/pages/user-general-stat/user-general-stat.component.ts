@@ -36,7 +36,7 @@ export class UserGeneralStatComponent implements OnInit {
 
   prepareData(): void {
     forkJoin({
-      users: this.subgraphService.fetchAllUsers$(),
+      users: this.subgraphService.fetchAllUsers$([1], this.destroy$),
       heroMaxLvl: this.subgraphService.heroMaxLevel$(),
     })
       .pipe(takeUntil(this.destroy$))

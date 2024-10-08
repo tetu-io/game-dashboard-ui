@@ -9,7 +9,8 @@ import { PawnshopPositionHistoryEntity, UserEntity } from '../../../../generated
   selector: 'app-pawnshop-chart',
   templateUrl: './pawnshop-chart.component.html',
   styleUrls: ['./pawnshop-chart.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  providers: [DestroyService]
 })
 export class PawnshopChartComponent implements OnInit {
 
@@ -34,7 +35,7 @@ export class PawnshopChartComponent implements OnInit {
   private prepareData(): void {
     this.isLoading = true;
 
-    this.subgraphService.fetchAllPawnshopActions$()
+    this.subgraphService.fetchAllPawnshopActions$(this.destroy$)
       .pipe(takeUntil(this.destroy$))
       .subscribe(actions => {
         if (actions) {

@@ -9,7 +9,8 @@ import { forkJoin, takeUntil } from 'rxjs';
   selector: 'app-dau-chart',
   templateUrl: './dau-chart.component.html',
   styleUrls: ['./dau-chart.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  providers: [DestroyService]
 })
 export class DauChartComponent implements OnInit {
 
@@ -33,8 +34,8 @@ export class DauChartComponent implements OnInit {
   private prepareData(): void {
     this.isLoading = true;
     forkJoin([
-      this.subgraphService.fetchAllDau$(),
-      this.subgraphService.fetchAllWau$()
+      this.subgraphService.fetchAllDau$(this.destroy$),
+      this.subgraphService.fetchAllWau$(this.destroy$)
     ])
       .pipe(takeUntil(this.destroy$))
       .subscribe(([dau, wau]) => {

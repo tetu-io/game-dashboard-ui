@@ -60,7 +60,7 @@ export class UserStatComponent implements OnInit {
 
   prepareData(): void {
     this.isLoading = true;
-    this.subgraphService.fetchAllUsersStat$()
+    this.subgraphService.fetchAllUsersStat$(this.destroy$)
       .pipe(takeUntil(this.destroy$))
       .subscribe(users => {
         const tokenSumCounts: { [key: string]: { sum: number } } = {};

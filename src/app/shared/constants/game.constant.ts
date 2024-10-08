@@ -307,5 +307,6 @@ const ITEMS_NAMES = new Map<string, string>([
 ]);
 
 export function getItemNameBySymbol(itemSymbol: string): string {
-  return ITEMS_NAMES.get(itemSymbol) || itemSymbol;
+  const id = itemSymbol.replace('SACRA_', '').replace('_ITEM', '');
+  return `${ITEMS_NAMES.get(itemSymbol)} (${id})` || itemSymbol;
 }

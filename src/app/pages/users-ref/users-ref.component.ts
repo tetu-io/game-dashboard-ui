@@ -34,7 +34,7 @@ export class UsersRefComponent implements OnInit {
   }
 
   prepareData(): void {
-    this.subgraphService.fetchHeroesWithRefCode$()
+    this.subgraphService.fetchHeroesWithRefCode$(this.destroy$)
       .pipe(takeUntil(this.destroy$))
       .subscribe(heroes => {
 
