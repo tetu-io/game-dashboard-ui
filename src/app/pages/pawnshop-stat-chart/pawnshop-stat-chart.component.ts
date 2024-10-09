@@ -33,7 +33,7 @@ export class PawnshopStatChartComponent implements OnInit {
   private prepareData(): void {
     this.isLoading = true;
     this.subgraphService
-      .fetchAllPawnshopStat$()
+      .fetchAllPawnshopStat$(this.destroy$)
       .pipe(takeUntil(this.destroy$))
       .subscribe(data => {
         this.prepareChartData(data as PawnshopStatisticEntity[]);

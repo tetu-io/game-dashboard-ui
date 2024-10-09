@@ -5,13 +5,14 @@ import { Observable, Subject } from 'rxjs';
   providedIn: 'root',
 })
 export class DestroyService extends Observable<void> implements OnDestroy {
-  private readonly life$: Subject<void> = new Subject();
+  public readonly life$: Subject<void> = new Subject();
 
   constructor() {
     super(subscriber => this.life$.subscribe(subscriber));
   }
 
   ngOnDestroy(): void {
+    console.log('DestroyService destroyed');
     this.life$.next();
     this.life$.complete();
   }

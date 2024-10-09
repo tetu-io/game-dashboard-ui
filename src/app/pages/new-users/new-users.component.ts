@@ -37,7 +37,7 @@ export class NewUsersComponent implements OnInit {
   private prepareData(): void {
     this.isLoading = true;
 
-    users: this.subgraphService.fetchAllUsersSimple$()
+    users: this.subgraphService.fetchAllUsersSimple$(this.destroy$)
       .pipe(takeUntil(this.destroy$))
       .subscribe(users => {
         if (users) {

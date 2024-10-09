@@ -15,6 +15,7 @@ import { formatUnits } from 'ethers';
   selector: 'app-hero-stat',
   templateUrl: './hero-stat.component.html',
   styleUrls: ['./hero-stat.component.scss'],
+  providers: [DestroyService],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class HeroStatComponent implements OnInit {
@@ -107,7 +108,7 @@ export class HeroStatComponent implements OnInit {
 
   prepareData(): void {
     this.isLoading = true;
-    this.subgraphService.fetchAllHeroStat$()
+    this.subgraphService.fetchAllHeroStat$(this.destroy$)
       .pipe(takeUntil(this.destroy$))
       .subscribe(heroes => {
         if (heroes) {

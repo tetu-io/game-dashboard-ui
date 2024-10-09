@@ -12,7 +12,8 @@ import { NETWORKS_URLS } from '../../shared/constants/network.constant';
   selector: 'app-item-stat',
   templateUrl: './item-stat.component.html',
   styleUrls: ['./item-stat.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  providers: [DestroyService]
 })
 export class ItemStatComponent implements OnInit {
 
@@ -84,7 +85,7 @@ export class ItemStatComponent implements OnInit {
 
   prepareData(): void {
     this.isLoading = true;
-    this.subgraphService.fetchAllItems$()
+    this.subgraphService.fetchAllItems$(this.destroy$)
       .pipe(takeUntil(this.destroy$))
       .subscribe(items => {
         if (items) {

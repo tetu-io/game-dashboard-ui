@@ -10,7 +10,8 @@ import { HEROES_ACTIONS, HEROES_CLASSES } from '../../shared/constants/heroes.co
   selector: 'app-tokenomics-stat',
   templateUrl: './tokenomics-stat.component.html',
   styleUrls: ['./tokenomics-stat.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  providers: [DestroyService]
 })
 export class TokenomicsStatComponent implements OnInit {
 
@@ -35,7 +36,7 @@ export class TokenomicsStatComponent implements OnInit {
   private prepareData(): void {
     this.isLoading = true;
 
-    this.subgraphService.fetchHeroActionsByType$([0, 2])
+    this.subgraphService.fetchHeroActionsByType$([0, 2], this.destroy$)
       .pipe(takeUntil(this.destroy$))
       .subscribe(heroActions => {
         if (heroActions) {

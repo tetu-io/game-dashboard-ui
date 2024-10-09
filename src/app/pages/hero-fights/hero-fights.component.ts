@@ -95,7 +95,7 @@ export class HeroFightsComponent implements OnInit {
       this.network = network;
       this.chainId = getChainId(network);
       this.isLoading = true;
-      this.subgraphService.fetchAllHeroesSimple$()
+      this.subgraphService.fetchAllHeroesSimple$(this.destroy$)
         .pipe(
           takeUntil(this.destroy$)
         )

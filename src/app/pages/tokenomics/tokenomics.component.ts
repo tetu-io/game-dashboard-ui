@@ -13,7 +13,8 @@ import { TokenService } from '../../services/onchain/token.service';
   selector: 'app-tokenomics',
   templateUrl: './tokenomics.component.html',
   styleUrls: ['./tokenomics.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  providers: [DestroyService]
 })
 export class TokenomicsComponent implements OnInit {
 
@@ -67,14 +68,14 @@ export class TokenomicsComponent implements OnInit {
     const dungeonFactory = GET_CORE_ADDRESSES(this.chainId).dungeonFactory.toLowerCase();
     forkJoin({
       tokenData: this.subgraphService.tokenByAddress$(gameToken),
-      userStats: this.subgraphService.fetchAllUsersStat$(),
+      userStats: this.subgraphService.fetchAllUsersStat$(this.destroy$),
       treasuryAmount1: this.dungeonFactoryService.getDungeonTreasuryAmount$(this.chainId, gameToken, this.getHeroLvlByBiome(1), 1),
       treasuryAmount2: this.dungeonFactoryService.getDungeonTreasuryAmount$(this.chainId, gameToken, this.getHeroLvlByBiome(2), 2),
       treasuryAmount3: this.dungeonFactoryService.getDungeonTreasuryAmount$(this.chainId, gameToken, this.getHeroLvlByBiome(3), 3),
       treasuryAmount4: this.dungeonFactoryService.getDungeonTreasuryAmount$(this.chainId, gameToken, this.getHeroLvlByBiome(4), 4),
       // heroVaultStat: this.subgraphService.heroTokenVaultStatistic$(),
       earned: this.subgraphService.heroEarned$(),
-      dauStats: this.subgraphService.dau$(30),
+      dauStats: this.subgraphService.dau$(30, 0, this.destroy$),
       stat: this.subgraphService.tokenomicStats$(),
       controllerBalance: this.tokenService.balanceOf$(gameToken, this.chainId, controller),
       treasuryBalance: this.tokenService.balanceOf$(gameToken, this.chainId, treasury),
