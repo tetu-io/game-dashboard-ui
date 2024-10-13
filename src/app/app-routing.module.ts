@@ -93,6 +93,14 @@ const routes: Routes = [
     loadChildren: () => import('./pages/pawnshop-price-range/pawnshop-price-range.module').then(m => m.PawnshopPriceRangeModule),
   },
   {
+    path: MAIN_ROUTES[MENU_ITEMS.TABLE_ITEM_GENERAL_STAT],
+    loadChildren: () => import('./pages/table-item-general-stat/table-item-general-stat.module').then(m => m.TableItemGeneralStatModule),
+  },
+  {
+    path: MAIN_ROUTES[MENU_ITEMS.TABLE_ITEM_MINT_IN_STORY_STAT],
+    loadChildren: () => import('./pages/table-item-mint-story-stat/table-item-mint-story-stat.module').then(m => m.TableItemMintStoryStatModule),
+  },
+  {
     path: '',
     pathMatch: 'full',
     redirectTo: MAIN_ROUTES[MENU_ITEMS.DAU_CHART],

@@ -28,12 +28,22 @@ export enum MENU_ITEMS {
   TOTAL_SUPPLY = 'Total supply chart',
   PAWNSHOP_STAT_CHART = "Pawnshop stat chart",
   PAWNSHOP_PRICE_RANGE = "Pawnshop price range",
+  TABLE_ITEM_GENERAL_STAT = 'Item general stats',
+  TABLE_ITEM_MINT_IN_STORY_STAT = 'Item mint in story stats',
 }
 
 export const MENU: { [key: string]: MenuItemInterface } = {
   [MENU_ITEMS.DAU_CHART]: {
     icon: 'line-chart',
     label: MENU_ITEMS.DAU_CHART,
+  },
+  [MENU_ITEMS.TABLE_ITEM_GENERAL_STAT]: {
+    icon: 'line-chart',
+    label: MENU_ITEMS.TABLE_ITEM_GENERAL_STAT,
+  },
+  [MENU_ITEMS.TABLE_ITEM_MINT_IN_STORY_STAT]: {
+    icon: 'line-chart',
+    label: MENU_ITEMS.TABLE_ITEM_MINT_IN_STORY_STAT,
   },
   [MENU_ITEMS.TX_CHART]: {
     icon: 'line-chart',
