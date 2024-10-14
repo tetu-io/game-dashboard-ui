@@ -1,0 +1,29 @@
+<nz-spin
+  *ngIf="isLoading; else loaded"
+  class="loader g-flex-column__item-fixed">
+</nz-spin>
+<ng-template #loaded>
+  <nz-table #basicTable [nzData]="tableData" [nzBordered]="true" [nzShowPagination]="false" [nzPageSize]="tableData.length">
+    <thead>
+    <tr>
+      <th *ngFor="let column of columns" [nzSortFn]="column.compare">{{ column.title }}</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr *ngFor="let item of basicTable.data">
+      <td>{{ item.name }}</td>
+      <td [ngStyle]="getStyle(item.exist, 1)">{{ item.count }}</td>
+      <td [ngStyle]="getStyle(item.exist, 2)">{{ item.burned }}</td>
+      <td [ngStyle]="getStyle(item.exist, 3)">{{ item.exist }}</td>
+      <td [ngStyle]="getPercentageStyle(+item.burnedPercent)">{{ item.burnedPercent | number:'1.2-2' }}%</td>
+      <td [ngStyle]="getStyle(item.exist, 5)">{{item.itemsInPawnshop}}</td>
+      <td [ngStyle]="getPercentageStyle(+item.itemsInPawnshopPercent)">{{ item.itemsInPawnshopPercent | number:'1.2-2' }}%</td>
+      <td [ngStyle]="getStyle(item.exist, 7)">{{ item.flurPrice }}</td>
+      <td [ngStyle]="getStyle(item.exist, 8)">{{item.biome}}</td>
+      <td>{{item.rarity}}</td>
+      <td [ngStyle]="getStyle(+item.sumCost, 10)">{{ item.sumCost }}</td>
+      <td [ngStyle]="getStyle(+item.sumCost, 11)">{{ item.sumCostPawnshop }}</td>
+    </tr>
+    </tbody>
+  </nz-table>
+</ng-template>

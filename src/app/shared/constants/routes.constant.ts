@@ -24,4 +24,6 @@ export const MAIN_ROUTES = {
   [MENU_ITEMS.TOTAL_SUPPLY]: 'total-supply',
   [MENU_ITEMS.PAWNSHOP_STAT_CHART]: 'pawnshop-stat-chart',
   [MENU_ITEMS.PAWNSHOP_PRICE_RANGE]: 'pawnshop-price-range',
+  [MENU_ITEMS.TABLE_ITEM_GENERAL_STAT]: 'table-item-general-stat',
+  [MENU_ITEMS.TABLE_ITEM_MINT_IN_STORY_STAT]: 'table-item-min-in-story-stat',
 };

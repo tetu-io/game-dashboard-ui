@@ -1,0 +1,22 @@
+<nz-spin
+  *ngIf="isLoading; else loaded"
+  class="loader g-flex-column__item-fixed">
+</nz-spin>
+<ng-template #loaded>
+  <nz-table #basicTable [nzData]="tableData" [nzBordered]="true" [nzShowPagination]="false" [nzPageSize]="tableData.length">
+    <thead>
+    <tr>
+      <th *ngFor="let column of columns" [nzSortFn]="column.compare">{{ column.title }}</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr *ngFor="let item of basicTable.data">
+      <td>{{ item.storyId }}</td>
+      <td [ngStyle]="getStyle(item.totalItems, 1)">{{ item.totalItems }}</td>
+      <td [ngStyle]="getStyle(item.itemsPerStory, 2)">{{ item.itemsPerStory }}</td>
+      <td [ngStyle]="getStyle(item.totalPassedStory, 3)">{{ item.totalPassedStory }}</td>
+      <td [ngStyle]="getPercentageStyle(+item.percentItems)">{{ item.percentItems | number:'1.2-2' }}%</td>
+    </tr>
+    </tbody>
+  </nz-table>
+</ng-template>
