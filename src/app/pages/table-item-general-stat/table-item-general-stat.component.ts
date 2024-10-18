@@ -5,6 +5,8 @@ import { ApiService } from '../../services/api.service';
 import { getChainId } from '../../shared/constants/network.constant';
 import { ItemGeneralStatModel } from '../../models/item-general-stat.model';
 import { takeUntil } from 'rxjs';
+import { saveAs } from 'file-saver';
+import { format } from 'date-fns';
 
 @Component({
   selector: 'app-table-item-general-stat',
@@ -44,7 +46,7 @@ export class TableItemGeneralStatComponent implements OnInit {
       compare: (a: ItemGeneralStatModel, b: ItemGeneralStatModel) => +a.itemsInPawnshopPercent - +b.itemsInPawnshopPercent,
     },
     {
-      title: 'FLUR price',
+      title: 'Floor price',
       compare: (a: ItemGeneralStatModel, b: ItemGeneralStatModel) => a.flurPrice - b.flurPrice,
     },
     {
@@ -169,6 +171,37 @@ export class TableItemGeneralStatComponent implements OnInit {
 
     // TODO change logic
     return max / 100 * value / 100;
+  }
+
+  // I need to export tableData to CSV
+  exportCsv(): void {
+    const csvData = this.tableData.map(item => {
+      return {
+        Name: item.name,
+        'Total Items': item.count,
+        'Burned Items': item.burned,
+        'Items Exists': item.exist,
+        'Burned %': item.burnedPercent,
+        'Items on Pawnshop': item.itemsInPawnshop,
+        'Pawnshop %': item.itemsInPawnshopPercent,
+        'Floor price': item.flurPrice,
+        Biome: item.biome,
+        Rarity: item.rarity,
+        'Total value': item.sumCost,
+        'Total value in Pawnshop': item.sumCostPawnshop,
+      };
+    });
+
+    const csvContent = this.convertToCSV(csvData);
+    const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+    saveAs(blob, `${this.chainId}-${format(new Date(), 'yyyy-MM-dd_HH:mm:ss')}-item-general-stat.csv`);
+  }
+
+  convertToCSV(objArray: any[]): string {
+    const array = [Object.keys(objArray[0])].concat(objArray);
+    return array.map(it => {
+      return Object.values(it).toString();
+    }).join('\n');
   }
 
 }

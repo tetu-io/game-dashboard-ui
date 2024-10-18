@@ -3,6 +3,14 @@
   class="loader g-flex-column__item-fixed">
 </nz-spin>
 <ng-template #loaded>
+  <div class="btn">
+    <button
+      nz-button
+      nzType="default"
+      (click)="exportCsv()">
+      Export to CSV
+    </button>
+  </div>
   <nz-table #basicTable [nzData]="tableData" [nzBordered]="true" [nzShowPagination]="false" [nzPageSize]="tableData.length">
     <thead>
     <tr>
