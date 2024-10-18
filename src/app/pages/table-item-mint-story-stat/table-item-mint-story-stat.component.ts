@@ -5,6 +5,8 @@ import { ApiService } from '../../services/api.service';
 import { ItemMintStoryStatModel } from '../../models/item-mint-story-stat.model';
 import { getChainId } from '../../shared/constants/network.constant';
 import { takeUntil } from 'rxjs';
+import { saveAs } from 'file-saver';
+import { format } from 'date-fns';
 
 @Component({
   selector: 'app-table-item-mint-story-stat',
@@ -33,7 +35,7 @@ export class TableItemMintStoryStatComponent implements OnInit {
     },
     {
       title: 'Percent Items',
-      compare: (a: ItemMintStoryStatModel, b: ItemMintStoryStatModel) => a.percentItems.localeCompare(b.percentItems),
+      compare: (a: ItemMintStoryStatModel, b: ItemMintStoryStatModel) => +a.percentItems - +b.percentItems,
     },
   ]
   isLoading = false;
@@ -115,5 +117,28 @@ export class TableItemMintStoryStatComponent implements OnInit {
 
   getColor(value: number, min: number, max: number): number {
     return max / 100 * value / 100;
+  }
+
+  exportToCsv() {
+    const csvData = this.tableData.map(item => {
+      return {
+        'Story ID': item.storyId,
+        'Total Items': item.totalItems,
+        'Items Per Story': item.itemsPerStory,
+        'Total Passed Story': item.totalPassedStory,
+        'Percent Items': item.percentItems,
+      }
+    });
+    const csvContent = this.convertToCSV(csvData);
+    const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+    saveAs(blob, `${this.chainId}-${format(new Date(), 'yyyy-MM-dd_HH:mm:ss')}-item-mint-in-story.csv`);
+  }
+
+
+  convertToCSV(objArray: any[]): string {
+    const array = [Object.keys(objArray[0])].concat(objArray);
+    return array.map(it => {
+      return Object.values(it).toString();
+    }).join('\n');
   }
 }

@@ -29,7 +29,7 @@ export enum MENU_ITEMS {
   PAWNSHOP_STAT_CHART = "Pawnshop stat chart",
   PAWNSHOP_PRICE_RANGE = "Pawnshop price range",
   TABLE_ITEM_GENERAL_STAT = 'Item general stats',
-  TABLE_ITEM_MINT_IN_STORY_STAT = 'Item mint in story stats',
+  TABLE_ITEM_MINT_IN_STORY_STAT = 'Item mint in story stats by 1 week',
 }
 
 export const MENU: { [key: string]: MenuItemInterface } = {

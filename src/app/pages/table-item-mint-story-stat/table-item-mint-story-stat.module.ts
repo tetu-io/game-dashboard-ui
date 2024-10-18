@@ -4,6 +4,8 @@ import { TableItemMintStoryStatComponent } from './table-item-mint-story-stat.co
 import { TableItemMintStoryStatRoutingModule } from './table-item-mint-story-stat-routing.module';
 import { NzSpinModule } from 'ng-zorro-antd/spin';
 import { NzTableModule } from 'ng-zorro-antd/table';
+import { NzButtonModule } from 'ng-zorro-antd/button';
+import { NzWaveModule } from 'ng-zorro-antd/core/wave';
 
 
 
@@ -16,6 +18,8 @@ import { NzTableModule } from 'ng-zorro-antd/table';
     TableItemMintStoryStatRoutingModule,
     NzSpinModule,
     NzTableModule,
-  ]
+    NzButtonModule,
+    NzWaveModule,
+  ],
 })
 export class TableItemMintStoryStatModule { }

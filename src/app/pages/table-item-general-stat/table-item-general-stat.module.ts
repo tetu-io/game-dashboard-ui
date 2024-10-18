@@ -4,6 +4,8 @@ import { TableItemGeneralStatComponent } from './table-item-general-stat.compone
 import { TableItemGeneralStatRoutingModule } from './table-item-general-stat-routing.module';
 import { NzSpinModule } from 'ng-zorro-antd/spin';
 import { NzTableModule } from 'ng-zorro-antd/table';
+import { NzButtonModule } from 'ng-zorro-antd/button';
+import { NzWaveModule } from 'ng-zorro-antd/core/wave';
 
 
 
@@ -16,6 +18,9 @@ import { NzTableModule } from 'ng-zorro-antd/table';
     TableItemGeneralStatRoutingModule,
     NzSpinModule,
     NzTableModule,
-  ]
+    NzButtonModule,
+    NzWaveModule,
+    NzButtonModule,
+  ],
 })
 export class TableItemGeneralStatModule { }
