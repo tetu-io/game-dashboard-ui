@@ -1,0 +1,27 @@
+<nz-spin
+  *ngIf="isLoading; else loaded"
+  class="loader g-flex-column__item-fixed">
+</nz-spin>
+<ng-template #loaded>
+  <div class="btn">
+    <button
+      nz-button
+      nzType="default"
+      (click)="exportToCsv()">
+      Export to CSV
+    </button>
+  </div>
+  <nz-table #basicTable [nzData]="tableData" [nzBordered]="true" [nzShowPagination]="false" [nzPageSize]="tableData.length">
+    <thead>
+    <tr>
+      <th *ngFor="let column of columns" [nzSortFn]="column.compare">{{ column.title }}</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr *ngFor="let story of basicTable.data">
+      <td>{{ story.storyId }}</td>
+      <td>{{ story.pageId }}</td>
+    </tr>
+    </tbody>
+  </nz-table>
+</ng-template>

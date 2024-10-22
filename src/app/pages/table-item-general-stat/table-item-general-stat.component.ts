@@ -7,6 +7,7 @@ import { ItemGeneralStatModel } from '../../models/item-general-stat.model';
 import { takeUntil } from 'rxjs';
 import { saveAs } from 'file-saver';
 import { format } from 'date-fns';
+import { getItemNameBySymbol } from '../../shared/constants/game.constant';
 
 @Component({
   selector: 'app-table-item-general-stat',
@@ -97,7 +98,10 @@ export class TableItemGeneralStatComponent implements OnInit {
       )
       .subscribe(data => {
       this.isLoading = false;
-      this.tableData = data;
+      this.tableData = data.map(item => {
+        item.name = getItemNameBySymbol(item.name);
+        return item;
+      });
       this.mins = [];
       this.maxs = [];
 
@@ -165,12 +169,12 @@ export class TableItemGeneralStatComponent implements OnInit {
   }
 
   getColor(value: number, min: number, max: number): number {
-    // if (max === min) return 1;
-    // const normalized = (value - min) / (max - min);
-    // return Math.min(Math.max(normalized, 0.5), 1);
-
-    // TODO change logic
-    return max / 100 * value / 100;
+    if (max === min) return 1;
+    const logMin = Math.log(min);
+    const logMax = Math.log(max);
+    const logValue = Math.log(value);
+    const normalized = (logValue - logMin) / (logMax - logMin);
+    return Math.min(Math.max(normalized, 0.5), 1);
   }
 
   // I need to export tableData to CSV
