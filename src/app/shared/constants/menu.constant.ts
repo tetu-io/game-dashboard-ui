@@ -30,6 +30,7 @@ export enum MENU_ITEMS {
   PAWNSHOP_PRICE_RANGE = "Pawnshop price range",
   TABLE_ITEM_GENERAL_STAT = 'Item general stats',
   TABLE_ITEM_MINT_IN_STORY_STAT = 'Item mint in story stats by 1 week',
+  TABLE_STORY_PAGE_NOT_PASSED = 'Story page not passed',
 }
 
 export const MENU: { [key: string]: MenuItemInterface } = {
@@ -44,6 +45,10 @@ export const MENU: { [key: string]: MenuItemInterface } = {
   [MENU_ITEMS.TABLE_ITEM_MINT_IN_STORY_STAT]: {
     icon: 'line-chart',
     label: MENU_ITEMS.TABLE_ITEM_MINT_IN_STORY_STAT,
+  },
+  [MENU_ITEMS.TABLE_STORY_PAGE_NOT_PASSED]: {
+    icon: 'line-chart',
+    label: MENU_ITEMS.TABLE_STORY_PAGE_NOT_PASSED,
   },
   [MENU_ITEMS.TX_CHART]: {
     icon: 'line-chart',

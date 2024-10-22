@@ -101,6 +101,10 @@ const routes: Routes = [
     loadChildren: () => import('./pages/table-item-mint-story-stat/table-item-mint-story-stat.module').then(m => m.TableItemMintStoryStatModule),
   },
   {
+    path: MAIN_ROUTES[MENU_ITEMS.TABLE_STORY_PAGE_NOT_PASSED],
+    loadChildren: () => import('./pages/table-passed-story-page/table-passed-story-page.module').then(m => m.TablePassedStoryPageModule),
+  },
+  {
     path: '',
     pathMatch: 'full',
     redirectTo: MAIN_ROUTES[MENU_ITEMS.DAU_CHART],

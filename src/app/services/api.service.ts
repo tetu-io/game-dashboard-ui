@@ -4,6 +4,7 @@ import { HttpClient } from '@angular/common/http';
 import { ItemGeneralStatModel } from '../models/item-general-stat.model';
 import { Observable } from 'rxjs';
 import { ItemMintStoryStatModel } from '../models/item-mint-story-stat.model';
+import { StoryPassedModel } from '../models/story-passed.model';
 
 @Injectable({
   providedIn: 'root',
@@ -22,6 +23,10 @@ export class ApiService {
 
   getItemsMintInStory(chainId: number): Observable<ItemMintStoryStatModel[]> {
     return this.http.get<ItemMintStoryStatModel[]>(`${this.getApiUrl()}/api/v1/items-story-mint?chainId=${chainId}`);
+  }
+
+  getPassedStoryPage(chainId: number): Observable<StoryPassedModel[]> {
+    return this.http.get<StoryPassedModel[]>(`${this.getApiUrl()}/api/v1/story-passed?chainId=${chainId}`);
   }
 
   private getApiUrl(): string {
