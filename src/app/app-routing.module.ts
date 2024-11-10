@@ -105,6 +105,10 @@ const routes: Routes = [
     loadChildren: () => import('./pages/table-passed-story-page/table-passed-story-page.module').then(m => m.TablePassedStoryPageModule),
   },
   {
+    path: MAIN_ROUTES[MENU_ITEMS.REINFORCEMENT_V2],
+    loadChildren: () => import('./pages/reinforcement-v2/reinforcement-v2.module').then(m => m.ReinforcementV2Module),
+  },
+  {
     path: '',
     pathMatch: 'full',
     redirectTo: MAIN_ROUTES[MENU_ITEMS.DAU_CHART],

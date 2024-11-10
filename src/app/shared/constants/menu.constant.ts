@@ -2,6 +2,9 @@ import { MenuItemInterface } from '../../models/menu-item.interface';
 
 export enum MENU_ITEMS {
   USERS = 'Users',
+  ITEMS = 'Items',
+  MONSTERS = 'Monsters',
+  STORY = 'Story',
   USER_STAT = 'User stats',
   USER_GENERAL_STAT = 'User general stats',
   NEW_USERS = 'New users',
@@ -31,56 +34,41 @@ export enum MENU_ITEMS {
   TABLE_ITEM_GENERAL_STAT = 'Item general stats',
   TABLE_ITEM_MINT_IN_STORY_STAT = 'Item mint in story stats by 1 week',
   TABLE_STORY_PAGE_NOT_PASSED = 'Story page not passed',
+  REINFORCEMENT_V2 = 'Reinforcement V2',
 }
 
 export const MENU: { [key: string]: MenuItemInterface } = {
-  [MENU_ITEMS.DAU_CHART]: {
+  [MENU_ITEMS.ITEMS]: {
     icon: 'line-chart',
-    label: MENU_ITEMS.DAU_CHART,
+    label: MENU_ITEMS.ITEMS,
+    subMenu: {
+      [MENU_ITEMS.ITEM_STAT]: {
+        icon: 'line-chart',
+        label: MENU_ITEMS.ITEM_STAT,
+      },
+      [MENU_ITEMS.TABLE_ITEM_GENERAL_STAT]: {
+        icon: 'line-chart',
+        label: MENU_ITEMS.TABLE_ITEM_GENERAL_STAT,
+      },
+      [MENU_ITEMS.TABLE_ITEM_MINT_IN_STORY_STAT]: {
+        icon: 'line-chart',
+        label: MENU_ITEMS.TABLE_ITEM_MINT_IN_STORY_STAT,
+      },
+    }
   },
-  [MENU_ITEMS.TABLE_ITEM_GENERAL_STAT]: {
+  [MENU_ITEMS.STORY]: {
     icon: 'line-chart',
-    label: MENU_ITEMS.TABLE_ITEM_GENERAL_STAT,
-  },
-  [MENU_ITEMS.TABLE_ITEM_MINT_IN_STORY_STAT]: {
-    icon: 'line-chart',
-    label: MENU_ITEMS.TABLE_ITEM_MINT_IN_STORY_STAT,
-  },
-  [MENU_ITEMS.TABLE_STORY_PAGE_NOT_PASSED]: {
-    icon: 'line-chart',
-    label: MENU_ITEMS.TABLE_STORY_PAGE_NOT_PASSED,
-  },
-  [MENU_ITEMS.TX_CHART]: {
-    icon: 'line-chart',
-    label: MENU_ITEMS.TX_CHART,
-  },
-  [MENU_ITEMS.CHURN_RATE]: {
-    icon: 'line-chart',
-    label: MENU_ITEMS.CHURN_RATE,
-  },
-  [MENU_ITEMS.CHURN_RATE_V2]: {
-    icon: 'line-chart',
-    label: MENU_ITEMS.CHURN_RATE_V2,
-  },
-  [MENU_ITEMS.TOTAL_SUPPLY]: {
-    icon: 'line-chart',
-    label: MENU_ITEMS.TOTAL_SUPPLY,
-  },
-  [MENU_ITEMS.PAWNSHOP_STAT_CHART]: {
-    icon: 'line-chart',
-    label: MENU_ITEMS.PAWNSHOP_STAT_CHART,
-  },
-  [MENU_ITEMS.PAWNSHOP_PRICE_RANGE]: {
-    icon: 'line-chart',
-    label: MENU_ITEMS.PAWNSHOP_PRICE_RANGE,
-  },
-  [MENU_ITEMS.MONSTER_FIGHTS]: {
-    icon: 'line-chart',
-    label: MENU_ITEMS.MONSTER_FIGHTS,
-  },
-  [MENU_ITEMS.HERO_FIGHTS]: {
-    icon: 'line-chart',
-    label: MENU_ITEMS.HERO_FIGHTS,
+    label: MENU_ITEMS.STORY,
+    subMenu: {
+      [MENU_ITEMS.STORY_STAT]: {
+        icon: 'line-chart',
+        label: MENU_ITEMS.STORY_STAT,
+      },
+      [MENU_ITEMS.TABLE_STORY_PAGE_NOT_PASSED]: {
+        icon: 'line-chart',
+        label: MENU_ITEMS.TABLE_STORY_PAGE_NOT_PASSED,
+      },
+    }
   },
   [MENU_ITEMS.TOKENOMICS_STAT]: {
     icon: 'line-chart',
@@ -98,12 +86,42 @@ export const MENU: { [key: string]: MenuItemInterface } = {
         icon: 'line-chart',
         label: MENU_ITEMS.TOKENS_TRANSACTIONS
       },
+      [MENU_ITEMS.TX_CHART]: {
+        icon: 'line-chart',
+        label: MENU_ITEMS.TX_CHART,
+      },
+      [MENU_ITEMS.CHURN_RATE]: {
+        icon: 'line-chart',
+        label: MENU_ITEMS.CHURN_RATE,
+      },
+      [MENU_ITEMS.CHURN_RATE_V2]: {
+        icon: 'line-chart',
+        label: MENU_ITEMS.CHURN_RATE_V2,
+      },
+      [MENU_ITEMS.TOTAL_SUPPLY]: {
+        icon: 'line-chart',
+        label: MENU_ITEMS.TOTAL_SUPPLY,
+      },
+    }
+  },
+  [MENU_ITEMS.MONSTERS]: {
+    icon: 'line-chart',
+    label: MENU_ITEMS.MONSTERS,
+    subMenu: {
+      [MENU_ITEMS.MONSTER_FIGHTS]: {
+        icon: 'line-chart',
+        label: MENU_ITEMS.MONSTER_FIGHTS,
+      },
     }
   },
   [MENU_ITEMS.USERS]: {
     icon: 'line-chart',
     label: MENU_ITEMS.USERS,
     subMenu: {
+      [MENU_ITEMS.DAU_CHART]: {
+        icon: 'line-chart',
+        label: MENU_ITEMS.DAU_CHART,
+      },
       [MENU_ITEMS.USER_GENERAL_STAT]: {
         icon: 'line-chart',
         label: MENU_ITEMS.USER_GENERAL_STAT
@@ -138,6 +156,14 @@ export const MENU: { [key: string]: MenuItemInterface } = {
         icon: 'line-chart',
         label: MENU_ITEMS.NEW_HEROES
       },
+      [MENU_ITEMS.REINFORCEMENT_V2]: {
+        icon: 'line-chart',
+        label: MENU_ITEMS.REINFORCEMENT_V2,
+      },
+      [MENU_ITEMS.HERO_FIGHTS]: {
+        icon: 'line-chart',
+        label: MENU_ITEMS.HERO_FIGHTS,
+      },
     }
   },
   [MENU_ITEMS.PAWNSHOP]: {
@@ -148,14 +174,14 @@ export const MENU: { [key: string]: MenuItemInterface } = {
         icon: 'line-chart',
         label: MENU_ITEMS.PAWNSHOP_CHART
       },
+      [MENU_ITEMS.PAWNSHOP_STAT_CHART]: {
+        icon: 'line-chart',
+        label: MENU_ITEMS.PAWNSHOP_STAT_CHART,
+      },
+      [MENU_ITEMS.PAWNSHOP_PRICE_RANGE]: {
+        icon: 'line-chart',
+        label: MENU_ITEMS.PAWNSHOP_PRICE_RANGE,
+      },
     }
   },
-  [MENU_ITEMS.ITEM_STAT]: {
-    icon: 'line-chart',
-    label: MENU_ITEMS.ITEM_STAT,
-  },
-  [MENU_ITEMS.STORY_STAT]: {
-    icon: 'line-chart',
-    label: MENU_ITEMS.STORY_STAT,
-  }
 };

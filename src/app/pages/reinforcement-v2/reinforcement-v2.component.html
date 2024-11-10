@@ -1,0 +1,23 @@
+<nz-spin
+  *ngIf="isLoading; else loaded"
+  class="loader g-flex-column__item-fixed">
+</nz-spin>
+<ng-template #loaded>
+  <nz-table #basicTable [nzData]="tableData" [nzBordered]="true" [nzShowPagination]="false" [nzPageSize]="tableData.length">
+    <thead>
+    <tr>
+      <th *ngFor="let column of columns" [nzSortFn]="column.compare">{{ column.title }}</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr *ngFor="let story of basicTable.data">
+      <td>{{ story.biome }}</td>
+      <td>{{ story.callCount }}</td>
+      <td>{{ story.sameAccountCount }}</td>
+      <td>{{ story.yearn.toFixed(0) }}</td>
+      <td>{{ story.min }}</td>
+      <td>{{ story.max }}</td>
+    </tr>
+    </tbody>
+  </nz-table>
+</ng-template>
