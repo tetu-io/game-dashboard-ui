@@ -5,6 +5,7 @@ import { ItemGeneralStatModel } from '../models/item-general-stat.model';
 import { Observable } from 'rxjs';
 import { ItemMintStoryStatModel } from '../models/item-mint-story-stat.model';
 import { StoryPassedModel } from '../models/story-passed.model';
+import { ReinforcementV2StatModel } from '../models/reinforcement-v2-stat.model';
 
 @Injectable({
   providedIn: 'root',
@@ -27,6 +28,10 @@ export class ApiService {
 
   getPassedStoryPage(chainId: number): Observable<StoryPassedModel[]> {
     return this.http.get<StoryPassedModel[]>(`${this.getApiUrl()}/api/v1/story-passed?chainId=${chainId}`);
+  }
+
+  getReinforcementV2(chainId: number): Observable<ReinforcementV2StatModel[]> {
+    return this.http.get<ReinforcementV2StatModel[]>(`${this.getApiUrl()}/api/v1/reinforcement-v2?chainId=${chainId}`);
   }
 
   private getApiUrl(): string {
