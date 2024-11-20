@@ -20,6 +20,15 @@ query OpenChamberByChambersData($first: Int!, $skip: Int!, $chambers: [String!],
             meta {
                 id
                 heroClass
+                feeToken {
+                    token {
+                        id
+                    }
+                }
+            }
+            ngLevel
+            lastPayToken {
+                id
             }
         }
         completed

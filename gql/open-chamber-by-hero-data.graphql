@@ -23,6 +23,15 @@ query OpenChamberByHeroData($first: Int!, $skip: Int!, $heroes: [String!], $biom
             meta {
                 id
                 heroClass
+                feeToken {
+                    token {
+                        id
+                    }
+                }
+            }
+            ngLevel
+            lastPayToken {
+                id
             }
         }
         completed
