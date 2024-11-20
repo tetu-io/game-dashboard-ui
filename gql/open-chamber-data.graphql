@@ -22,6 +22,15 @@ query OpenChamberData($first: Int!, $skip: Int!, $biomes: [Int!], $orderDirectio
             meta {
                 id
                 heroClass
+                feeToken {
+                    token {
+                        id
+                    }
+                }
+            }
+            ngLevel
+            lastPayToken {
+                id
             }
         }
         completed

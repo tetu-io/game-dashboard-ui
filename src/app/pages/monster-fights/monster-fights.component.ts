@@ -13,6 +13,7 @@ interface MonsterBattleInfo {
   status: string;
   heroClass: string;
   link: string;
+  type: string;
   date: number;
 }
 
@@ -38,6 +39,11 @@ export class MonsterFightsComponent implements OnInit {
     {
       name: 'Status',
       sortFn: (a: MonsterBattleInfo, b: MonsterBattleInfo) => a.status.localeCompare(b.status),
+      sortDirections: ['ascend', 'descend', null],
+    },
+    {
+      name: 'Type',
+      sortFn: (a: MonsterBattleInfo, b: MonsterBattleInfo) => a.type.localeCompare(b.type),
       sortDirections: ['ascend', 'descend', null],
     },
     {
@@ -104,10 +110,13 @@ export class MonsterFightsComponent implements OnInit {
             } else {
               status = 'Lose';
             }
+            const prePayment = chamber.enteredHero.meta.feeToken.token.id === chamber.enteredHero.lastPayToken.id;
+
             return {
               monster: `${getMonsterName(+chamber.chamber.id)} (${chamber.chamber.id})`,
               heroClass: HEROES_CLASSES.get(chamber.enteredHero.meta.heroClass + '') || '',
               status: status,
+              type: prePayment ? 'NG-' + chamber.enteredHero.ngLevel : 'Post Payment',
               link: this.createFightUrl(chamber),
               date: +chamber.timestamp * 1000
             };
