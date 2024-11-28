@@ -41,8 +41,9 @@ export class NewUsersComponent implements OnInit {
       .pipe(takeUntil(this.destroy$))
       .subscribe(users => {
         if (users) {
-          this.totalUsers = users.length;
-          this.prepareChartData(users as UserEntity[]);
+          const filterUsers = users.filter(user => user.userStat.actions > 0);
+          this.totalUsers = filterUsers.length;
+          this.prepareChartData(filterUsers as UserEntity[]);
         }
         this.isLoading = false;
         this.changeDetectorRef.detectChanges();

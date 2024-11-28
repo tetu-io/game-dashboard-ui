@@ -15,6 +15,7 @@ query UsersSimpleData($first: Int!, $skip: Int!) {
             refCode
         }
         userStat {
+            actions
             heroMaxLvl
         }
         timestamp
