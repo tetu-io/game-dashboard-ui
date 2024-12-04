@@ -23,6 +23,10 @@ export class TableItemGeneralStatComponent implements OnInit {
       compare: (a: ItemGeneralStatModel, b: ItemGeneralStatModel) => a.name.localeCompare(b.name),
     },
     {
+      title: 'Item type',
+      compare: (a: ItemGeneralStatModel, b: ItemGeneralStatModel) => a.itemType - b.itemType,
+    },
+    {
       title: 'Total Items',
       compare: (a: ItemGeneralStatModel, b: ItemGeneralStatModel) => a.count - b.count,
     },
@@ -177,11 +181,11 @@ export class TableItemGeneralStatComponent implements OnInit {
     return Math.min(Math.max(normalized, 0.5), 1);
   }
 
-  // I need to export tableData to CSV
   exportCsv(): void {
     const csvData = this.tableData.map(item => {
       return {
         Name: item.name,
+        'Item type': item.itemType,
         'Total Items': item.count,
         'Burned Items': item.burned,
         'Items Exists': item.exist,

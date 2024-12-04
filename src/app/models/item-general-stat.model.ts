@@ -6,6 +6,7 @@ export interface ItemGeneralStatModel {
   burnedPercent: string;
   itemsInPawnshop: number;
   itemsInPawnshopPercent: string;
+  itemType: number;
   biome: number;
   rarity: string;
   flurPrice: number;
