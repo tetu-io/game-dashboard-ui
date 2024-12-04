@@ -20,6 +20,7 @@
     <tbody>
     <tr *ngFor="let item of basicTable.data">
       <td>{{ item.name }}</td>
+      <td>{{ item.itemType }}</td>
       <td [ngStyle]="getStyle(item.count, 1)">{{ item.count }}</td>
       <td [ngStyle]="getStyle(item.burned, 2)">{{ item.burned }}</td>
       <td [ngStyle]="getStyle(item.exist, 3)">{{ item.exist }}</td>

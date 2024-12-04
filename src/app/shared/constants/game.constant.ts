@@ -308,5 +308,21 @@ const ITEMS_NAMES = new Map<string, string>([
 
 export function getItemNameBySymbol(itemSymbol: string): string {
   const id = itemSymbol.replace('SACRA_', '').replace('_ITEM', '');
-  return `${ITEMS_NAMES.get(itemSymbol)} (${id})` || itemSymbol;
+  return `${id} (${ITEMS_NAMES.get(itemSymbol)})` || itemSymbol;
 }
+
+export const ITEM_TYPE_NAMES = new Map<number, string>([
+  [0, 'no_slot'],
+  [1, 'head'],
+  [2, 'body'],
+  [3, 'gloves'],
+  [4, 'belt'],
+  [5, 'amulet'],
+  [6, 'ring'],
+  [7, 'off_hand'],
+  [8, 'boots'],
+  [9, 'one_hand'],
+  [10, 'two_hand'],
+  [11, 'skill'],
+  [12, 'other'],
+]);
