@@ -1,0 +1,26 @@
+import { CoreAddressesModel } from '../../models/core-addresses.model';
+
+export const SONIC_CORE = new CoreAddressesModel(
+  '0x75e1e98650c119c4E3dCE3070CE6A5397Ed70c6a', // controller
+  '0x7AD5935EA295c4E743e4f2f5B4CDA951f41223c2', // gameToken
+  '0x8018BA5E6C05c51E5433123e392334B63a0B6D02', // minter
+  '0xCF66857b468740d6dbF9cE11929A9c03DDA12988', // goc
+  '0xC423D7e3e1B7caF1AA5ce58EA0f3A91427Fd47ae', // reinforcementController
+  '0xA60205802E1B5C6EC1CAFA3cAcd49dFeECe05AC9', // dungeonFactory
+  '0xd0C1378c177E961D96c06b0E8F6E7841476C81Ef', // heroController
+  '0xFE700D523094Cc6C673d78F1446AE0743C89586E', // itemController
+  '0xC3B5d80E4c094B17603Ea8Bb15d2D31ff5954aAE', // oracle
+  '0x6d85966b5280Bfbb479E0EBA00Ac5ceDfe8760D3', // statController
+  '0x00aE29E31748898B8B404b4DcF076738F68439d4', // storyController
+  '0x3bDbd2Ed1A214Ca4ba4421ddD7236ccA3EF088b6', // treasury
+  '0x875976AeF383Fe4135B93C3989671056c4dEcDFF', // statReader
+  '0x6ce857d3037e87465b003aCbA264DDF2Cec6D5E4', // multicall
+  '0x039e2fB66102314Ce7b64Ce5Ce3E5183bc94aD38', // magicToken
+  '0x7AD5935EA295c4E743e4f2f5B4CDA951f41223c2', // strengthToken
+  '0x7AD5935EA295c4E743e4f2f5B4CDA951f41223c2', // dexterityToken
+
+  '0xC9d5917A0cb82450Cd687AF31eCAaC967D7F121C', // pawnsop
+  '0x0C6868831c504Fb0bB61A54FEfC6464804380508', // PawnShopRouterFactory
+  '0x039e2fB66102314Ce7b64Ce5Ce3E5183bc94aD38', // network token
+  '', // sponsored hero
+);

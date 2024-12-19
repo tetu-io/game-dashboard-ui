@@ -4,13 +4,13 @@ import { REAL_POOLS, REAL_SKIP_ADDRESSES } from './real.constants';
 export const NETWORKS = {
   // sepolia: 'sepolia',
   // mumbai: 'mumbai',
-  // sonic: 'sonic',
+  sonic: 'sonic',
   fantom: 'fantom',
   real: 'real',
 }
 
 export function defaultNetwork(): string {
-  return NETWORKS.fantom;
+  return NETWORKS.sonic;
 }
 
 export function isExcitingNetwork(network: string): boolean {
@@ -46,7 +46,7 @@ export function getSkipAddresses(network: string): string[] {
 }
 
 export const CHAIN_ID = new Map<string, number>([
-  ['sonic', 64165],
+  ['sonic', 146],
   ['fantom', 250],
   ['real', 111188]
 ]);
@@ -54,13 +54,13 @@ export const CHAIN_ID = new Map<string, number>([
 export const NETWORKS_URLS = new Map<string, string>([
   ['sepolia', 'https://sepolia.sacra.cc'],
   ['mumbai', 'https://mumbai.sacra.cc'],
-  ['sonic', 'https://sonic-beta.sacra.game'],
+  ['sonic', 'https://sonic.sacra.game'],
   ['fantom', 'https://fantom.sacra.game'],
   ['real', 'https://real.sacra.game'],
 ]);
 
 export const RPC_URLS = new Map<number, string>([
-  [64165, 'https://rpc.sonic.fantom.network/'],
+  [146, 'https://rpc.soniclabs.com/'],
   [250, 'https://rpc.ftm.tools/'],
   [111188, 'https://tangible-real.gateway.tenderly.co/']
 ]);
