@@ -6,6 +6,7 @@ import { HttpLink } from 'apollo-angular/http';
 
 const FANTOM_GAME_SUBGRAPH = environment.FANTOM_GAME_SUBGRAPH;
 const REAL_GAME_SUBGRAPH = environment.REAL_GAME_SUBGRAPH;
+const SONIC_GAME_SUBGRAPH = environment.SONIC_GAME_SUBGRAPH;
 
 
 const defaultOptions: DefaultOptions = {
@@ -39,6 +40,17 @@ export function createRealGameSubgraph(httpLink: HttpLink) {
   };
 }
 
+export function createSonicGameSubgraph(httpLink: HttpLink) {
+  return {
+    link: httpLink.create({ uri: SONIC_GAME_SUBGRAPH }),
+    cache: new InMemoryCache({
+      resultCaching: true,
+    }),
+    defaultOptions,
+  };
+}
+
+
 @NgModule({
   exports: [ApolloModule],
   providers: [
@@ -48,6 +60,7 @@ export function createRealGameSubgraph(httpLink: HttpLink) {
         return {
           FANTOM_GAME_SUBGRAPH: createFantomGameSubgraph(httpLink),
           REAL_GAME_SUBGRAPH: createRealGameSubgraph(httpLink),
+          SONIC_GAME_SUBGRAPH: createSonicGameSubgraph(httpLink),
         };
       },
       deps: [HttpLink],

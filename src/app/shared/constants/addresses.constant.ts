@@ -15,6 +15,7 @@ export type TokenInfo = {
 const ADDRESSES_CORE_MAP = new Map<number, CoreAddressesModel>([
   [64165, SONIC_CORE],
   [250, FANTOM_CORE],
+  [146, SONIC_CORE],
   [111188, REAL_CORE]
 ]);
 
