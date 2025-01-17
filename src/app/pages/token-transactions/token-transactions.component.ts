@@ -154,7 +154,7 @@ export class TokenTransactionsComponent implements OnInit {
           for (let pawnshopAction of pawnshopActions) {
             if (pawnshopAction.values.length > 0) {
               const borrower = pawnshopAction.values[0]
-              const buyer = pawnshopAction.user.id;
+              const buyer = pawnshopAction.user?.id || '';
               const amount = pawnshopAction.position.acquiredAmount;
               if (!tokenBalanceRecord[borrower]) {
                 tokenBalanceRecord[borrower] = this.createTokenBalance(borrower, users as UserEntity[]);

@@ -6,7 +6,7 @@ export const NETWORKS = {
   // mumbai: 'mumbai',
   sonic: 'sonic',
   fantom: 'fantom',
-  real: 'real',
+  // real: 'real',
 }
 
 export function defaultNetwork(): string {
