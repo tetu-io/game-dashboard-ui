@@ -100,7 +100,7 @@ export class UsersRatioEarnComponent implements OnInit {
       if (!itemActionsByDates[dateString]) {
         itemActionsByDates[dateString] = 0
       }
-      itemActionsByDates[dateString] = itemActionsByDates[dateString] + (+data.item.meta.feeToken.amount * value);
+      itemActionsByDates[dateString] = itemActionsByDates[dateString] + ((+(data.item.meta.feeToken?.amount || 0)) * value);
     });
 
     const dates = Object.keys(dateCounts).sort();

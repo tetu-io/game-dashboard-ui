@@ -1,1 +1,1 @@
-{"name":"TetuGame GraphQL Schema","schemaPath":"schema.graphql","extensions":{"endpoints":{"Default GraphQL Endpoint":{"headers":{"user-agent":"JS GraphQL"},"introspect":false,"url":"https://node.sacrasubgraphftm41.zeeve.io/ac0949db073e065c7a5b66e4d702f814d61cc19b92d04186/query/subgraphs/name/sacra"}}}}
+{"name":"TetuGame GraphQL Schema","schemaPath":"schema.graphql","extensions":{"endpoints":{"Default GraphQL Endpoint":{"headers":{"user-agent":"JS GraphQL"},"introspect":false,"url":"https://graph.tetu.io/subgraphs/name/sacra-fantom"}}}}
