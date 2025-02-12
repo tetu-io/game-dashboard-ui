@@ -24,7 +24,7 @@ export class TableItemGeneralStatComponent implements OnInit {
     },
     {
       title: 'Item type',
-      compare: (a: ItemGeneralStatModel, b: ItemGeneralStatModel) => a.itemType - b.itemType,
+      compare: (a: ItemGeneralStatModel, b: ItemGeneralStatModel) => a.itemType.localeCompare(b.itemType),
     },
     {
       title: 'Total Items',
