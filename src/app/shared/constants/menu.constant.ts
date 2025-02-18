@@ -25,6 +25,7 @@ export enum MENU_ITEMS {
   PAWNSHOP = 'Pawnshop',
   PAWNSHOP_CHART = 'Pawnshop chart',
   DAU_CHART = 'User activities',
+  EARNED_BY_BIOME = 'Earned by biome',
   TX_CHART = 'Total transactions',
   CHURN_RATE = 'Churn rate',
   CHURN_RATE_V2 = 'Churn rate V2',
@@ -77,6 +78,10 @@ export const MENU: { [key: string]: MenuItemInterface } = {
       [MENU_ITEMS.TOKENOMICS]: {
         icon: 'line-chart',
         label: MENU_ITEMS.TOKENOMICS
+      },
+      [MENU_ITEMS.EARNED_BY_BIOME]: {
+        icon: 'line-chart',
+        label: MENU_ITEMS.EARNED_BY_BIOME
       },
       [MENU_ITEMS.TOKENOMICS_CHART]: {
         icon: 'line-chart',

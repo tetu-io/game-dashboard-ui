@@ -7,7 +7,7 @@ import {
   ControllerDataGQL,
   ControllerDataQuery,
   DauGQL,
-  DauQuery,
+  DauQuery, EarnedByBiomeGQL, EarnedByBiomeQuery,
   HeroActionGQL,
   HeroActionQuery,
   HeroesDataGQL,
@@ -121,6 +121,7 @@ export class SubgraphService {
     private openChamberByChambersDataGQL: OpenChamberByChambersDataGQL,
     private openChamberByHeroGQL: OpenChamberByHeroDataGQL,
     private itemMetaDataGQL: ItemMetaDataGQL,
+    private earnedByBiomeGQL: EarnedByBiomeGQL,
     private pawnshopOpenPositionDataGQL: PawnshopOpenPositionDataGQL,
   ) {
   }
@@ -944,6 +945,23 @@ export class SubgraphService {
     );
   }
 
+  earnedByBiome$(
+    timestamp: string,
+    first: number,
+    skip: number = 0,
+    destroy$: DestroyService,
+  ): Observable<EarnedByBiomeQuery['dungeonEntities']> {
+    this.earnedByBiomeGQL.client = this.getClientSubgraph();
+    return this.earnedByBiomeGQL.fetch(
+      { timestamp: timestamp, first: first, skip: skip },
+    ).pipe(
+      map(x => x.data.dungeonEntities),
+      retry({ count: RETRY, delay: DELAY }),
+      takeUntil(destroy$),
+    );
+  }
+
+
   fetchAllItemsMeta$(destroy$: DestroyService): Observable<ItemMetaDataQuery['itemMetaEntities']> {
     let allData: ItemMetaDataQuery['itemMetaEntities'] = [];
     let skip = 0;
@@ -952,6 +970,30 @@ export class SubgraphService {
     return new Observable<ItemMetaDataQuery['itemMetaEntities']>(observer => {
       const action$ = () => {
         this.itemsMeta$(first, skip, destroy$).subscribe(data => {
+          if (data.length > 0) {
+            allData = allData.concat(data);
+            skip += first;
+            action$();
+          } else {
+            observer.next(allData);
+            observer.complete();
+          }
+        });
+      };
+
+      action$();
+    })
+      .pipe(takeUntil(destroy$));
+  }
+
+  fetchAllEarnedByBiome$(timestamp: string, destroy$: DestroyService): Observable<EarnedByBiomeQuery['dungeonEntities']> {
+    let allData: EarnedByBiomeQuery['dungeonEntities'] = [];
+    let skip = 0;
+    const first = 1000;
+
+    return new Observable<EarnedByBiomeQuery['dungeonEntities']>(observer => {
+      const action$ = () => {
+        this.earnedByBiome$(timestamp, first, skip, destroy$).subscribe(data => {
           if (data.length > 0) {
             allData = allData.concat(data);
             skip += first;
