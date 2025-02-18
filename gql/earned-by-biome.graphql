@@ -1,0 +1,20 @@
+query EarnedByBiome($timestamp: BigInt!, $first: Int!, $skip: Int!) {
+    dungeonEntities(
+        where: {
+            claimedTokens_:{
+                timestamp_gt: $timestamp
+            }
+            isCompleted: true
+        }
+        first: $first
+        skip: $skip
+    ) @namedClient(name: "FANTOM_GAME_SUBGRAPH") {
+        claimedTokens {
+            amount
+            timestamp
+        }
+        logic {
+            biome
+        }
+    }
+}

@@ -57,6 +57,10 @@ const routes: Routes = [
     loadChildren: () => import('./pages/dau-chart/dau-chart.module').then(m => m.DauChartModule),
   },
   {
+    path: MAIN_ROUTES[MENU_ITEMS.EARNED_BY_BIOME],
+    loadChildren: () => import('./pages/earned-biome/earned-biome.module').then(m => m.EarnedBiomeModule),
+  },
+  {
     path: MAIN_ROUTES[MENU_ITEMS.TX_CHART],
     loadChildren: () => import('./pages/total-tx/total-tx.module').then(m => m.TotalTxModule),
   },
