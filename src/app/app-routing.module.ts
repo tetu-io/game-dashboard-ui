@@ -2,6 +2,7 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { MAIN_ROUTES } from './shared/constants/routes.constant';
 import { MENU_ITEMS } from './shared/constants/menu.constant';
+import { TreasuryHistoryModule } from './pages/treasury-history/treasury-history.module';
 
 const routes: Routes = [
   {
@@ -55,6 +56,10 @@ const routes: Routes = [
   {
     path: MAIN_ROUTES[MENU_ITEMS.DAU_CHART],
     loadChildren: () => import('./pages/dau-chart/dau-chart.module').then(m => m.DauChartModule),
+  },
+  {
+    path: MAIN_ROUTES[MENU_ITEMS.TREASURY_BALANCE_HISTORY],
+    loadChildren: () => import('./pages/treasury-history/treasury-history.module').then(m => m.TreasuryHistoryModule),
   },
   {
     path: MAIN_ROUTES[MENU_ITEMS.EARNED_BY_BIOME],

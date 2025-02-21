@@ -29,4 +29,5 @@ export const MAIN_ROUTES = {
   [MENU_ITEMS.TABLE_ITEM_MINT_IN_STORY_STAT]: 'table-item-min-in-story-stat',
   [MENU_ITEMS.TABLE_STORY_PAGE_NOT_PASSED]: 'table-story-page-not-passed',
   [MENU_ITEMS.REINFORCEMENT_V2]: 'reinforcement-v2',
+  [MENU_ITEMS.TREASURY_BALANCE_HISTORY]: 'treasury-balance-history',
 };
