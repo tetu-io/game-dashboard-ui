@@ -7,7 +7,7 @@ import {
   ControllerDataGQL,
   ControllerDataQuery,
   DauGQL,
-  DauQuery, EarnedByBiomeGQL, EarnedByBiomeQuery,
+  DauQuery, EarnedByBiomeGQL, EarnedByBiomeQuery, GraphDataGQL, GraphDataQuery,
   HeroActionGQL,
   HeroActionQuery,
   HeroesDataGQL,
@@ -123,11 +123,19 @@ export class SubgraphService {
     private itemMetaDataGQL: ItemMetaDataGQL,
     private earnedByBiomeGQL: EarnedByBiomeGQL,
     private pawnshopOpenPositionDataGQL: PawnshopOpenPositionDataGQL,
+    private graphDataGQL: GraphDataGQL,
   ) {
   }
 
   changeNetwork(network: string): void {
     this.networkSubject.next(network);
+  }
+
+  graphData$(): Observable<GraphDataQuery['_meta']> {
+    return this.graphDataGQL.fetch().pipe(
+      map(x => x.data._meta),
+      retry({ count: RETRY, delay: DELAY }),
+    );
   }
 
   tokenomicStats$(): Observable<TokenomicsQuery['generalTokenomicsEntities']> {

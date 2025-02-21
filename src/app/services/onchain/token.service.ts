@@ -20,8 +20,8 @@ export class TokenService {
   }
 
 
-  totalSupply$(token: string, chainId: number, account: string = '') {
-    return from(this.createERC20(token, chainId, account).totalSupply()).pipe(
+  totalSupply$(token: string, chainId: number, block: string | number = 'latest', account: string = '') {
+    return from(this.createERC20(token, chainId, account).totalSupply({blockTag: block})).pipe(
       retry({ count: ON_CHAIN_CALL_RETRY, delay: ON_CHAIN_CALL_DELAY }),
       catchError(err => {
         console.log(err)
@@ -30,8 +30,8 @@ export class TokenService {
     );
   }
 
-  balanceOf$(token: string, chainId: number, account: string = ''): Observable<bigint> {
-    return from(this.createERC20(token, chainId, account).balanceOf(account)).pipe(
+  balanceOf$(token: string, chainId: number, block: string | number = 'latest', account: string = ''): Observable<bigint> {
+    return from(this.createERC20(token, chainId, account).balanceOf(account, {blockTag: block})).pipe(
       retry({ count: ON_CHAIN_CALL_RETRY, delay: ON_CHAIN_CALL_DELAY }),
     );
   }
