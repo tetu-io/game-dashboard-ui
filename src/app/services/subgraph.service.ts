@@ -7,7 +7,7 @@ import {
   ControllerDataGQL,
   ControllerDataQuery,
   DauGQL,
-  DauQuery, EarnedByBiomeGQL, EarnedByBiomeQuery, GraphDataGQL, GraphDataQuery,
+  DauQuery, EarnedByBiomeGQL, EarnedByBiomeQuery, GraphDataByBlockGQL, GraphDataGQL, GraphDataQuery,
   HeroActionGQL,
   HeroActionQuery,
   HeroesDataGQL,
@@ -124,6 +124,7 @@ export class SubgraphService {
     private earnedByBiomeGQL: EarnedByBiomeGQL,
     private pawnshopOpenPositionDataGQL: PawnshopOpenPositionDataGQL,
     private graphDataGQL: GraphDataGQL,
+    private graphDataByBlockGQL: GraphDataByBlockGQL,
   ) {
   }
 
@@ -132,7 +133,16 @@ export class SubgraphService {
   }
 
   graphData$(): Observable<GraphDataQuery['_meta']> {
+    this.graphDataGQL.client = this.getClientSubgraph();
     return this.graphDataGQL.fetch().pipe(
+      map(x => x.data._meta),
+      retry({ count: RETRY, delay: DELAY }),
+    );
+  }
+
+  graphDataByBlock$(block: number): Observable<GraphDataQuery['_meta']> {
+    this.graphDataByBlockGQL.client = this.getClientSubgraph();
+    return this.graphDataByBlockGQL.fetch({blockNumber: block}).pipe(
       map(x => x.data._meta),
       retry({ count: RETRY, delay: DELAY }),
     );
