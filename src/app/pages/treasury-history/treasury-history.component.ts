@@ -4,9 +4,10 @@ import { TokenService } from '../../services/onchain/token.service';
 import { EChartsOption } from 'echarts';
 import { SubgraphService } from '../../services/subgraph.service';
 import { getChainId, NETWORKS } from '../../shared/constants/network.constant';
-import { forkJoin, takeUntil } from 'rxjs';
+import { concatMap, delay, forkJoin, of, takeUntil, toArray } from 'rxjs';
 import { GET_CORE_ADDRESSES } from '../../shared/constants/addresses.constant';
 import { formatUnits } from 'ethers';
+import { ProviderService } from '../../services/onchain/provider.service';
 
 @Component({
   selector: 'app-treasury-history',
@@ -36,6 +37,7 @@ export class TreasuryHistoryComponent implements OnInit {
     private changeDetectorRef: ChangeDetectorRef,
     private tokenService: TokenService,
     private subgraphService: SubgraphService,
+    private providerService: ProviderService,
   ) {
   }
 
@@ -65,23 +67,46 @@ export class TreasuryHistoryComponent implements OnInit {
             currentBlock += this.rangeBlockByNetwork[this.network];
           }
 
+
           forkJoin({
-            game: forkJoin(blocks.map(block => this.tokenService.balanceOf$(
-              GET_CORE_ADDRESSES(this.chainId).gameToken,
-              this.chainId,
-              block,
-              GET_CORE_ADDRESSES(this.chainId).treasury,
-            ))),
-            magic: forkJoin(blocks.map(block => this.tokenService.balanceOf$(
-              GET_CORE_ADDRESSES(this.chainId).magicToken,
-              this.chainId,
-              block,
-              GET_CORE_ADDRESSES(this.chainId).treasury,
-            )))
+            game: of(...blocks).pipe(
+              concatMap(block =>
+                this.tokenService.balanceOf$(
+                  GET_CORE_ADDRESSES(this.chainId).gameToken,
+                  this.chainId,
+                  block,
+                  GET_CORE_ADDRESSES(this.chainId).treasury
+                ).pipe(
+                  delay(300)
+                )
+              ),
+              toArray()
+            ),
+            magic: of(...blocks).pipe(
+              concatMap(block =>
+                this.tokenService.balanceOf$(
+                  GET_CORE_ADDRESSES(this.chainId).networkToken,
+                  this.chainId,
+                  block,
+                  GET_CORE_ADDRESSES(this.chainId).treasury
+                ).pipe(
+                  delay(300)
+                )
+              ),
+              toArray()
+            ),
+            blockData: of(...blocks).pipe(
+              concatMap(block =>
+                this.providerService.getBlock(this.chainId, block).pipe(
+                  delay(300)
+                )
+              ),
+              toArray()
+            )
           })
             .pipe(takeUntil(this.destroy$))
-            .subscribe(({game, magic}) => {
-              this.prepareChartData(blocks, game.map(i => +formatUnits(i)), magic.map(i => +formatUnits(i)));
+            .subscribe(({game, magic, blockData}) => {
+              this.prepareChartData(blockData.map(i => (i?.timestamp || 0) + ''), game.map(i => +formatUnits(i)), magic.map(i => +formatUnits(i)));
               this.isLoading = false;
               this.changeDetectorRef.detectChanges();
             });
@@ -89,7 +114,11 @@ export class TreasuryHistoryComponent implements OnInit {
       });
   }
 
-  private prepareChartData(blocks: number[], game: number[], magic: number[]) {
+  private prepareChartData(timestamps: string[], game: number[], magic: number[]) {
+    const convertToDateString = (timestamp: string): string => {
+      const date = new Date(parseInt(timestamp) * 1000);
+      return date.toISOString().split('T')[0];
+    };
 
     this.options = {
       legend: {
@@ -121,7 +150,7 @@ export class TreasuryHistoryComponent implements OnInit {
         },
       },
       xAxis: {
-        data: blocks,
+        data: timestamps.map(convertToDateString),
         type: 'category',
         boundaryGap: false,
         axisLine: { onZero: false },

@@ -1,0 +1,13 @@
+query GraphDataByBlock($blockNumber: Int!) {
+  _meta(
+    block: {number: $blockNumber}
+  ) @namedClient(name: "FANTOM_GAME_SUBGRAPH"){
+    deployment
+    hasIndexingErrors
+    block {
+      hash
+      number
+      timestamp
+    }
+  }
+}

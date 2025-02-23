@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { environment } from '../../../environments/environment';
 import { ethers } from 'ethers';
 import { getRpcUrl } from '../../shared/constants/network.constant';
+import { from, Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -23,5 +24,9 @@ export class ProviderService {
     });
 
     return new ethers.JsonRpcSigner(provider, '0x4255bAc2c9dd09056efcA514Bd4D0F4D890110C2');
+  }
+
+  getBlock(chainId: number, block: number): Observable<ethers.Block | null> {
+    return from(new ethers.JsonRpcProvider(getRpcUrl(chainId), chainId).getBlock(block));
   }
 }
