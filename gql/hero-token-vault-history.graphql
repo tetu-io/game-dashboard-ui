@@ -1,0 +1,16 @@
+query HeroTokenVaultData($first: Int!, $skip: Int!) {
+    heroTokensVaultHistoryEntities(
+        first: $first
+        skip: $skip
+        orderBy: timestamp
+        orderDirection: asc
+    ) @namedClient(name: "FANTOM_GAME_SUBGRAPH") {
+        toGov
+        token {
+            name
+            price
+        }
+        id
+        timestamp
+    }
+}
