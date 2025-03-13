@@ -21,7 +21,7 @@ import {
   HeroStatDataGQL,
   HeroStatDataQuery,
   HeroTokenEarnedDataGQL,
-  HeroTokenEarnedDataQuery,
+  HeroTokenEarnedDataQuery, HeroTokenVaultDataGQL, HeroTokenVaultDataQuery,
   HeroTokenVaultStatisticDataGQL,
   HeroTokenVaultStatisticDataQuery, ItemMetaDataGQL, ItemMetaDataQuery,
   ItemsActionDataGQL,
@@ -123,6 +123,7 @@ export class SubgraphService {
     private itemMetaDataGQL: ItemMetaDataGQL,
     private earnedByBiomeGQL: EarnedByBiomeGQL,
     private pawnshopOpenPositionDataGQL: PawnshopOpenPositionDataGQL,
+    private heroTokenVaultDataGQL: HeroTokenVaultDataGQL,
     private graphDataGQL: GraphDataGQL,
     private graphDataByBlockGQL: GraphDataByBlockGQL,
   ) {
@@ -1044,6 +1045,21 @@ export class SubgraphService {
     );
   }
 
+  heroTokenVault$(
+    first: number,
+    skip: number = 0,
+    destroy$: DestroyService,
+  ): Observable<HeroTokenVaultDataQuery['heroTokensVaultHistoryEntities']> {
+    this.heroTokenVaultDataGQL.client = this.getClientSubgraph();
+    return this.heroTokenVaultDataGQL.fetch(
+      { first: first, skip: skip },
+    ).pipe(
+      map(x => x.data.heroTokensVaultHistoryEntities),
+      retry({ count: RETRY, delay: DELAY }),
+      takeUntil(destroy$),
+    );
+  }
+
   fetchAllPawnshopOpenPositions$(
     item: string,
     destroy$: DestroyService,
@@ -1106,6 +1122,30 @@ export class SubgraphService {
       };
 
       heroTokenEarned$();
+    })
+      .pipe(takeUntil(destroy$));
+  }
+
+  fetchAllHeroTokenVault$(destroy$: DestroyService): Observable<HeroTokenVaultDataQuery['heroTokensVaultHistoryEntities']> {
+    let allEarned: HeroTokenVaultDataQuery['heroTokensVaultHistoryEntities'] = [];
+    let skip = 0;
+    const first = 1000;
+
+    return new Observable<HeroTokenVaultDataQuery['heroTokensVaultHistoryEntities']>(observer => {
+      const heroTokenVault$ = () => {
+        this.heroTokenVault$(first, skip, destroy$).subscribe(earned => {
+          if (earned.length > 0) {
+            allEarned = allEarned.concat(earned);
+            skip += first;
+            heroTokenVault$();
+          } else {
+            observer.next(allEarned);
+            observer.complete();
+          }
+        });
+      };
+
+      heroTokenVault$();
     })
       .pipe(takeUntil(destroy$));
   }

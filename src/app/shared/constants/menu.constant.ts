@@ -37,6 +37,7 @@ export enum MENU_ITEMS {
   TABLE_STORY_PAGE_NOT_PASSED = 'Story page not passed',
   REINFORCEMENT_V2 = 'Reinforcement V2',
   TREASURY_BALANCE_HISTORY = 'Treasury balance history',
+  PROFIT_INCOME = 'Profit income',
 }
 
 export const MENU: { [key: string]: MenuItemInterface } = {
@@ -111,6 +112,10 @@ export const MENU: { [key: string]: MenuItemInterface } = {
       [MENU_ITEMS.TREASURY_BALANCE_HISTORY]:{
         icon: 'line-chart',
         label: MENU_ITEMS.TREASURY_BALANCE_HISTORY
+      },
+      [MENU_ITEMS.PROFIT_INCOME]: {
+        icon: 'line-chart',
+        label: MENU_ITEMS.PROFIT_INCOME
       }
     }
   },

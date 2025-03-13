@@ -15,4 +15,5 @@ generates:
         Bytes: string
         Int8: number
         Timestamp: string
-schema: https://graph.tetu.io/subgraphs/name/sacra-fantom
+schema: >-
+  https://gateway.thegraph.com/api/6403986b8e71cc0ba5ad547e93dd605d/subgraphs/id/3SymxLiwoZUq5wSAqwVozgS7Rsg1CGE9Un8n4VodrVQt
