@@ -98,7 +98,7 @@ export class ProfitIncomeComponent implements OnInit {
 
     this.options = {
       legend: {
-        data: ['Total income', 'Sacra', 'Other'],
+        data: ['Total income in USD', 'Sacra in USD', 'wS in USD'],
         align: 'left',
       },
       dataZoom: [
@@ -136,17 +136,17 @@ export class ProfitIncomeComponent implements OnInit {
       },
       series: [
         {
-          name: 'Total income',
+          name: 'Total income in USD',
           type: 'line',
           data: total,
         },
         {
-          name: 'Sacra',
+          name: 'Sacra in USD',
           type: 'line',
           data: sacra,
         },
         {
-          name: 'Other',
+          name: 'wS in USD',
           type: 'line',
           data: secondToken,
         }
