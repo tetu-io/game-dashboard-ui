@@ -12,6 +12,7 @@ query OpenChamberByChambersData($first: Int!, $skip: Int!, $chambers: [String!],
         id
         dungeon {
             id
+            ngLevel
         }
         enteredHero {
             id

@@ -15,6 +15,7 @@ query OpenChamberByHeroData($first: Int!, $skip: Int!, $heroes: [String!], $biom
         id
         dungeon {
             id
+            ngLevel
         }
         enteredHero {
             id
