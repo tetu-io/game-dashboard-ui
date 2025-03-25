@@ -144,7 +144,7 @@ export class HeroFightsComponent implements OnInit {
               monster: `${getMonsterName(+chamber.chamber.id)} (${chamber.chamber.id})`,
               heroClass: HEROES_CLASSES.get(chamber.enteredHero.meta.heroClass + '') || '',
               status: status,
-              type: prePayment ? 'NG-' + chamber.enteredHero.ngLevel : 'Post Payment',
+              type: prePayment ? 'NG-' + chamber.dungeon.ngLevel : 'Post Payment',
               link: this.createFightUrl(chamber),
               date: +chamber.timestamp * 1000,
               biome: chamber.chamber.biome + '',
