@@ -2,14 +2,21 @@ import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit } from '@
 import { EChartsOption } from 'echarts';
 import { DestroyService } from '../../services/destroy.service';
 import { SubgraphService } from '../../services/subgraph.service';
-import { takeUntil } from 'rxjs';
+import { forkJoin, of, takeUntil } from 'rxjs';
 import {
   HeroTokensVaultEntity,
   HeroTokensVaultHistoryEntity,
   PawnshopStatisticEntity,
   UserEntity,
 } from '../../../../generated/gql';
-import { formatUnits } from 'ethers';
+import { formatUnits, parseUnits } from 'ethers';
+import { AlgebraPoolService } from '../../services/onchain/algebra-pool.service';
+import { GET_CORE_ADDRESSES } from '../../shared/constants/addresses.constant';
+import { getChainId } from '../../shared/constants/network.constant';
+
+const SACRA_SWAPX_POOL_SONIC = '0x875819746112630cEe95aA78E4327cd4837Da70D';
+const WS_USDC_SWAPX_POOL_SONIC = '0x5C4B7d607aAF7B5CDE9F09b5F03Cf3b5c923AEEa';
+
 
 interface Income {
   total: number;
@@ -27,11 +34,14 @@ export class ProfitIncomeComponent implements OnInit {
 
   options: EChartsOption = {};
   isLoading = false;
+  network: string = '';
+  chainId: number = 0;
 
   constructor(
     private destroy$: DestroyService,
     private changeDetectorRef: ChangeDetectorRef,
     private subgraphService: SubgraphService,
+    private algebraPoolService: AlgebraPoolService,
   ) { }
 
   ngOnInit(): void {
@@ -43,32 +53,52 @@ export class ProfitIncomeComponent implements OnInit {
   }
 
   private prepareData(): void {
-    this.isLoading = true;
-    this.subgraphService
-      .fetchAllHeroTokenVault$(this.destroy$)
-      .pipe(takeUntil(this.destroy$))
-      .subscribe(data => {
-        this.prepareChartData(data as HeroTokensVaultHistoryEntity[]);
-        this.isLoading = false;
-        this.changeDetectorRef.detectChanges();
-      });
+    this.subgraphService.networkObserver.subscribe(network => {
+      this.network = network;
+      this.chainId = getChainId(network);
+      this.isLoading = true;
+      forkJoin({
+        gamePrice: this.chainId === 146 ? this.algebraPoolService.safelyGetStateOfAMM$(SACRA_SWAPX_POOL_SONIC, this.chainId) : of(undefined),
+        ethPriceRes: this.chainId === 146 ?  this.algebraPoolService.safelyGetStateOfAMM$(WS_USDC_SWAPX_POOL_SONIC, this.chainId) : of(undefined),
+        data: this.subgraphService
+          .fetchAllHeroTokenVault$(this.destroy$)
+      })
+        .pipe(takeUntil(this.destroy$))
+        .subscribe(({ gamePrice, ethPriceRes, data }) => {
+          let sacraPrice = 0;
+          let ethPrice = 0;
+          if (gamePrice) {
+            const sqrtSacra = (gamePrice as bigint[])[0];
+            const price = (Number(sqrtSacra) / ((2) ** (96))) ** 2;
+            const sqrtEth = (ethPriceRes as bigint[])[0];
+            const ethPriceN = (Number(sqrtEth) / ((2) ** (96))) ** 2;
+            const sacra = 1 / price * ethPriceN;
+            sacraPrice = sacra * 10 ** 12
+            ethPrice = ethPriceN * 10 ** 12;
+          }
+          this.prepareChartData(data as HeroTokensVaultHistoryEntity[], sacraPrice, ethPrice);
+          this.isLoading = false;
+          this.changeDetectorRef.detectChanges();
+        });
+    });
   }
 
-  private prepareChartData(data: HeroTokensVaultHistoryEntity[]) {
+  private prepareChartData(data: HeroTokensVaultHistoryEntity[], sacraPrice: number, ethPrice: number) {
     const dates: string[] = [];
     const total: string[] = [];
     const sacra: string[] = [];
     const secondToken: string[] = [];
 
-    const convertToDateString = (timestamp: string): string => {
+    const convertToMonthString = (timestamp: string): string => {
       const date = new Date(parseInt(timestamp) * 1000);
-      return date.toISOString().split('T')[0];
+      return date.toLocaleString('en-US', { month: 'long' });
     };
+
 
     const heroVaultByDates: Record<string, Income> = {};
 
     data.forEach(item => {
-      const dateString = convertToDateString(item.timestamp + '');
+      const dateString = convertToMonthString(item.timestamp + '');
       if (!heroVaultByDates[dateString]) {
         heroVaultByDates[dateString] = {
           total: 0,
@@ -78,11 +108,13 @@ export class ProfitIncomeComponent implements OnInit {
       }
       let total = 0;
       if (item.token.name.includes('Sacra')) {
-        const val = +formatUnits(item.toGov) * +item.token.price
+        const price = +item.token.price > 0 ? +item.token.price : sacraPrice;
+        const val = +formatUnits(item.toGov) * price
         heroVaultByDates[dateString].sacra += val;
         total += val;
       } else {
-        const val = +formatUnits(item.toGov) * +item.token.price;
+        const price = +item.token.price > 0 ? +item.token.price : ethPrice;
+        const val = +formatUnits(item.toGov) * price;
         heroVaultByDates[dateString].secondToken += val;
         total += val;
       }
