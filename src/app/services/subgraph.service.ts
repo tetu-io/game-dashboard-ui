@@ -213,7 +213,7 @@ export class SubgraphService {
     first: number,
     skip: number = 0,
     orderDirection: OrderDirection = OrderDirection.Desc,
-    biomes: number[] = [1, 2, 3, 4],
+    biomes: number[] = [1, 2, 3, 4, 5],
   ): Observable<OpenChamberDataQuery['openedChamberEntities']> {
     this.openChamberDataGQL.client = this.getClientSubgraph();
     return this.openChamberDataGQL.fetch(
@@ -244,7 +244,7 @@ export class SubgraphService {
     skip: number = 0,
     heroes: string[] = [],
     orderDirection: OrderDirection = OrderDirection.Desc,
-    biomes: number[] = [1, 2, 3, 4],
+    biomes: number[] = [1, 2, 3, 4, 5],
   ): Observable<OpenChamberByChambersDataQuery['openedChamberEntities']> {
     this.openChamberByHeroGQL.client = this.getClientSubgraph();
     return this.openChamberByHeroGQL.fetch(

@@ -74,7 +74,7 @@ export class HeroFightsComponent implements OnInit {
   heroList: Array<{ label: string; value: string }> = [];
   selectedHeroes: string[] = [];
 
-  biomes = [1,2,3,4]
+  biomes = [1,2,3,4,5]
   biome: string = 'All';
 
   form: FormGroup = this.fb.group({
