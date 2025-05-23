@@ -231,7 +231,7 @@ export type MonstersAddressesType = {
   OLD_WHORE_10: number;
   TRAINING_BUDDY_33: number;
   FEROCIOUS_WIFE_33: number;
-  STRABAN_KNIGHT_10: number,
+  STRABAN_KNIGHT_10: number;
 
   BLOODCURDLING_WOLFS_34: number;
   SOMBER_HANGMAN_34: number;
@@ -257,9 +257,9 @@ export type MonstersAddressesType = {
   BAD_SEED_33: number;
   BAD_SEED_35: number;
   RIPE_MIDNIGHTER_2: number;
-  WOUNDED_DEMOLDER_10: number,
-  HANGOVER_WILLY_10: number,
-  VENOMOUS_SPIDER_10: number,
+  WOUNDED_DEMOLDER_10: number;
+  HANGOVER_WILLY_10: number;
+  VENOMOUS_SPIDER_10: number;
 
   MOCK2: number;
   DEMOLDER_WARRIOR_34: number;
@@ -289,6 +289,7 @@ export type MonstersAddressesType = {
   MIGHTY_RUIN_KEEPER_10: number;
 
   MOCK3: number;
+  MOCK4: number;
   GIANT_WASP_34: number;
   MOONHUNTER_34: number;
   GELDED_ONE_34: number;
@@ -315,6 +316,48 @@ export type MonstersAddressesType = {
   KNIGHT_HAMMERGINA_10: number;
   FULLMOON_DARK_ESSENCE_10: number;
   SUPERGOOSE_10: number;
+
+  HUNT_ESSENCE_35: number;
+  GRAVE_KEEPERS_42: number;
+  CONVERTED_KNIGHT_34: number;
+  CONVERTED_ARISTOCRAT_43: number;
+  MEAT_DANCER_42: number;
+  GRAVE_PARASITE_42: number;
+  SNIDE_CORPSE_EATER_35: number;
+  HIGH_PRIESTESS_DAERHANNA_3: number;
+  THRALLS_NIGHTMARE_10: number;
+  EVIL_MIDGETS_34: number;
+  STREET_ROBBER_44: number;
+  DESPERATE_DESERTER_34: number;
+  THRALL_OWNER_45: number;
+  WASTEWATER_LEECH_44: number;
+  CACTUS_MAN_45: number;
+  BLACK_HORDE_35: number;
+  PRIOR_BABADZAKI_TUMBLEWEED_3: number;
+  ENSLAVED_DEMOLDER_10: number;
+  FUGITIVE_DEMOLDER_10: number;
+  SHOCKERFACE_10: number;
+  BATTLE_THRALL_10: number;
+  TROLL_WARLORD_10: number;
+  REJECTED_ESSENCE_10: number;
+  GUARDIAN_THUG_10: number;
+  BELLBOY_46: number;
+  RICH_DEADBEATS_35: number;
+  DOUBLE_DELIGHT_35: number;
+  DISCARDED_TOY_47: number;
+  HIGHBORN_REBEL_46: number;
+  SAWMILL_KNIGHT_34: number;
+  KING_ARCHIBALD_DICKSTRONG_3: number;
+  ROYAL_HORSE_47: number;
+  HUNT_ESSENCE_43: number;
+  SNIDE_CORPSE_EATER_43: number;
+  CONVERTED_KNIGHT_42: number;
+  EVIL_MIDGETS_44: number;
+  DESPERATE_DESERTER_44: number;
+  BLACK_HORDE_45: number;
+  RICH_DEADBEATS_47: number;
+  DOUBLE_DELIGHT_47: number;
+  SAWMILL_KNIGHT_46: number;
 
   // 1-2 biome new
   // ORDINARY_GOOSE: string,
