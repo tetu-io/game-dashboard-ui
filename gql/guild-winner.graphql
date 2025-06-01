@@ -1,0 +1,21 @@
+query GuildWinner($epochWeek: BigInt!, $biome: Int!) {
+    pvpGuildEntities(
+        where: {
+            epochWeek: $epochWeek
+            biome: $biome
+            pvpPoint_gt: 0
+        }
+        first: 1
+        orderBy: pvpPoint
+        orderDirection: desc
+    ) {
+        epochWeek
+        biome
+        pvpPoint
+        guild {
+            id
+            guildBank
+            name
+        }
+    }
+}

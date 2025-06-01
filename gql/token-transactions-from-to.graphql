@@ -1,0 +1,24 @@
+query TokenTransactionsFromTo($token: String!, $from: String!, $to: String!, $timestampFrom: BigInt!, $timestampTo: BigInt!, $first: Int!, $skip: Int!) {
+    tokenTransactionEntities(
+        where: {
+            token: $token
+            from: $from
+            to: $to
+            timestamp_gte: $timestampFrom
+            timestamp_lt: $timestampTo
+        }
+        first: $first
+        skip: $skip
+        orderBy: id
+        orderDirection: desc
+    ) {
+        token {
+            id
+        }
+        from
+        to
+        amount
+        price
+        createdAtBlock
+    }
+}

@@ -38,6 +38,8 @@ export enum MENU_ITEMS {
   REINFORCEMENT_V2 = 'Reinforcement V2',
   TREASURY_BALANCE_HISTORY = 'Treasury balance history',
   PROFIT_INCOME = 'Profit income',
+  GUILDS = 'Guilds',
+  GUILDS_WEEK_STAT = 'Guilds week stat',
 }
 
 export const MENU: { [key: string]: MenuItemInterface } = {
@@ -70,6 +72,16 @@ export const MENU: { [key: string]: MenuItemInterface } = {
       [MENU_ITEMS.TABLE_STORY_PAGE_NOT_PASSED]: {
         icon: 'line-chart',
         label: MENU_ITEMS.TABLE_STORY_PAGE_NOT_PASSED,
+      },
+    }
+  },
+  [MENU_ITEMS.GUILDS]: {
+    icon: 'line-chart',
+    label: MENU_ITEMS.GUILDS,
+    subMenu: {
+      [MENU_ITEMS.GUILDS_WEEK_STAT]: {
+        icon: 'line-chart',
+        label: MENU_ITEMS.GUILDS_WEEK_STAT,
       },
     }
   },
