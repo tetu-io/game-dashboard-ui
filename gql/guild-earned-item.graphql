@@ -1,0 +1,18 @@
+query GuildItemEarned($guild: String!, $timestampFrom: BigInt!, $timestampTo: BigInt!, $first: Int!, $skip: Int!) {
+    guildItemEarnedEntities(
+        where: {
+            guild: $guild
+            timestamp_gt: $timestampFrom
+            timestamp_lt: $timestampTo
+        }
+        first: $first
+        skip: $skip
+    ) {
+        taxPercent
+        item {
+            meta {
+                id
+            }
+        }
+    }
+}

@@ -1,0 +1,29 @@
+<h3>Week: {{prevWeek}} ({{formatDateFromTimestamp(startTimestamp * 1000)}} - {{formatDateFromTimestamp(endTimestamp * 1000)}})</h3>
+<nz-table #filterTable [nzData]="data"
+          [nzShowPagination]="false"
+          [nzLoading]="isLoading"
+          [nzPageSize]="pageSize"
+          nzTableLayout="auto">
+  <thead>
+  <tr>
+    <th
+      *ngFor="let column of columns"
+      [nzSortFn]="column.sortFn"
+      [nzSortDirections]="column.sortDirections"
+    >
+      {{ column.name }}
+    </th>
+  </tr>
+  </thead>
+  <tbody>
+  <tr *ngFor="let data of filterTable.data">
+    <td>{{ data.biome }}</td>
+    <td>{{ data.id }}</td>
+    <td>{{ data.name }}</td>
+    <td>{{ data.weekWin }}</td>
+    <td>{{ data.totalEarned }} SACRA</td>
+    <td>{{ data.taxPercent }}%</td>
+    <td>{{ data.totalEarnedItems }}</td>
+  </tr>
+  </tbody>
+</nz-table>

@@ -7,7 +7,7 @@ import {
   ControllerDataGQL,
   ControllerDataQuery,
   DauGQL,
-  DauQuery, EarnedByBiomeGQL, EarnedByBiomeQuery, GraphDataByBlockGQL, GraphDataGQL, GraphDataQuery,
+  DauQuery, EarnedByBiomeGQL, EarnedByBiomeQuery, GraphDataByBlockGQL, GraphDataGQL, GraphDataQuery, GuildWinnerGQL,
   HeroActionGQL,
   HeroActionQuery,
   HeroesDataGQL,
@@ -39,7 +39,7 @@ import {
   PawnshopExecuteDataGQL,
   PawnshopExecuteDataQuery, PawnshopOpenPositionDataGQL, PawnshopOpenPositionDataQuery,
   PawnshopStatDataGQL,
-  PawnshopStatDataQuery,
+  PawnshopStatDataQuery, PvpGuildEntity,
   StoryDataGQL,
   StoryDataQuery,
   TokenEarnedGQL,
@@ -47,7 +47,7 @@ import {
   TokenGQL,
   TokenomicsGQL,
   TokenomicsQuery,
-  TokenQuery,
+  TokenQuery, TokenTransactionEntity, TokenTransactionsFromToGQL,
   TokenTransactionsGQL,
   TokenTransactionsQuery,
   TotalSupplyHistoryGQL,
@@ -68,6 +68,8 @@ import {
   UsersTimestampDataQuery,
   WauGQL,
   WauQuery,
+  GuildTokenEarnedGQL, GuildTokenEarnedEntity,
+  GuildItemEarnedGQL, GuildItemEarnedEntity,
 } from '../../../generated/gql';
 import { BehaviorSubject, map, Observable, retry, Subject, takeUntil } from 'rxjs';
 import { defaultNetwork, NETWORKS } from '../shared/constants/network.constant';
@@ -126,6 +128,10 @@ export class SubgraphService {
     private heroTokenVaultDataGQL: HeroTokenVaultDataGQL,
     private graphDataGQL: GraphDataGQL,
     private graphDataByBlockGQL: GraphDataByBlockGQL,
+    private guildWinnerGQL: GuildWinnerGQL,
+    private tokenTransactionsFromToGQL: TokenTransactionsFromToGQL,
+    private guildTokenEarnedGQL: GuildTokenEarnedGQL,
+    private guildItemEarnedGQL: GuildItemEarnedGQL,
   ) {
   }
 
@@ -1060,6 +1066,73 @@ export class SubgraphService {
     );
   }
 
+  tokenTransactionsFromTo$(
+    token: string,
+    from: string,
+    to: string,
+    timestampFrom: string,
+    timestampTo: string,
+    first: number,
+    skip: number = 0,
+    destroy$: DestroyService,
+  ): Observable<TokenTransactionEntity[]> {
+    this.tokenTransactionsFromToGQL.client = this.getClientSubgraph();
+    return this.tokenTransactionsFromToGQL.fetch(
+      { from, to, token, timestampFrom, timestampTo, first: first, skip: skip },
+    ).pipe(
+      map(x => x.data.tokenTransactionEntities as TokenTransactionEntity[]),
+      retry({ count: RETRY, delay: DELAY }),
+      takeUntil(destroy$),
+    );
+  }
+
+  guildTokenEarned$(
+    guild: string,
+    timestampFrom: string,
+    timestampTo: string,
+    first: number,
+    skip: number = 0,
+    destroy$: DestroyService,
+  ): Observable<GuildTokenEarnedEntity[]> {
+    this.guildTokenEarnedGQL.client = this.getClientSubgraph();
+    return this.guildTokenEarnedGQL.fetch(
+      { guild, timestampFrom, timestampTo, first: first, skip: skip },
+    ).pipe(
+      map(x => x.data.guildTokenEarnedEntities as GuildTokenEarnedEntity[]),
+      retry({ count: RETRY, delay: DELAY }),
+      takeUntil(destroy$),
+    );
+  }
+
+  guildItemEarned$(
+    guild: string,
+    timestampFrom: string,
+    timestampTo: string,
+    first: number,
+    skip: number = 0,
+    destroy$: DestroyService,
+  ): Observable<GuildItemEarnedEntity[]> {
+    this.guildItemEarnedGQL.client = this.getClientSubgraph();
+    return this.guildItemEarnedGQL.fetch(
+      { guild, timestampFrom, timestampTo, first: first, skip: skip },
+    ).pipe(
+      map(x => x.data.guildItemEarnedEntities as GuildItemEarnedEntity[]),
+      retry({ count: RETRY, delay: DELAY }),
+      takeUntil(destroy$),
+    );
+  }
+
+  guildWinner(epochWeek: string, biome: number, destroy$: DestroyService): Observable<PvpGuildEntity[]> {
+    this.guildWinnerGQL.client = this.getClientSubgraph();
+    return this.guildWinnerGQL.fetch(
+      { epochWeek, biome },
+    ).pipe(
+      map(x => x.data.pvpGuildEntities as PvpGuildEntity[]),
+      retry({ count: RETRY, delay: DELAY }),
+      takeUntil(destroy$),
+    );
+  }
+
   fetchAllPawnshopOpenPositions$(
     item: string,
     destroy$: DestroyService,
@@ -1185,6 +1258,78 @@ export class SubgraphService {
       };
 
       fetchHeroes();
+    })
+      .pipe(takeUntil(destroy$));
+  }
+
+  fetchAllTransactionsFromTo$(token: string, from: string, to: string, timestampFrom: string, timestampTo: string, destroy$: DestroyService): Observable<TokenTransactionEntity[]> {
+    let allData: TokenTransactionEntity[] = [];
+    let skip = 0;
+    const first = 1000;
+
+    return new Observable<TokenTransactionEntity[]>(observer => {
+      const fetchData = () => {
+        this.tokenTransactionsFromTo$(token, from, to, timestampFrom, timestampTo, first, skip, destroy$).subscribe(heroes => {
+          if (heroes.length > 0) {
+            allData = allData.concat(heroes);
+            skip += first;
+            fetchData();
+          } else {
+            observer.next(allData);
+            observer.complete();
+          }
+        });
+      };
+
+      fetchData();
+    })
+      .pipe(takeUntil(destroy$));
+  }
+
+  fetchAllGuildTokenEarned$(guild: string, timestampFrom: string, timestampTo: string, destroy$: DestroyService): Observable<GuildTokenEarnedEntity[]> {
+    let allData: GuildTokenEarnedEntity[] = [];
+    let skip = 0;
+    const first = 1000;
+
+    return new Observable<GuildTokenEarnedEntity[]>(observer => {
+      const fetchData = () => {
+        this.guildTokenEarned$(guild, timestampFrom, timestampTo, first, skip, destroy$).subscribe(heroes => {
+          if (heroes.length > 0) {
+            allData = allData.concat(heroes);
+            skip += first;
+            fetchData();
+          } else {
+            observer.next(allData);
+            observer.complete();
+          }
+        });
+      };
+
+      fetchData();
+    })
+      .pipe(takeUntil(destroy$));
+  }
+
+  fetchAllGuildItemEarned$(guild: string, timestampFrom: string, timestampTo: string, destroy$: DestroyService): Observable<GuildItemEarnedEntity[]> {
+    let allData: GuildItemEarnedEntity[] = [];
+    let skip = 0;
+    const first = 1000;
+
+    return new Observable<GuildItemEarnedEntity[]>(observer => {
+      const fetchData = () => {
+        this.guildItemEarned$(guild, timestampFrom, timestampTo, first, skip, destroy$).subscribe(heroes => {
+          if (heroes.length > 0) {
+            allData = allData.concat(heroes);
+            skip += first;
+            fetchData();
+          } else {
+            observer.next(allData);
+            observer.complete();
+          }
+        });
+      };
+
+      fetchData();
     })
       .pipe(takeUntil(destroy$));
   }

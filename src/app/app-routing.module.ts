@@ -82,6 +82,10 @@ const routes: Routes = [
     loadChildren: () => import('./pages/profit-income/profit-income.module').then(m => m.ProfitIncomeModule),
   },
   {
+    path: MAIN_ROUTES[MENU_ITEMS.GUILDS_WEEK_STAT],
+    loadChildren: () => import('./pages/guilds-week-stat/guilds-week-stat.module').then(m => m.GuildsWeekStatModule),
+  },
+  {
     path: MAIN_ROUTES[MENU_ITEMS.CHURN_RATE_V2],
     loadChildren: () => import('./pages/chunk-rate-v2/chunk-rate-v2.module').then(m => m.ChunkRateV2Module),
   },
