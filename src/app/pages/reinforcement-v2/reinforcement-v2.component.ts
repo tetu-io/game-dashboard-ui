@@ -45,6 +45,7 @@ export class ReinforcementV2Component implements OnInit {
   network: string = '';
   chainId: number = 0;
   tableData: ReinforcementV2StatModel[] = [];
+  date: string = '';
 
   constructor(
     private destroy$: DestroyService,
@@ -69,7 +70,8 @@ export class ReinforcementV2Component implements OnInit {
       )
       .subscribe(data => {
         this.isLoading = false;
-        this.tableData = data;
+        this.tableData = data?.data || [];
+        this.date = data?.time || '';
 
         this.changeDetectorRef.detectChanges();
       });

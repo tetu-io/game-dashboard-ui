@@ -42,6 +42,7 @@ export class TableItemMintStoryStatComponent implements OnInit {
   network: string = '';
   chainId: number = 0;
   tableData: ItemMintStoryStatModel[] = [];
+  date: string = '';
 
   mins: number[] = [];
   maxs: number[] = [];
@@ -68,8 +69,10 @@ export class TableItemMintStoryStatComponent implements OnInit {
       .pipe(
         takeUntil(this.destroy$)
       )
-      .subscribe(data => {
+      .subscribe(response => {
         this.isLoading = false;
+        const data = response?.data ?? [];
+        this.date = response?.time ?? '';
         this.tableData = data;
         this.mins = [];
         this.maxs = [];

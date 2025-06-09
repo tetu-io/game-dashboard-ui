@@ -3,6 +3,12 @@
   class="loader g-flex-column__item-fixed">
 </nz-spin>
 <ng-template #loaded>
+  <div
+    *ngIf="date">
+    <h2>
+      Report created at: {{ date }}
+    </h2>
+  </div>
   <div class="btn">
     <button
       nz-button

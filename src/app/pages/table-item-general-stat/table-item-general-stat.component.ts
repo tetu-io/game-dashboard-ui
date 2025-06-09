@@ -72,6 +72,7 @@ export class TableItemGeneralStatComponent implements OnInit {
     }
   ]
   tableData: ItemGeneralStatModel[] = [];
+  date: string = '';
   isLoading = false;
   network: string = '';
   chainId: number = 0;
@@ -100,8 +101,10 @@ export class TableItemGeneralStatComponent implements OnInit {
       .pipe(
         takeUntil(this.destroy$)
       )
-      .subscribe(data => {
+      .subscribe(response => {
       this.isLoading = false;
+      const data = (response?.data ?? []);
+      this.date = response?.time ?? '';
       this.tableData = data.map(item => {
         item.name = getItemNameBySymbol(item.name);
         return item;

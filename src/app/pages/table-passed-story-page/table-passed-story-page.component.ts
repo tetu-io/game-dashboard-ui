@@ -31,6 +31,7 @@ export class TablePassedStoryPageComponent implements OnInit {
   network: string = '';
   chainId: number = 0;
   tableData: StoryPassedModel[] = [];
+  date: string = '';
 
   constructor(
     private destroy$: DestroyService,
@@ -53,9 +54,10 @@ export class TablePassedStoryPageComponent implements OnInit {
       .pipe(
         takeUntil(this.destroy$)
       )
-      .subscribe(data => {
+      .subscribe(response => {
         this.isLoading = false;
-        this.tableData = data;
+        this.tableData = response?.data ?? [];
+        this.date = response?.time ?? '';
 
         this.changeDetectorRef.detectChanges();
       });
