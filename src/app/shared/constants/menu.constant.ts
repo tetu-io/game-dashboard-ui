@@ -47,10 +47,10 @@ export const MENU: { [key: string]: MenuItemInterface } = {
     icon: 'line-chart',
     label: MENU_ITEMS.ITEMS,
     subMenu: {
-      [MENU_ITEMS.ITEM_STAT]: {
-        icon: 'line-chart',
-        label: MENU_ITEMS.ITEM_STAT,
-      },
+      // [MENU_ITEMS.ITEM_STAT]: {
+      //   icon: 'line-chart',
+      //   label: MENU_ITEMS.ITEM_STAT,
+      // },
       [MENU_ITEMS.TABLE_ITEM_GENERAL_STAT]: {
         icon: 'line-chart',
         label: MENU_ITEMS.TABLE_ITEM_GENERAL_STAT,
@@ -61,20 +61,20 @@ export const MENU: { [key: string]: MenuItemInterface } = {
       },
     }
   },
-  [MENU_ITEMS.STORY]: {
-    icon: 'line-chart',
-    label: MENU_ITEMS.STORY,
-    subMenu: {
-      [MENU_ITEMS.STORY_STAT]: {
-        icon: 'line-chart',
-        label: MENU_ITEMS.STORY_STAT,
-      },
-      [MENU_ITEMS.TABLE_STORY_PAGE_NOT_PASSED]: {
-        icon: 'line-chart',
-        label: MENU_ITEMS.TABLE_STORY_PAGE_NOT_PASSED,
-      },
-    }
-  },
+  // [MENU_ITEMS.STORY]: {
+  //   icon: 'line-chart',
+  //   label: MENU_ITEMS.STORY,
+  //   subMenu: {
+  //     [MENU_ITEMS.STORY_STAT]: {
+  //       icon: 'line-chart',
+  //       label: MENU_ITEMS.STORY_STAT,
+  //     },
+  //     [MENU_ITEMS.TABLE_STORY_PAGE_NOT_PASSED]: {
+  //       icon: 'line-chart',
+  //       label: MENU_ITEMS.TABLE_STORY_PAGE_NOT_PASSED,
+  //     },
+  //   }
+  // },
   [MENU_ITEMS.GUILDS]: {
     icon: 'line-chart',
     label: MENU_ITEMS.GUILDS,
@@ -89,10 +89,10 @@ export const MENU: { [key: string]: MenuItemInterface } = {
     icon: 'line-chart',
     label: MENU_ITEMS.TOKENOMICS_STAT,
     subMenu: {
-      [MENU_ITEMS.TOKENOMICS]: {
-        icon: 'line-chart',
-        label: MENU_ITEMS.TOKENOMICS
-      },
+      // [MENU_ITEMS.TOKENOMICS]: {
+      //   icon: 'line-chart',
+      //   label: MENU_ITEMS.TOKENOMICS
+      // },
       [MENU_ITEMS.EARNED_BY_BIOME]: {
         icon: 'line-chart',
         label: MENU_ITEMS.EARNED_BY_BIOME
@@ -117,10 +117,10 @@ export const MENU: { [key: string]: MenuItemInterface } = {
         icon: 'line-chart',
         label: MENU_ITEMS.CHURN_RATE_V2,
       },
-      [MENU_ITEMS.TOTAL_SUPPLY]: {
-        icon: 'line-chart',
-        label: MENU_ITEMS.TOTAL_SUPPLY,
-      },
+      // [MENU_ITEMS.TOTAL_SUPPLY]: {
+      //   icon: 'line-chart',
+      //   label: MENU_ITEMS.TOTAL_SUPPLY,
+      // },
       [MENU_ITEMS.TREASURY_BALANCE_HISTORY]:{
         icon: 'line-chart',
         label: MENU_ITEMS.TREASURY_BALANCE_HISTORY
@@ -149,10 +149,10 @@ export const MENU: { [key: string]: MenuItemInterface } = {
         icon: 'line-chart',
         label: MENU_ITEMS.DAU_CHART,
       },
-      [MENU_ITEMS.USER_GENERAL_STAT]: {
-        icon: 'line-chart',
-        label: MENU_ITEMS.USER_GENERAL_STAT
-      },
+      // [MENU_ITEMS.USER_GENERAL_STAT]: {
+      //   icon: 'line-chart',
+      //   label: MENU_ITEMS.USER_GENERAL_STAT
+      // },
       [MENU_ITEMS.USER_STAT]: {
         icon: 'line-chart',
         label: MENU_ITEMS.USER_STAT
@@ -197,10 +197,10 @@ export const MENU: { [key: string]: MenuItemInterface } = {
     icon: 'line-chart',
     label: MENU_ITEMS.PAWNSHOP,
     subMenu: {
-      [MENU_ITEMS.PAWNSHOP_CHART]: {
-        icon: 'line-chart',
-        label: MENU_ITEMS.PAWNSHOP_CHART
-      },
+      // [MENU_ITEMS.PAWNSHOP_CHART]: {
+      //   icon: 'line-chart',
+      //   label: MENU_ITEMS.PAWNSHOP_CHART
+      // },
       [MENU_ITEMS.PAWNSHOP_STAT_CHART]: {
         icon: 'line-chart',
         label: MENU_ITEMS.PAWNSHOP_STAT_CHART,
